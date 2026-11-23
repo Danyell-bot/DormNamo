@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Pin dorm locations · DormNamo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2028%2032%22%3E%3Cpath%20d%3D%22M3%2028.4V14a11%2011%200%200%201%2022%200v14.4a1.6%201.6%200%200%201-1.6%201.6H4.6A1.6%201.6%200%200%201%203%2028.4z%22%20fill%3D%22%230a47a9%22%2F%3E%3Cpath%20d%3D%22M14%206.2V30%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.6%22%2F%3E%3Ccircle%20cx%3D%2210.9%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2217.1%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E"
+    />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600..800&family=Figtree:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/maps.css" />
+  </head>
+  <body class="pt-page">
+    <header class="pt-head">
+      <b class="pt-title"><span class="logo" id="ptLogo"></span><span>Pin dorm locations</span></b
+      ><a href="index.html">← Back to the site</a>
+    </header>
+    <main class="pt">
+      <aside class="pt-side" aria-label="Dorms">
+        <p class="meta"><span id="ptCount"></span>. Pick a dorm, then click its building on the map.</p>
+        <ol class="pt-list" id="ptList"></ol>
+      </aside>
+      <section class="pt-main" aria-label="Pin the selected dorm">
+        <div class="pt-info" id="ptInfo"></div>
+        <form class="pt-find" id="ptFind" role="search">
+          <input
+            id="ptQ"
+            placeholder="Jump to a street or landmark, e.g. Champaca St"
+            aria-label="Find a street or landmark"
+          />
+          <button class="btn sm" type="submit">Go</button>
+        </form>
+        <form class="pt-find pt-paste" id="ptPaste">
+          <input
+            id="ptLoc"
+            placeholder="Paste a location: 8.2412, 124.2453 · plus code 66RW+F4M · or a map link"
+            aria-label="Paste coordinates, a plus code or a map link"
+            autocomplete="off"
+          />
+          <button class="btn sm" type="submit">Set pin</button>
+        </form>
+        <div
+          class="pt-map"
+          id="ptMap"
+          role="region"
+          aria-label="Map. Click to place the selected dorm's pin."
+        ></div>
+        <p class="pt-msg" id="ptMsg" role="status" aria-live="polite"></p>
+        <div class="pt-export">
+          <h2>Publish your pins</h2>
+          <p class="meta" id="ptPending"></p>
+          <textarea id="ptOut" rows="7" readonly aria-label="Contents of js/pins.js"></textarea>
+          <div class="pt-actions">
+            <button class="btn" id="ptDl" type="button">Download pins.js</button
+            ><button class="btn alt" id="ptCopy" type="button">Copy</button
+            ><button class="linkbtn" id="ptClear" type="button">Clear drafts</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/pins.js"></script>
+    <script src="js/nearby-core.js"></script>
+    <script src="js/maps.js"></script>
+    <script src="js/pin-tool.js"></script>
+  </body>
+</html>

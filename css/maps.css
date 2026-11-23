@@ -1,0 +1,663 @@
+/* maps.css - map + "Nearby places" section in the listing dialog */
+#dlg {
+  overflow-y: auto;
+}
+.nb {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 14px 0 0;
+} /* padding-bottom 0: base.css pads every <section> */
+.nb-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.nb-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.nb-head .btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.nb-head .btn .ic {
+  width: 16px;
+  height: 16px;
+}
+
+.nb-map {
+  position: relative;
+  height: 280px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  background: #eef4fd;
+}
+@media (max-width: 560px) {
+  .nb-map {
+    height: 230px;
+  }
+}
+.nb-canvas {
+  position: absolute;
+  inset: 0;
+}
+.nb-msg {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 4px;
+  padding: 16px;
+  text-align: center;
+  color: var(--mute);
+}
+.nb-msg-i {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--brand);
+  box-shadow: 0 2px 8px rgba(10, 47, 115, 0.1);
+}
+.nb-msg-i .ic {
+  width: 22px;
+  height: 22px;
+}
+.nb-msg b {
+  color: var(--ink);
+}
+.nb-msg small {
+  max-width: 44ch;
+}
+.nb-info {
+  display: grid;
+  gap: 2px;
+  font:
+    13px Figtree,
+    system-ui,
+    sans-serif;
+  color: #0a2f73;
+  max-width: 240px;
+}
+.nb-info b {
+  font-size: 14px;
+}
+.nb-info a {
+  margin-top: 4px;
+}
+
+.nb-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  border-radius: 99px;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.nb-chip small {
+  color: var(--mute);
+}
+.nb-chip[aria-pressed="false"] {
+  opacity: 0.5;
+}
+.nb-chip[aria-pressed="false"] .nb-dot {
+  filter: grayscale(1);
+}
+.nb-chip:focus-visible,
+.nb-name:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.nb-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+.nb-sum {
+  background: #fff8e1;
+  border: 1.5px solid var(--gold);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: #3d2c00;
+}
+.nb-sum ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+.nb-sum .nb-note {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #6b5200;
+}
+body.dark .nb-sum {
+  background: #2a2300;
+  color: #ffe9a8;
+}
+body.dark .nb-sum .nb-note {
+  color: #ffd76a;
+}
+
+.nb-cat {
+  display: grid;
+  gap: 6px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.nb-cat:last-child {
+  border-bottom: 0;
+}
+.nb-cat h4 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  flex-wrap: wrap;
+}
+.nb-cat h4 small {
+  font-weight: 400;
+  color: var(--mute);
+}
+.nb-r {
+  width: auto;
+  font: inherit;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+.nb-cat ol {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+.nb-cat li .meta {
+  font-size: 13px;
+}
+.nb-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.nb-name {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--brand);
+  text-align: left;
+  cursor: pointer;
+}
+.nb-name:hover {
+  text-decoration: underline;
+}
+.nb-d {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.nb-open {
+  color: #0a7a46;
+  font-weight: 600;
+}
+.nb-closed {
+  color: #c92a2a;
+  font-weight: 600;
+}
+.nb-attr {
+  margin: 0;
+  font-size: 12px;
+  color: var(--mute);
+}
+
+/* loading skeletons */
+.nb-skel {
+  background: linear-gradient(90deg, #e3ecfa 25%, #f3f7fe 50%, #e3ecfa 75%);
+  background-size: 200% 100%;
+  animation: nbShimmer 1.2s infinite linear;
+  border-radius: 8px;
+}
+.nb-skel-map {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+.nb-skel-line {
+  height: 12px;
+  margin: 6px 0;
+}
+@keyframes nbShimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-skel {
+    animation: none;
+  }
+}
+.nb .sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Leaflet builds some controls from <section>; base.css pads every section by 48px */
+.leaflet-container section {
+  padding: 0;
+}
+.leaflet-control-layers label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+/* Minimal map pins (Leaflet divIcons and Google advanced-marker content share these) */
+.nb-pin {
+  background: none;
+  border: 0;
+}
+.nb-pin span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.12s;
+}
+.nb-pin:hover span,
+.nb-pin:focus-visible span {
+  transform: scale(1.35);
+}
+.nb-pin:focus-visible {
+  outline: none;
+}
+.nb-pin:focus-visible span {
+  box-shadow: 0 0 0 3px var(--brand);
+}
+/* the dorm: a teardrop with a white center; its tip is the exact spot */
+.nb-pin-big span {
+  display: grid;
+  place-items: center;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border-width: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.nb-pin-big:hover span,
+.nb-pin-big:focus-visible span {
+  transform: rotate(-45deg) scale(1.12);
+}
+.nb-pin-big i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+/* Google advanced markers anchor at the bottom center: drop the dots so they're centered on the spot */
+.nb-pin-g {
+  width: 14px;
+  height: 14px;
+  transform: translateY(50%);
+}
+.nb-pin-g.nb-pin-big {
+  width: 26px;
+  height: 26px;
+  transform: translateY(-4px);
+}
+.nb-map .leaflet-container,
+.pt-map.leaflet-container {
+  font:
+    13px Figtree,
+    system-ui,
+    sans-serif;
+}
+.nb-legend-h {
+  align-self: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mute);
+}
+.nb-draft {
+  margin: -4px 0 0;
+  font-size: 13px;
+}
+
+/* pin.html - admin tool for exact dorm locations */
+.pt-page {
+  background: var(--bg);
+  color: var(--ink);
+}
+.pt-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+.pt-title > span:last-child {
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+  color: var(--mute);
+}
+.pt-head .logo {
+  gap: 9px;
+  font:
+    800 20px "Bricolage Grotesque",
+    sans-serif;
+  letter-spacing: -0.025em;
+  color: var(--brand);
+}
+.pt-head .dn-mark {
+  width: 22px;
+  height: 26px;
+}
+.pt-head .dn-arch {
+  fill: var(--brand);
+}
+.pt-head .dn-in {
+  fill: #fff;
+}
+.pt-head .dn-knob {
+  fill: #fff;
+}
+.pt-s::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: currentColor;
+  vertical-align: 1px;
+}
+.pt-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.pt {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: 16px;
+  padding: 16px 20px;
+}
+@media (max-width: 800px) {
+  .pt {
+    grid-template-columns: 1fr;
+  }
+  .pt-side {
+    order: 2;
+  }
+}
+.pt-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  max-height: 75vh;
+  overflow: auto;
+}
+.pt-list button {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+.pt-list button[aria-current] {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand) inset;
+}
+.pt-list small {
+  color: var(--mute);
+}
+.pt-s {
+  font-size: 12px;
+  font-weight: 600;
+}
+.pt-ok {
+  color: #0a7a46;
+}
+.pt-draft {
+  color: #b35c00;
+}
+.pt-none {
+  color: var(--mute);
+}
+.pt-main {
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+}
+.pt-info {
+  display: grid;
+  gap: 2px;
+}
+.pt-info small {
+  color: var(--mute);
+}
+.pt-links {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pt-find {
+  display: flex;
+  gap: 8px;
+}
+.pt-find input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  font: inherit;
+}
+.pt-map {
+  height: min(62vh, 560px);
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  cursor: crosshair;
+}
+.pt-paste input {
+  font-variant-numeric: tabular-nums;
+}
+.pt-msg {
+  margin: 0;
+  min-height: 1.4em;
+  font-weight: 600;
+}
+.pt-export {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.pt-export h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.pt-export textarea {
+  width: 100%;
+  font:
+    12px ui-monospace,
+    Consolas,
+    monospace;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.pt-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pt-page .linkbtn {
+  background: none;
+  border: 0;
+  color: var(--brand);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 6px;
+  font: inherit;
+}
+.nb-draft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nb-draft .ic {
+  width: 15px;
+  height: 15px;
+  color: var(--brand);
+}
+
+/* route bar under the map (maps.js routeBar) */
+.nb-route {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f3f7fd;
+  animation: nbRouteIn 0.2s ease;
+}
+@keyframes nbRouteIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.nb-route-i {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+}
+.nb-route-i .ic {
+  width: 18px;
+  height: 18px;
+}
+.nb-route-t {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.nb-route-t small {
+  color: var(--mute);
+}
+.nb-route-s {
+  color: var(--ink);
+}
+.nb-route-s b {
+  color: var(--brand);
+}
+.nb-route-s.busy {
+  color: var(--mute);
+}
+.nb-route .meta {
+  font-size: 12.5px;
+}
+.nb-route-x {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--mute);
+  cursor: pointer;
+}
+.nb-route-x:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.nb-route-x .ic {
+  width: 14px;
+  height: 14px;
+}
+body.dark .nb-map {
+  background: #0b2250;
+} /* the "not pinned yet" message has light text here */
+body.dark .nb-msg-i {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--gold);
+  box-shadow: none;
+}
+body.dark .nb-route {
+  background: rgba(255, 255, 255, 0.06);
+}
+body.dark .nb-route-s b {
+  color: var(--gold);
+}
+body.dark .nb-route-x {
+  background: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-route {
+    animation: none;
+  }
+}

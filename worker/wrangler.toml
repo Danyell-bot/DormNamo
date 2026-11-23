@@ -1,0 +1,24 @@
+# Cloudflare Worker that proxies Google Places for the "Nearby Places" section.
+# Deploy:  npx wrangler deploy --config worker/wrangler.toml
+# Secret:  npx wrangler secret put GOOGLE_MAPS_SERVER_KEY --config worker/wrangler.toml
+name = "dormnamo-nearby"
+main = "nearby.mjs"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Your site's origins (GitHub Pages + local dev server). "*" allows any site (not recommended).
+ALLOWED_ORIGINS = "https://YOUR-USERNAME.github.io,http://localhost:5500,http://127.0.0.1:5500"
+# Only answer for locations inside this circle: "lat,lng,km" (MSU-IIT, 100 km covers Iligan + CDO).
+ALLOWED_AREA = "8.2408,124.2437,100"
+CACHE_TTL_SECONDS = "86400"
+# off | WALK | DRIVE  (WALK/DRIVE call the Routes API: extra cost, see README)
+ROUTES_MODE = "off"
+# Leave empty for all categories, or e.g. "convenience,grocery,mall,retail"
+NEARBY_CATEGORIES = ""
+
+# Server-side cache with TTL. Create it with:
+#   npx wrangler kv namespace create NEARBY_CACHE
+# then uncomment and paste the id it prints. Without it, results are cached in memory per isolate only.
+# [[kv_namespaces]]
+# binding = "NEARBY_CACHE"
+# id = "PASTE_KV_NAMESPACE_ID"

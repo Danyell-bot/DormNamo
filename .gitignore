@@ -1,0 +1,12 @@
+# secrets: real keys live only here (see .env.example)
+.env
+.env.*
+!.env.example
+.dev.vars
+worker/.dev.vars
+# generated from .env by `npm run config`
+js/config.js
+
+node_modules/
+.wrangler/
+worker/.wrangler/

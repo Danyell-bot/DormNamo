@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>DormNamo – Your Home Away From Home</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2028%2032%22%3E%3Cpath%20d%3D%22M3%2028.4V14a11%2011%200%200%201%2022%200v14.4a1.6%201.6%200%200%201-1.6%201.6H4.6A1.6%201.6%200%200%201%203%2028.4z%22%20fill%3D%22%230a47a9%22%2F%3E%3Cpath%20d%3D%22M14%206.2V30%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.6%22%2F%3E%3Ccircle%20cx%3D%2210.9%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2217.1%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E"
+    />
+    <script>
+      /* hide the hero until the intro plays (js/hero-fx.js); safety net if it never does */ document.documentElement.classList.add(
+        "intro",
+      );
+      setTimeout(function () {
+        document.documentElement.classList.remove("intro");
+      }, 8000);
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600..800&family=Figtree:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/chat.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/discover.css" />
+    <link rel="stylesheet" href="css/maps.css" />
+    <link rel="stylesheet" href="css/details.css" />
+    <link rel="stylesheet" href="css/polish.css" />
+    <link rel="stylesheet" href="css/hero.css" />
+    <link rel="stylesheet" href="css/brand.css" />
+    <link rel="stylesheet" href="css/onboarding.css" />
+    <link rel="stylesheet" href="css/owners.css" />
+    <link rel="stylesheet" href="css/finder.css" />
+  </head>
+  <body data-page="home">
+    <header id="siteHeader"></header>
+
+    <main id="top">
+      <div class="hero">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-grid hero-grid-hot" aria-hidden="true"></div>
+        <div class="hero-fade" aria-hidden="true"></div>
+        <div class="wrap">
+          <span class="kicker"
+            ><span class="kicker-dot" aria-hidden="true"></span>Rooms near MSU-IIT &amp; more</span
+          >
+          <h1 id="heroTitle">Find a room that feels like <span class="scribble">home</span>.</h1>
+          <script>
+            /* Random tagline on every load: [before, underlined word, after]. Runs inline, before first paint,
+   so the h1 (the LCP element) never flashes or starts hidden. Never repeats the previous pick. */
+            (function () {
+              var T = [
+                ["Find a room that feels like ", "home", "."],
+                ["Your home away from ", "home", "."],
+              ];
+              var last = -1,
+                i;
+              try {
+                last = +localStorage.getItem("dn:tagline");
+              } catch (e) {}
+              do {
+                i = Math.floor(Math.random() * T.length);
+              } while (i === last && T.length > 1);
+              try {
+                localStorage.setItem("dn:tagline", i);
+              } catch (e) {}
+              var h = document.getElementById("heroTitle"),
+                s = document.createElement("span");
+              s.className = "scribble";
+              s.textContent = T[i][1];
+              h.textContent = T[i][0];
+              h.appendChild(s);
+              h.appendChild(document.createTextNode(T[i][2]));
+            })();
+          </script>
+          <p class="lead">
+            Compare boarding houses and dorms by price, distance and what reviewers say, without visiting
+            every one.
+          </p>
+          <form class="pill" id="quick" aria-label="Quick search">
+            <label
+              ><span class="pl">Where</span
+              ><select id="qNear"></select></label
+            ><span class="sep"></span>
+            <label
+              ><span class="pl">Budget</span
+              ><select id="qBudget">
+                <option value="99999">Any budget</option>
+                <option value="1000">Up to ₱1,000</option>
+                <option value="1500">Up to ₱1,500</option>
+                <option value="2500">Up to ₱2,500</option>
+                <option value="4000">Up to ₱4,000</option>
+              </select></label
+            ><span class="sep"></span>
+            <label
+              ><span class="pl">Room type</span
+              ><select id="qType">
+                <option value="">Any type</option>
+              </select></label
+            >
+            <button class="go" type="submit">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" /></svg
+              >Search
+            </button>
+          </form>
+          <div class="stats">
+            <div><b id="sCount">0</b><span>listings</span></div>
+            <div><b id="sVer">0</b><span>with phone</span></div>
+            <div><b id="sMin">₱0</b><span>lowest listed rent</span></div>
+          </div>
+          <div class="fcs">
+            <div class="fc a">
+              <span class="fc-i" aria-hidden="true"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" />
+                  <circle cx="12" cy="9.5" r="2.5" /></svg></span
+              ><span>Near MSU-IIT<small>Real places from Google Maps</small></span>
+            </div>
+            <div class="fc b">
+              <span class="fc-i" aria-hidden="true"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="12" cy="12" r="5" />
+                  <circle cx="12" cy="12" r="1" /></svg></span
+              ><span>Match scores<small>Unknown details are never guessed</small></span>
+            </div>
+            <div class="fc c">
+              <span class="fc-i" aria-hidden="true"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg></span
+              ><span>Ask Namo<small>“Cheaper, with Wi-Fi”</small></span>
+            </div>
+          </div>
+          <a class="hero-next" href="#finder"
+            >Browse all rooms<svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" /></svg
+          ></a>
+        </div>
+      </div>
+      <section id="finder">
+        <div class="wrap">
+          <div class="sh">
+            <div>
+              <span class="eyebrow">Browse rooms</span>
+              <h2>Find your room</h2>
+              <p>
+                Real places near MSU-IIT from Google Maps. Where rent or amenities are not published, we say
+                so instead of guessing.
+              </p>
+            </div>
+          </div>
+          <div class="finder">
+            <aside class="filters" id="filters" aria-label="Filters">
+              <div class="f-head">
+                <h3>Filters <span class="f-count" id="fCount" hidden></span></h3>
+                <button class="f-clear" id="reset" type="button" hidden>Clear all</button
+                ><button
+                  class="f-toggle"
+                  id="fToggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="fBody"
+                >
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+                    <circle cx="15" cy="7" r="2" />
+                    <circle cx="9" cy="17" r="2" /></svg
+                  ><span>Show</span>
+                </button>
+              </div>
+              <div class="f-body" id="fBody">
+                <label class="f-field"
+                  ><span class="f-lab">Search</span
+                  ><span class="f-search"
+                    ><svg
+                      class="ic"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m20 20-3.5-3.5" /></svg
+                    ><input
+                      type="text"
+                      id="fQ"
+                      placeholder="Name or area, e.g. Tibanga"
+                      autocomplete="off" /></span
+                ></label>
+                <label class="f-field f-dd"
+                  ><span class="pl f-lab">Near</span
+                  ><select id="fNear"></select
+                ></label>
+                <div class="f-field f-range">
+                  <div class="f-range-h">
+                    <label class="f-lab" for="fP">Max price</label><output id="fPv" for="fP">Any</output>
+                  </div>
+                  <input
+                    type="range"
+                    id="fP"
+                    min="500"
+                    max="10000"
+                    step="100"
+                    value="10000"
+                    style="--fill: 100%"
+                  />
+                  <div class="f-ends"><span>₱500</span><span>Any</span></div>
+                </div>
+                <div class="f-field">
+                  <span class="f-lab">Room type</span>
+                  <div class="chips" id="fTypes"></div>
+                </div>
+                <div class="f-field">
+                  <span class="f-lab">Must have</span>
+                  <div class="chips" id="fAm"></div>
+                </div>
+                <label class="chk" hidden><input type="checkbox" id="fV" /> Verified listings only</label>
+              </div>
+            </aside>
+            <div class="results">
+              <div class="bar">
+                <span id="res" aria-live="polite"></span
+                ><label class="sort"
+                  ><span class="pl">Sort by</span
+                  ><select id="sort">
+                    <option value="rec">Recommended</option>
+                    <option value="pa">Price: low to high</option>
+                    <option value="pd">Price: high to low</option>
+                    <option value="rt">Top rated</option>
+                    <option value="ds">Nearest to school</option>
+                  </select></label
+                >
+              </div>
+              <div class="grid" id="grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" style="background: var(--card)">
+        <div class="wrap">
+          <div class="sh">
+            <div>
+              <h2>Finding a BH shouldn’t be this hard</h2>
+              <p>
+                Here’s what students and workers told us slows them down, and what DormNamo does about it.
+              </p>
+            </div>
+          </div>
+          <div class="problem">
+            <div>
+              <b>Unreliable info</b>Outdated or misleading posts. We ask owners to keep rates and availability
+              current.
+            </div>
+            <div>
+              <b>Hard to compare</b>Prices and facilities in one view. Pick up to three listings and compare
+              side by side.
+            </div>
+            <div>
+              <b>Unknown location</b>Every listing shows distance to nearby schools and what’s around it.
+            </div>
+            <div>
+              <b>Time and fare costs</b>Check photos, rates, and tenant reviews before you spend on a visit.
+            </div>
+            <div>
+              <b>Is it legit and safe?</b>A Verified badge appears only after DormNamo confirms details with
+              the owner. Until then every missing detail is labeled unverified.
+            </div>
+            <div>
+              <b>Owners can’t reach tenants</b>A simple way to list rooms and be found by people who need
+              them.
+            </div>
+          </div>
+          <h3 style="margin: 36px 0 14px; font-size: 24px">Made for</h3>
+          <div class="who">
+            <div>
+              <b>College students</b><br /><span class="meta"
+                >Studying away from home and watching every peso.</span
+              >
+            </div>
+            <div>
+              <b>Incoming freshmen</b><br /><span class="meta"
+                >New to the city and need a place near school.</span
+              >
+            </div>
+            <div><b>Working professionals</b><br /><span class="meta">Relocating for a job.</span></div>
+            <div>
+              <b>Interns and reviewees</b><br /><span class="meta"
+                >Short stays for internships, exams, and review programs.</span
+              >
+            </div>
+            <div>
+              <b>Owners and landlords</b><br /><span class="meta"
+                >Advertise open rooms and attract tenants.</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="owners">
+        <div class="sec-grid" aria-hidden="true"></div>
+        <div class="wrap">
+          <div class="sh">
+            <div>
+              <span class="eyebrow">For owners</span>
+              <h2>Own a boarding house? List it here.</h2>
+              <p>Start free. Pay only when you want more students to find your rooms.</p>
+            </div>
+          </div>
+          <div class="bill" role="group" aria-label="Owner Pro billing">
+            <button type="button" data-bill="m" aria-pressed="true">Monthly</button
+            ><button type="button" data-bill="y" aria-pressed="false">
+              Yearly <span class="save">2 months free</span>
+            </button>
+          </div>
+          <div class="plans">
+            <article class="plan">
+              <div class="plan-h">
+                <h3>Basic</h3>
+                <p>Get your rooms online today</p>
+              </div>
+              <div class="plan-p"><b>₱0</b><span>forever</span></div>
+              <a class="btn alt plan-cta" href="#addForm" data-plan="basic">List for free</a>
+              <ul>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>1 listing with your rates and photos</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Contact number shown to students</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Appears in search, Discover and Namo</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Tenant reviews</span>
+                </li>
+              </ul>
+            </article>
+            <article class="plan pop">
+              <span class="plan-badge">Most popular</span>
+              <div class="plan-h">
+                <h3>Featured boost</h3>
+                <p>Fill empty beds faster</p>
+              </div>
+              <div class="boost" role="radiogroup" aria-label="Boost length">
+                <button type="button" role="radio" data-boost="b7" aria-checked="false">7 days</button
+                ><button type="button" role="radio" data-boost="b30" aria-checked="true">
+                  30 days<i>Best value</i></button
+                ><button type="button" role="radio" data-boost="bsem" aria-checked="false">Semester</button>
+              </div>
+              <div class="plan-p"><b id="bPrice">₱399</b><span id="bPer">for 30 days</span></div>
+              <p class="plan-note" id="bNote">About ₱13 a day, the price of one jeepney ride.</p>
+              <a class="btn plan-cta gold" href="#addForm" data-plan="b30" id="bCta">Boost a listing</a>
+              <ul>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Top of search results and Discover</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Gold “Featured” label on your listing</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Views and inquiries report for the boost</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Best timed before enrollment season</span>
+                </li>
+              </ul>
+            </article>
+            <article class="plan">
+              <div class="plan-h">
+                <h3>Owner Pro</h3>
+                <p>For owners with several properties</p>
+              </div>
+              <div class="plan-p"><b id="proPrice">₱499</b><span id="proPer">per month</span></div>
+              <p class="plan-note" id="proNote">Includes 2 free 7-day boosts a month (₱298 value).</p>
+              <a class="btn plan-cta navy" href="#addForm" data-plan="pro-m" id="proCta">Start Owner Pro</a>
+              <ul>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Up to 5 properties</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>2 free 7-day boosts every month</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Priority verification badge</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Views and inquiries dashboard</span>
+                </li>
+                <li>
+                  <svg
+                    class="ic"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+                  ><span>Priority support</span>
+                </li>
+              </ul>
+            </article>
+          </div>
+          <p class="plan-foot">
+            <span
+              ><svg
+                class="ic"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+              >No contract. Cancel anytime.</span
+            ><span
+              ><svg
+                class="ic"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
+              >Basic stays free.</span
+            ><span class="roi"
+              >Example: one filled bedspace at ₱2,000 a month covers Owner Pro 4 times over.</span
+            >
+          </p>
+          <form class="owner" id="addForm">
+            <div class="full owner-h">
+              <h3>Add your property</h3>
+              <p class="meta">
+                Demo: listings are saved in this browser and no payment is taken. Add photos and house rules
+                later in <a href="mylistings.html">My listings</a>.
+              </p>
+            </div>
+            <label
+              >Property name<input type="text" id="aN" required placeholder="e.g. Sunrise Boarding House"
+            /></label>
+            <label>Area<input type="text" id="aA" required placeholder="e.g. Tibanga" /></label>
+            <label
+              >Monthly rent (₱)<input type="number" id="aP" min="300" required placeholder="e.g. 2500"
+            /></label>
+            <label>Room type<select id="aT"></select></label>
+            <label>Contact number<input type="tel" id="aC" required placeholder="09XX XXX XXXX" /></label>
+            <label>Near<select id="aS"></select></label>
+            <label
+              >Plan<select id="aPlan">
+                <option value="basic">Basic · Free</option>
+                <option value="b7">Featured boost · 7 days · ₱149</option>
+                <option value="b30">Featured boost · 30 days · ₱399</option>
+                <option value="bsem">Featured boost · Semester · ₱1,499</option>
+                <option value="pro-m">Owner Pro · Monthly · ₱499</option>
+                <option value="pro-y">Owner Pro · Yearly · ₱4,990</option>
+              </select></label
+            >
+            <label class="full"
+              >Short description<textarea
+                id="aD"
+                rows="2"
+                placeholder="Rooms, rules, what's included in the rent"
+              ></textarea>
+            </label>
+            <div class="full owner-f">
+              <button class="btn" type="submit">Add listing</button>
+              <span id="aMsg" class="meta" aria-live="polite"></span>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        DormNamo · Your Home Away From Home. A student project by Team Gwapo (CCC100). Listings come from
+        public Google Maps data; rent, rules and amenities stay unverified until you confirm them with the
+        owner.
+      </div>
+    </footer>
+
+    <div class="cmpbar" id="cmpbar" hidden>
+      <span id="cmpTxt"></span><button class="btn sm" id="cmpGo">Compare</button
+      ><button
+        class="btn sm"
+        id="cmpClr"
+        style="background: transparent; color: inherit; border: 1px solid currentColor"
+      >
+        Clear
+      </button>
+    </div>
+    <dialog id="dlg"></dialog>
+
+    <div class="overlay" id="auth" hidden></div>
+    <div class="overlay" id="ob" hidden></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/photos.js"></script>
+    <script src="js/listings.js"></script>
+    <script src="js/comments.js"></script>
+    <script src="js/hearts.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/pins.js"></script>
+    <script src="js/nearby-snapshot.js"></script>
+    <script src="js/nearby-core.js"></script>
+    <script src="js/maps.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/browse.js"></script>
+    <script src="js/owners.js"></script>
+    <script src="js/select.js"></script>
+    <script src="js/matching.js"></script>
+    <script src="js/twotower.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/argon2id.js"></script>
+    <script src="js/accounts.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/onboarding.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/fx.js"></script>
+    <script src="js/hero-fx.js"></script>
+    <script src="js/talk.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

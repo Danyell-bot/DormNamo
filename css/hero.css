@@ -1,0 +1,847 @@
+/* hero.css - polished navbar + hero: graph-paper grid, line icons, quieter shadows.
+   Loaded after polish.css so it wins over the earlier playful styles. */
+
+/* ---------- navbar ---------- */
+.tabs {
+  background: #f3f7fd;
+  border: 1px solid var(--line);
+  padding: 4px;
+  gap: 2px;
+}
+.tabs a {
+  gap: 8px;
+  padding: 8px 18px;
+  font-size: 15px;
+}
+.tabs a.on {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(10, 47, 115, 0.25);
+}
+.tabs .ti {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+body.dark .tabs {
+  border-color: var(--line);
+}
+body.dark .tabs a.on {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- hero ---------- */
+.hero {
+  padding: 64px 0 52px;
+  isolation: isolate;
+  background: linear-gradient(180deg, #f7faff 0%, #fff 100%);
+}
+/* graph paper: fine 20px squares with stronger lines every 100px, fading out toward the edges */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(10, 71, 169, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.13) 1px, transparent 1px),
+    linear-gradient(rgba(10, 71, 169, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.055) 1px, transparent 1px);
+  background-size:
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 30%, #000 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 90% at 50% 30%, #000 45%, transparent 100%);
+}
+/* soft blue and gold light on top of the grid */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(10, 71, 169, 0.07), transparent 38%),
+    radial-gradient(circle at 90% 88%, rgba(255, 200, 61, 0.22), transparent 40%);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  animation: none;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 6px 15px 6px 11px;
+  box-shadow: 0 2px 10px rgba(10, 47, 115, 0.08);
+}
+.kicker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.28);
+}
+.hero h1 {
+  color: var(--ink);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-top: 22px;
+}
+.hero p.lead {
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+/* search bar */
+.pill {
+  max-width: 820px;
+  margin-top: 34px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 14px 34px rgba(10, 47, 115, 0.12),
+    0 2px 6px rgba(10, 47, 115, 0.06);
+}
+.pill:hover {
+  box-shadow:
+    0 16px 40px rgba(10, 47, 115, 0.15),
+    0 2px 6px rgba(10, 47, 115, 0.06);
+  transform: none;
+}
+.pill:focus-within {
+  box-shadow:
+    0 16px 40px rgba(10, 47, 115, 0.15),
+    0 0 0 4px rgba(255, 200, 61, 0.4);
+  transform: none;
+}
+.pill label {
+  gap: 3px;
+  padding: 9px 22px;
+}
+.pill .pl {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--mute);
+}
+.pill select {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+.pill .sep {
+  margin: 14px 0;
+}
+.pill .go {
+  padding: 0 28px;
+  gap: 9px;
+  font-size: 15px;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+.pill .go svg {
+  width: 18px;
+  height: 18px;
+}
+.pill .go:hover {
+  transform: none;
+  background: #ffbe1a;
+}
+.pill .go:active {
+  transform: translateY(1px);
+}
+.pill .go:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .pill {
+    border-radius: 22px;
+  }
+  .pill .go {
+    padding: 14px;
+  }
+}
+
+/* stats: one clean strip with dividers */
+.hero .stats {
+  display: inline-flex;
+  gap: 0;
+  margin-top: 34px;
+  padding: 12px 4px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(10, 47, 115, 0.06);
+}
+.hero .stats > div {
+  display: grid;
+  gap: 2px;
+  padding: 0 26px;
+  font-size: 13px;
+  color: var(--mute);
+}
+.hero .stats > div + div {
+  border-left: 1px solid var(--line);
+}
+.hero .stats b {
+  background: none;
+  padding: 0;
+  font:
+    800 24px "Bricolage Grotesque",
+    sans-serif;
+  color: var(--ink);
+  line-height: 1.1;
+}
+@media (max-width: 560px) {
+  .hero .stats > div {
+    padding: 0 12px;
+  }
+  .hero .stats b {
+    font-size: 20px;
+  }
+}
+
+/* feature cards: a tidy row under the stats by default ... */
+.fcs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+.hero .fc {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 16px 10px 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink);
+  font-size: 14px;
+  text-align: left;
+  box-shadow: 0 8px 22px rgba(10, 47, 115, 0.09);
+  transform: none;
+  animation: none;
+}
+/* ... and floating in the side margins only when there is room beside the headline.
+   Offsets are measured from the center, so they never cover the text (headline ~640px, lead ~540px wide). */
+@media (min-width: 1320px) {
+  .fcs {
+    margin: 0;
+  }
+  .hero .fc {
+    position: absolute;
+    width: 250px;
+    box-sizing: border-box;
+    box-shadow: 0 12px 30px rgba(10, 47, 115, 0.12);
+    animation: bob 6s ease-in-out infinite;
+  }
+  .hero .fc.a {
+    left: auto;
+    right: calc(50% + 350px);
+    top: 36px;
+    bottom: auto;
+  }
+  .hero .fc.c {
+    left: auto;
+    right: calc(50% + 370px);
+    top: 200px;
+    bottom: auto;
+  }
+  .hero .fc.b {
+    left: calc(50% + 350px);
+    right: auto;
+    top: 110px;
+    bottom: auto;
+  }
+}
+@media (max-width: 560px) {
+  .fcs {
+    display: grid;
+    justify-content: stretch;
+  }
+}
+.fc small {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 1px;
+}
+.fc-i {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: #eef4fd;
+  color: var(--brand);
+}
+.fc.b .fc-i {
+  background: #fff6d6;
+  color: #8a6300;
+}
+.fc-i svg {
+  width: 19px;
+  height: 19px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero .fc {
+    animation: none;
+  }
+}
+
+/* ---------- grid spotlight (js/hero-fx.js sets --mx/--my) ---------- */
+/* a darker copy of the grid, visible only in a soft circle around the mouse */
+.hero-grid-hot {
+  background-image:
+    radial-gradient(circle 230px at var(--mx, 50%) var(--my, 50%), rgba(10, 71, 169, 0.07), transparent 70%),
+    linear-gradient(rgba(10, 71, 169, 0.42) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.42) 1px, transparent 1px),
+    linear-gradient(rgba(10, 71, 169, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.2) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  background-position:
+    0 0,
+    center top,
+    center top,
+    center top,
+    center top;
+  -webkit-mask-image: radial-gradient(
+    circle 210px at var(--mx, 50%) var(--my, 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 210px at var(--mx, 50%) var(--my, 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 40%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.hero.hot .hero-grid-hot {
+  opacity: 1;
+}
+
+/* ---------- small hover details ---------- */
+.kicker-dot {
+  position: relative;
+}
+.kicker-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  animation: kpulse 2.4s ease-out infinite;
+}
+@keyframes kpulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  70%,
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+.hero .stats > div {
+  transition: transform 0.2s ease;
+}
+.hero .stats > div:hover {
+  transform: translateY(-2px);
+}
+.hero .stats b {
+  font-variant-numeric: tabular-nums;
+  transition: color 0.4s ease;
+}
+.hero .stats b.scrambling {
+  color: var(--brand);
+}
+.hero .fc {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.fcs .fc:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow: 0 14px 30px rgba(10, 47, 115, 0.14);
+}
+@media (min-width: 1320px) {
+  .fcs .fc:hover {
+    transform: none;
+  }
+} /* floating ones already bob */
+
+/* ---------- opening transition ---------- */
+/* <html class="intro"> is set in the page head; HeroFX.play() swaps it for .intro-run */
+.intro header,
+.intro .hero .wrap > *,
+.intro .hero-grid:not(.hero-grid-hot) {
+  opacity: 0;
+}
+/* The headline is the page's largest content, so it is never hidden or animated: browsers only count an animated
+   element as painted after the animation, which pushed the Largest Contentful Paint metric from ~0.2 s to ~2.4 s.
+   Everything around it still rises in, and the yellow highlight on "home" sweeps in. */
+.intro .hero .wrap > h1 {
+  opacity: 1;
+}
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes heroGrid {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes navDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.intro-run header {
+  animation: navDrop 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.intro-run .hero-grid:not(.hero-grid-hot) {
+  animation: heroGrid 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.intro-run .hero .wrap > * {
+  animation: heroRise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.intro-run .hero .kicker {
+  animation-delay: 0.12s;
+}
+.intro-run .hero .wrap > h1 {
+  animation: none;
+}
+.intro-run .hero .lead {
+  animation-delay: 0.36s;
+}
+.intro-run .hero .pill {
+  animation-delay: 0.48s;
+}
+.intro-run .hero .stats {
+  animation-delay: 0.6s;
+}
+.intro-run .hero .fcs {
+  animation-delay: 0.74s;
+}
+/* reduced motion: same order and timing, but only fading (no rising, blur or zoom) */
+@keyframes heroFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-run header,
+  .intro-run .hero .wrap > *,
+  .intro-run .hero-grid:not(.hero-grid-hot) {
+    animation-name: heroFade;
+  }
+  .kicker-dot::after {
+    animation: none;
+  }
+  .hero-grid-hot {
+    transition: none;
+  }
+}
+
+/* ---------- after pressing Search: results rise in, count highlights ---------- */
+@keyframes resRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+#finder.searched .grid > .card {
+  animation: resRise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+/* result count: a slim gold underline wipes in, then out to the right (same style as the hero's) */
+#res {
+  position: relative;
+}
+#finder.searched #res::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--gold);
+  animation: resLine 1.7s ease both;
+  pointer-events: none;
+}
+@keyframes resLine {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  30% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  70% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+}
+#finder.searched .filters {
+  animation: resRise 0.5s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  #finder.searched .grid > .card,
+  #finder.searched .filters {
+    animation-name: heroFade;
+  }
+}
+
+/* ---------- handoff from the hero to "Find your room" ---------- */
+/* 1. no hard edge: the hero's grid, tint and glow fade into the white top of #finder */
+.hero {
+  padding-bottom: 72px;
+}
+.hero-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 180px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 92%);
+}
+#finder {
+  position: relative;
+}
+
+/* 2. "Browse all rooms" cue */
+.hero-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 26px;
+  padding: 8px 14px 8px 18px;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 99px;
+  border: 1px solid transparent;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.hero-next svg {
+  width: 18px;
+  height: 18px;
+  animation: nudge 1.8s ease-in-out infinite;
+}
+.hero-next:hover {
+  background: #fff;
+  border-color: var(--line);
+}
+.hero-next:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+.intro-run .hero .hero-next {
+  animation-delay: 0.86s;
+}
+
+/* 3. scroll depth (js/hero-fx.js sets --hp from 0 at the top to 1 when the hero has scrolled away) */
+.hero .wrap {
+  transform: translateY(calc(var(--hp, 0) * -36px));
+  opacity: calc(1 - var(--hp, 0) * 0.55);
+  will-change: transform, opacity;
+}
+.hero-grid {
+  transform: translateY(calc(var(--hp, 0) * 50px));
+}
+.hero-grid-hot {
+  -webkit-mask-image: radial-gradient(
+    circle 210px at var(--mx, 50%) calc(var(--my, 50%) - var(--hp, 0) * 50px),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 210px at var(--mx, 50%) calc(var(--my, 50%) - var(--hp, 0) * 50px),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 40%,
+    transparent 100%
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-next svg {
+    animation: none;
+  }
+}
+
+/* ---------- custom dropdowns in the search bar (js/select.js) ---------- */
+.pill label.dd {
+  position: relative;
+}
+.pill label.dd-open {
+  background: #eef4fd;
+}
+.dd-native {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.dd-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font:
+    600 15px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+}
+.dd-btn:focus-visible {
+  outline: none;
+}
+.pill label.dd:focus-within {
+  background: #eef4fd;
+}
+.dd-val {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dd-chev {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--mute);
+  transition: transform 0.2s ease;
+}
+.dd-open .dd-chev {
+  transform: rotate(180deg);
+  color: var(--brand);
+}
+.dd-list {
+  position: absolute;
+  left: 6px;
+  top: calc(100% + 10px);
+  z-index: 40;
+  min-width: max(220px, calc(100% - 12px));
+  max-height: 290px;
+  overflow: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 18px 44px rgba(10, 47, 115, 0.18),
+    0 2px 6px rgba(10, 47, 115, 0.06);
+  animation: ddIn 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+@keyframes ddIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+.dd-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font:
+    600 14px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.dd-list li.act {
+  background: #eef4fd;
+}
+.dd-list li[aria-selected="true"] {
+  color: var(--brand);
+}
+.dd-ok {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--brand);
+  stroke-width: 3;
+  visibility: hidden;
+}
+.dd-list li[aria-selected="true"] .dd-ok {
+  visibility: visible;
+}
+@media (max-width: 700px) {
+  .dd-list {
+    left: 0;
+    right: 0;
+    min-width: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dd-list {
+    animation: none;
+  }
+  .dd-chev {
+    transition: none;
+  }
+}
+
+/* ---------- intro for the three floating cards (wide screens) ----------
+   On wide screens the cards are absolutely positioned against .hero .wrap. Animating their wrapper (.fcs)
+   with a transform would make the wrapper their positioning box for the length of the animation, so the cards
+   faded in far below their spots and snapped up at the end. Instead the wrapper stays put and each card
+   glides in from its own side, in step with the lead and the search pill. `bob` stays in the animation list
+   in both states, so the gentle float keeps running without a jump when the intro class is removed. */
+@keyframes fcInL {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes fcInR {
+  from {
+    opacity: 0;
+    transform: translateX(28px) scale(0.96);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@media (min-width: 1320px) {
+  .intro .hero .fcs,
+  .intro-run .hero .fcs {
+    opacity: 1;
+    animation: none;
+  }
+  .intro .hero .fc {
+    opacity: 0;
+  }
+  .intro-run .hero .fc {
+    animation:
+      fcInL 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both,
+      bob 6s ease-in-out infinite;
+  }
+  .intro-run .hero .fc.b {
+    animation-name: fcInR, bob;
+  }
+  /* left top, right, left bottom: arrives with the lead (0.36 s) and the search pill (0.48 s) */
+  .intro-run .hero .fc.a {
+    animation-delay: 0.3s, 0s;
+  }
+  .intro-run .hero .fc.b {
+    animation-delay: 0.42s, 0s;
+  }
+  .intro-run .hero .fc.c {
+    animation-delay: 0.54s, 0s;
+  }
+}
+@media (min-width: 1320px) and (prefers-reduced-motion: reduce) {
+  .intro-run .hero .fc,
+  .intro-run .hero .fc.b {
+    animation-name: heroFade;
+  }
+  .intro-run .hero .fc.a {
+    animation-delay: 0.3s;
+  }
+  .intro-run .hero .fc.b {
+    animation-delay: 0.42s;
+  }
+  .intro-run .hero .fc.c {
+    animation-delay: 0.54s;
+  }
+}

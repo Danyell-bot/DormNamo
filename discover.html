@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Discover · DormNamo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2028%2032%22%3E%3Cpath%20d%3D%22M3%2028.4V14a11%2011%200%200%201%2022%200v14.4a1.6%201.6%200%200%201-1.6%201.6H4.6A1.6%201.6%200%200%201%203%2028.4z%22%20fill%3D%22%230a47a9%22%2F%3E%3Cpath%20d%3D%22M14%206.2V30%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.6%22%2F%3E%3Ccircle%20cx%3D%2210.9%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2217.1%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600..800&family=Figtree:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/chat.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/discover.css" />
+    <link rel="stylesheet" href="css/maps.css" />
+    <link rel="stylesheet" href="css/details.css" />
+    <link rel="stylesheet" href="css/polish.css" />
+    <link rel="stylesheet" href="css/hero.css" />
+    <link rel="stylesheet" href="css/brand.css" />
+    <link rel="stylesheet" href="css/onboarding.css" />
+  </head>
+  <body data-page="discover" class="dark">
+    <header id="siteHeader"></header>
+    <main class="dpage">
+      <div class="dhead">
+        <div>
+          <h1>For you</h1>
+          <p class="dsub">Rooms ranked for you. Swipe right to like, left to pass.</p>
+        </div>
+        <button class="btn alt sm" id="dPref" type="button">
+          <svg
+            class="ic"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+            <circle cx="15" cy="7" r="2" />
+            <circle cx="9" cy="17" r="2" /></svg
+          >Edit preferences
+        </button>
+      </div>
+      <div class="deckwrap">
+        <div
+          class="deck"
+          id="deck"
+          tabindex="0"
+          aria-label="Dorm recommendations. Arrow right to like, left to pass, up for details, Z to undo."
+        ></div>
+        <div class="rail">
+          <button id="dLike" type="button" aria-label="Like" title="Like (→)">
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3.2 5 6.6 5c2.1 0 3.4 1.2 5.4 3.3C14 6.2 15.3 5 17.4 5c3.4 0 5.3 3.4 3.8 6.4C19 15.6 12 20 12 20z"
+              />
+            </svg>
+          </button>
+          <button id="dInfo" type="button" aria-label="Details and ask landlord" title="Details (↑)">
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 11v5" />
+              <path d="M12 7.6v.01" />
+            </svg>
+          </button>
+          <details class="more">
+            <summary aria-label="More actions" title="More">
+              <svg
+                class="ic"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h.01M12 12h.01M19 12h.01" />
+              </svg>
+            </summary>
+            <div class="pop">
+              <button id="dMark" type="button">
+                <svg
+                  class="ic"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M6 3.5h12v17l-6-4.3-6 4.3z" /></svg
+                >Bookmark</button
+              ><button id="dPass" type="button">
+                <svg
+                  class="ic"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M6 6l12 12M18 6 6 18" /></svg
+                >Pass <kbd>←</kbd></button
+              ><button id="dUndo" type="button">
+                <svg
+                  class="ic"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 14 4 9l5-5" />
+                  <path d="M4 9h11a5 5 0 0 1 0 10h-3" /></svg
+                >Undo <kbd>Z</kbd>
+              </button>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="dstat" id="dStat" aria-live="polite"></div>
+      <details class="saved">
+        <summary><span>Liked &amp; bookmarked</span><b id="dSavedN">0</b></summary>
+        <div id="dSaved"></div>
+      </details>
+    </main>
+    <div class="overlay" id="auth" hidden></div>
+    <div class="overlay" id="ob" hidden></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="dlg"></dialog>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/photos.js"></script>
+    <script src="js/listings.js"></script>
+    <script src="js/comments.js"></script>
+    <script src="js/hearts.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/pins.js"></script>
+    <script src="js/nearby-snapshot.js"></script>
+    <script src="js/nearby-core.js"></script>
+    <script src="js/maps.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/matching.js"></script>
+    <script src="js/twotower.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/discover.js"></script>
+    <script src="js/argon2id.js"></script>
+    <script src="js/accounts.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/onboarding.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/fx.js"></script>
+    <script src="js/talk.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
