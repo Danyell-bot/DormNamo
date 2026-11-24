@@ -623,7 +623,7 @@ var Chat = (function () {
     lastTop = top.h.id;
     if (before == null) return;
     alertUser(
-      "📌 Your preferences changed, so your best match is now <b>" +
+      "Your preferences changed, so your best match is now <b>" +
         esc(top.h.n) +
         "</b> (" +
         top.pct +
@@ -751,7 +751,7 @@ var Chat = (function () {
       }),
       hs = ids.map(byId).filter(Boolean);
     if (!hs.length)
-      return 'You haven\'t liked or bookmarked any rooms yet. Try swiping in <a href="discover.html">Discover</a>! 🔥';
+      return 'You haven\'t liked or bookmarked any rooms yet. Try swiping in <a href="discover.html">Discover</a>!';
     return (
       'Rooms you liked or bookmarked:<div class="minis">' +
       hs
@@ -767,7 +767,7 @@ var Chat = (function () {
   var HELP =
     "I can tune your matches from plain sentences, e.g. <i>“near campus, 10 min walk, under 3k, must have wifi, no curfew”</i> or <i>“I'm broke and I have online classes”</i>. You can also ask me about a listing by name, how matching works, or what to check when visiting. Ask “what's best for me?”, “why?” or “compare it with the next one”, and I'll explain my picks. Say <b>undo</b> to revert.";
   var FALLBACK = [
-    "Hmm, I'm not sure I got that. 🤔 I'm best at rooms: try “cheaper”, “closer to campus”, “I have online classes” or “show my matches”.",
+    "Hmm, I'm not sure I got that. I'm best at rooms: try “cheaper”, “closer to campus”, “I have online classes” or “show my matches”.",
     "Sorry {name}, that one's beyond me for now. I can help with budget, distance, Wi-Fi, water, curfew and more. Say <b>help</b> for ideas.",
     "I didn't quite catch that. Could you say it another way? For example “I don't want to walk far” or “what are my preferences?”",
   ];
@@ -1160,7 +1160,7 @@ var Chat = (function () {
       return (
         "Hi " +
         first() +
-        "! I'm Namo 👋 Tell me what you want in a room and I'll tune your matches, or ask me about any dorm by name. Try a chip below."
+        "! I'm Namo. Tell me what you want in a room and I'll tune your matches, or ask me about any dorm by name. Try a chip below."
       );
     var musts = Object.keys(P.m)
         .filter(function (k) {
@@ -1173,7 +1173,7 @@ var Chat = (function () {
     return (
       "Welcome back, " +
       first() +
-      "! 👋 You're looking near " +
+      "! You're looking near " +
       esc(P.school) +
       ", within " +
       P.maxKm +
@@ -1208,9 +1208,7 @@ var Chat = (function () {
     if (p.heart) {
       var hh = byId(p.heart);
       if (hh && window.Hearts && !Hearts.has(hh.id)) Hearts.toggle(hh.id);
-      return hh
-        ? "Saved <b>" + esc(hh.n) + "</b> to your hearts. ❤️ You'll find it in your liked rooms."
-        : null;
+      return hh ? "Saved <b>" + esc(hh.n) + "</b> to your hearts. You'll find it in your liked rooms." : null;
     }
     if (p.apply) {
       undoStack.push(JSON.stringify(S.P));
@@ -1387,7 +1385,7 @@ var Chat = (function () {
     if (t && t.id) {
       miss = 0;
       if (t.act === "yes")
-        return ctx.pending ? doPending(ctx.pending) : "👍 Great! What else would you like in a room?";
+        return ctx.pending ? doPending(ctx.pending) : "Great! What else would you like in a room?";
       if (t.act === "no") {
         ctx.pending = null;
         return "No problem! Just tell me whenever you want to change something.";
@@ -1471,12 +1469,12 @@ var Chat = (function () {
       ico("chat") +
       '<b>Ask Namo</b><span class="fab-badge" id="chatBadge" hidden aria-hidden="true"></span></button>' +
       '<div class="c-peek" id="chatPeek" hidden role="status"><button type="button" class="c-peek-b" aria-label="Open the chat with Namo"><span class="c-av">' +
-      ico("chat") +
+      ico("namo") +
       '</span><span class="c-peek-m"><b>Namo</b><span class="c-peek-t"></span></span></button><button type="button" class="c-peek-x" aria-label="Dismiss">' +
       ico("x") +
       "</button></div>" +
       '<section class="cpanel" id="chatPanel" hidden aria-label="Chat with Namo"><header><span class="c-av">' +
-      ico("chat") +
+      ico("namo") +
       '</span><div><b>Namo</b><small><i class="c-dot" aria-hidden="true"></i>Online · your room helper</small></div><button id="chatX" aria-label="Close chat">' +
       ico("x") +
       "</button></header>" +
@@ -1567,7 +1565,7 @@ var Chat = (function () {
         say(
           "bot",
           yes
-            ? "Thanks! 🙌 From now on I'll learn from the rooms you open, heart, skip and search for. Ask “what do I like?” any time, or say “stop learning”." +
+            ? "Thanks! From now on I'll learn from the rooms you open, heart, skip and search for. Ask “what do I like?” any time, or say “stop learning”." +
                 (more ? "<br><br>" + tasteHTML() : "")
             : "No problem! I won't look at your activity. Your hearts and swipes still shape your matches as usual, and you can say “learn from me” if you change your mind.",
         );
@@ -1663,7 +1661,7 @@ var Chat = (function () {
         "I couldn't reach the map search right now (it may be busy, or you're offline). You can still search these yourself:";
     else if (n)
       out +=
-        "🌐 I found <b>" +
+        "I found <b>" +
         n +
         (n === 1 ? " place" : " places") +
         "</b> on OpenStreetMap within " +
@@ -1741,8 +1739,8 @@ var Chat = (function () {
             "</ul>"
         : "";
     }
-    var social = group("social", "📱 Social media"),
-      web = group("web", "🔎 Search engines and maps");
+    var social = group("social", "Social media"),
+      web = group("web", "Search engines and maps");
     out +=
       (n ? web + social : social + web) +
       "<small class=\"c-note\">These open each site's own search (some ask you to log in). I don't read those sites myself, so check the posts and message the owners there.</small>" +
@@ -1765,7 +1763,7 @@ var Chat = (function () {
       if (box) say("bot", webResultsHTML(res));
     });
     return (
-      "🔎 Searching the web (OpenStreetMap) for " +
+      "Searching the web (OpenStreetMap) for " +
       esc(what) +
       " within " +
       reg.r +
@@ -1785,7 +1783,7 @@ var Chat = (function () {
     tipped = true;
     say(
       "bot",
-      "👀 I noticed something from what you've been looking at. " + Insights.summaryHTML() + offerHTML(sugs),
+      "I noticed something from what you've been looking at. " + Insights.summaryHTML() + offerHTML(sugs),
     );
   }
   function open_(id) {

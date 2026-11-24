@@ -161,48 +161,6 @@ body.dark .fab {
   height: 18px;
 }
 
-/* ---------- Discover: header ---------- */
-.dhead {
-  width: min(520px, 100%);
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.dhead h1 {
-  margin: 0;
-  font-size: 30px;
-  letter-spacing: -0.02em;
-}
-.dsub {
-  margin: 2px 0 0;
-  font-size: 13px;
-  color: var(--mute);
-}
-.dhead .btn.alt {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--ink);
-}
-.dhead .btn.alt:hover {
-  border-color: var(--gold);
-}
-body.dark .dhead .btn.alt {
-  background: var(--card);
-  border-color: var(--line);
-  color: #fff;
-}
-body.dark .dhead .btn.alt:hover {
-  border-color: var(--gold);
-}
-.dhead .btn .ic {
-  width: 16px;
-  height: 16px;
-}
-
 /* ---------- Discover: swipe card ---------- */
 .dpage .sw {
   border: 1px solid var(--line);
@@ -379,12 +337,8 @@ body.dark .sw-unv {
 }
 .rail > button:hover,
 .more > summary:hover {
-  transform: translateY(-2px);
   background: var(--card);
   border-color: var(--gold);
-}
-.rail > button:active {
-  transform: scale(0.94);
 }
 .more[open] > summary {
   border-color: var(--gold);
@@ -399,9 +353,6 @@ body.dark .sw-unv {
 }
 #dLike:not(:disabled):hover {
   background: #ffbe1a;
-}
-#dLike.pop {
-  animation: heart 0.45s;
 }
 .more .pop {
   background: var(--card);
@@ -551,209 +502,391 @@ body:not(.dark) .sv-tag.bm {
   border-color: #e0a800;
 }
 
-/* ---------- Discover: swipe feedback ---------- */
-/* discover.js sets --lk / --ps (drag progress toward like / pass, 0..1) and --pull on .dpage.
-   Drag right: green washes in from the right of the page, LIKE stamps on. Drag left: red from the left, PASS.
-   .sw.armed = past the swipe threshold. .dpage.dragging = finger down (no easing, follow the finger). */
-.dtint {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+/* ---------- Discover: cover flow ---------- */
+/* discover.js lay()/put() place every card inline (transform, blur, opacity, z-index). The focused room sits in
+   the middle; its neighbours stack behind it on both sides. Up = like, down = pass, sideways = browse.
+   --lk / --ps (0..1) on .dpage light the card's Like / Pass label and the guides beside the deck. */
+/* explicit columns: an auto grid track would shrink to the rail's width and squeeze the deck */
+.dpage {
+  grid-template-columns: minmax(0, 1fr);
+}
+.dpage .deckwrap {
+  position: relative;
+  width: min(1120px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 14px;
+}
+.dpage .deckwrap .deck {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: clamp(420px, calc(100dvh - 290px), 640px);
+  margin: 0;
+  flex: none;
+  touch-action: none;
+  clip-path: inset(-100vh 0);
+  perspective: 1600px;
+}
+/* a soft spotlight on the floor under the focused room */
+.dpage .deckwrap .deck::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -26px;
+  width: min(560px, 90%);
+  height: 90px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(10, 47, 115, 0.1), transparent);
+  filter: blur(6px);
   pointer-events: none;
 }
-.dtint i {
+/* position in the ranking: 03 / 24 with a thin progress line */
+.dpos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font:
+    700 12px/1 Figtree,
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.14em;
+  color: var(--mute);
+  font-variant-numeric: tabular-nums;
+}
+.dpos b {
+  color: var(--ink);
+}
+.dpos i {
+  position: relative;
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.dpos i::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  transition: opacity 0.55s ease;
+  inset: 0 auto 0 0;
+  width: var(--dp, 0%);
+  background: var(--gold);
+  transition: width 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
-.dtint .t-like {
+.dpage .sw {
+  inset: 0 auto 0 50%;
+  width: min(420px, calc(100% - 64px));
+  transform: translate3d(-50%, 0, 0);
+  border-radius: 24px;
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+}
+.dpage .sw {
+  background: #fff;
+  border-color: var(--line);
+}
+.dpage .sw.side {
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(10, 47, 115, 0.08);
+}
+.dpage .sw.side .cb {
+  overflow: hidden;
+}
+.dpage .sw.side .sw-hint {
+  visibility: hidden;
+}
+.dpage .sw.is-focus {
+  box-shadow: 0 24px 60px rgba(10, 47, 115, 0.16);
+}
+.sw img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.dpage.dragging .sw {
+  cursor: grabbing;
+}
+
+/* Like / Pass label on the focused card */
+.sw-flag {
+  position: absolute;
+  left: 50%;
+  z-index: 4;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font:
+    700 12px/1 Figtree,
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(8, 20, 44, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.sw-flag.l {
+  bottom: 52px;
   opacity: var(--lk, 0);
-  background: radial-gradient(
-    120% 130% at 100% 50%,
-    rgba(18, 184, 104, 0.62) 0%,
-    rgba(18, 184, 104, 0.24) 42%,
-    rgba(18, 184, 104, 0) 75%
-  );
+  background: rgb(22, 163, 74);
 }
-.dtint .t-pass {
+.sw-flag.p {
+  top: 14px;
   opacity: var(--ps, 0);
-  background: radial-gradient(
-    120% 130% at 0% 50%,
-    rgba(229, 62, 62, 0.6) 0%,
-    rgba(229, 62, 62, 0.22) 42%,
-    rgba(229, 62, 62, 0) 75%
-  );
-}
-.dpage.dragging .dtint i {
-  transition: none;
+  background: rgb(220, 38, 38);
 }
 
-/* the dragged / flying card rises above the action rail */
-.deck.drag {
-  z-index: 6;
-}
-
-/* card underneath grows into place as the top card leaves */
-.dpage .sw.back {
-  opacity: calc(0.5 + 0.5 * var(--pull, 0));
-  transform: translateY(calc(16px * (1 - var(--pull, 0)))) scale(calc(0.93 + 0.07 * var(--pull, 0)));
-  filter: brightness(calc(0.78 + 0.22 * var(--pull, 0)));
-  transition:
-    transform 0.35s ease,
-    opacity 0.35s ease,
-    filter 0.35s ease;
-  animation: backIn 0.45s ease;
-}
-.dpage.dragging .sw.back {
-  transition: none;
-}
-@keyframes backIn {
-  from {
-    opacity: 0;
-  }
-}
-
-/* colored wash on the card's leading edge */
-.sw .glow {
+/* guides beside the strip: a thin arrow and one word (wide screens only) */
+.dguide {
   position: absolute;
   top: 0;
-  bottom: 0;
-  width: 65%;
-  z-index: 3;
+  height: clamp(420px, calc(100dvh - 290px), 640px);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 64px;
   pointer-events: none;
+  color: var(--mute);
 }
-.sw .glow.gl {
-  right: 0;
-  opacity: var(--lk, 0);
-  background: linear-gradient(to left, rgba(18, 184, 104, 0.6), rgba(18, 184, 104, 0));
-  box-shadow: inset -6px 0 0 #12b868;
+.dguide.up {
+  left: 12px;
 }
-.sw .glow.gp {
-  left: 0;
-  opacity: var(--ps, 0);
-  background: linear-gradient(to right, rgba(229, 62, 62, 0.6), rgba(229, 62, 62, 0));
-  box-shadow: inset 6px 0 0 #e53e3e;
+.dguide.down {
+  right: 12px;
+}
+.dguide .ic {
+  width: 18px;
+  height: 40px;
+  stroke-width: 1.5;
+  transition: transform 0.2s;
+}
+.dguide b {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.dguide.up {
+  color: rgba(22, 163, 74, calc(0.7 + 0.3 * var(--lk, 0)));
+}
+.dguide.up .ic {
+  transform: translateY(calc(var(--lk, 0) * -10px));
+}
+.dguide.down {
+  color: rgba(220, 38, 38, calc(0.7 + 0.3 * var(--ps, 0)));
+}
+.dguide.down .ic {
+  transform: translateY(calc(var(--ps, 0) * 10px));
+}
+@media (max-width: 1179px) {
+  .dguide {
+    display: none;
+  }
 }
 
-/* stamps: solid, chunky, grow in with the drag and thunk down past the threshold */
-.sw .stamp {
-  top: 22px;
-  z-index: 4;
+/* compact hints at both ends of the position row (narrow screens, where the side panels are hidden) */
+.dpos .dph {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.dpos .dph .ic {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2.2;
+}
+.dpos .dph {
+  font-weight: 700;
+}
+.dpos .dph.up {
+  margin-right: 6px;
+  color: rgba(22, 163, 74, calc(0.75 + 0.25 * var(--lk, 0)));
+}
+.dpos .dph.down {
+  margin-left: 6px;
+  color: rgba(220, 38, 38, calc(0.75 + 0.25 * var(--ps, 0)));
+}
+@media (max-width: 1179px) {
+  .dpos .dph {
+    display: inline-flex;
+  }
+}
+@media (max-width: 420px) {
+  .dpos {
+    gap: 8px;
+  }
+  .dpos i {
+    width: 54px;
+  }
+}
+
+/* ---------- Discover: TikTok-style header (Saved | For you tabs, preferences icon) ---------- */
+.vh {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.dpage .dhead {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: min(1120px, 100%);
+  margin-bottom: 8px;
+}
+.dtabs {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.dtabs button {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding: 8px 2px 11px;
+  border: 0;
+  background: none;
+  cursor: pointer;
   font:
-    800 22px/1 "Bricolage Grotesque",
+    600 16px/1 Figtree,
+    system-ui,
     sans-serif;
-  letter-spacing: 0.12em;
-  color: #fff;
-  padding: 9px 17px 9px 13px;
-  border: 3px solid #fff;
-  border-radius: 15px;
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.22);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+  color: var(--mute);
+  opacity: 0.7;
+  transition:
+    color 0.2s,
+    opacity 0.2s;
 }
-.sw .stamp .ic {
-  width: 22px;
-  height: 22px;
+.dtabs button + button::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  width: 1px;
+  height: 13px;
+  margin-top: -8px;
+  background: var(--line);
 }
-.sw .stamp.l {
-  right: 16px;
-  left: auto;
-  background: linear-gradient(135deg, #22d884, #0e9f5a);
-  opacity: var(--lk, 0);
-  transform: rotate(12deg) scale(calc(0.5 + 0.5 * var(--lk, 0)));
+.dtabs button:hover {
+  opacity: 1;
 }
-.sw .stamp.l .ic {
-  fill: currentColor;
+.dtabs button[aria-selected="true"] {
+  opacity: 1;
+  color: var(--ink);
+  font-weight: 800;
 }
-.sw .stamp.p {
-  left: 16px;
+.dtabs button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 24px;
+  height: 3px;
+  margin-left: -12px;
+  border-radius: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.dtabs button[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+.dtabs button:focus-visible {
+  outline: 2px solid rgba(255, 200, 61, 0.6);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+#dSavedTab {
+  min-width: 18px;
+  padding: 3px 6px;
+  border-radius: 99px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--goldink);
+  background: var(--gold);
+}
+.dicon {
+  grid-column: 3;
+  justify-self: end;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.dicon:hover {
+  border-color: var(--gold);
+}
+.dicon .ic {
+  width: 19px;
+  height: 19px;
+}
+
+/* Saved tab: the liked & bookmarked list takes the strip's place */
+.dpage:not(.on-saved) .saved {
+  display: none;
+}
+.dpage.on-saved .deckwrap,
+.dpage.on-saved .dstat {
+  display: none;
+}
+.dpage.on-saved .saved {
+  margin-top: 6px;
+  padding: 6px 16px;
+}
+.dpage.on-saved .saved summary {
+  display: none;
+}
+
+/* phones: a shorter strip so the hints and buttons stay on screen */
+@media (max-width: 560px) {
+  .dpage .deckwrap .deck {
+    height: clamp(380px, calc(100dvh - 250px), 600px);
+  }
+  .dtabs button {
+    font-size: 15px;
+  }
+}
+
+/* action rail: one row under the strip */
+.dpage .rail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.dpage .rail #dLike,
+.dpage .rail #dPass {
+  width: 60px;
+  height: 60px;
+}
+.dpage .more .pop {
   right: auto;
-  background: linear-gradient(135deg, #ff6b6b, #d63a3a);
-  opacity: var(--ps, 0);
-  transform: rotate(-12deg) scale(calc(0.5 + 0.5 * var(--ps, 0)));
-}
-.sw .stamp.p .ic {
-  stroke-width: 3.4;
-}
-.sw.armed .stamp.l {
-  animation: thunkL 0.38s cubic-bezier(0.3, 1.6, 0.5, 1);
-}
-.sw.armed .stamp.p {
-  animation: thunkP 0.38s cubic-bezier(0.3, 1.6, 0.5, 1);
-}
-@keyframes thunkL {
-  from {
-    transform: rotate(4deg) scale(1.45);
-  }
-  to {
-    transform: rotate(12deg) scale(1);
-  }
-}
-@keyframes thunkP {
-  from {
-    transform: rotate(-4deg) scale(1.45);
-  }
-  to {
-    transform: rotate(-12deg) scale(1);
-  }
-}
-
-/* the heart button answers a right-drag */
-#dLike:not(:disabled) {
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.22),
-    0 0 0 calc(10px * var(--lk, 0)) rgba(255, 200, 61, 0.28);
-}
-
-/* hearts / crosses that fly off a swiped card */
-.burst {
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: 7;
-  pointer-events: none;
-}
-.burst i {
-  position: absolute;
-  left: -15px;
-  top: -15px;
-  width: 30px;
-  height: 30px;
-  animation: burst 0.95s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
-}
-.burst .ic {
-  width: 100%;
-  height: 100%;
-}
-.burst.like i {
-  color: #22d884;
-}
-.burst.like .ic {
-  fill: currentColor;
-}
-.burst.pass i {
-  color: #ff6b6b;
-}
-.burst.pass .ic {
-  stroke-width: 3.4;
-}
-@keyframes burst {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.2);
-  }
-  18% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--x), var(--y)) scale(var(--s)) rotate(var(--r));
-  }
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%);
 }
 
 /* card surface + quieter scrollbar on the dark page */
@@ -773,18 +906,6 @@ body.dark .sw .cb::-webkit-scrollbar-thumb {
 body.dark .sw-hint {
   border-color: rgba(157, 183, 230, 0.16);
   background: rgba(0, 0, 0, 0.12);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dtint i,
-  .dpage .sw.back {
-    transition: none;
-    animation: none;
-  }
-  .sw.armed .stamp.l,
-  .sw.armed .stamp.p {
-    animation: none;
-  }
 }
 
 /* keyboard focus only (no box around the deck on mouse clicks) */
@@ -1111,40 +1232,22 @@ body.dark #chatForm input:focus {
   outline: 3px solid var(--gold);
   outline-offset: 2px;
 }
-/* heart: squash, stretch, tilt, settle (like a ball landing) */
+/* heart: a short, quiet scale */
 .hrt.pop .ic {
-  animation: hrtPop 0.62s cubic-bezier(0.25, 0.9, 0.3, 1.2);
+  animation: hrtPop 0.28s ease-out;
 }
 @keyframes hrtPop {
-  0% {
-    transform: scale(1);
-  }
-  14% {
-    transform: scale(0.62, 0.5) translateY(2px);
-  }
-  38% {
-    transform: scale(1.38, 1.42) rotate(-12deg);
-  }
-  56% {
-    transform: scale(0.9, 1.08) rotate(6deg);
-  }
-  74% {
-    transform: scale(1.1, 0.95) rotate(-3deg);
-  }
-  100% {
-    transform: scale(1) rotate(0);
+  50% {
+    transform: scale(1.15);
   }
 }
-/* the whole pill gives a little hop and a red glow */
+/* the whole pill gives a soft red ring */
 .hrt.pop {
   animation: hrtHop 0.5s ease-out;
 }
 @keyframes hrtHop {
   0% {
     box-shadow: 0 0 0 0 rgba(229, 72, 77, 0.45);
-  }
-  30% {
-    transform: translateY(-3px);
   }
   100% {
     transform: none;
@@ -1160,9 +1263,6 @@ body.dark #chatForm input:focus {
       0 4px 12px rgba(10, 30, 80, 0.25),
       0 0 0 0 rgba(229, 72, 77, 0.5);
   }
-  30% {
-    transform: translateY(-3px);
-  }
   100% {
     transform: none;
     box-shadow:
@@ -1172,23 +1272,11 @@ body.dark #chatForm input:focus {
 }
 /* un-heart: deflate and wobble */
 .hrt.unpop .ic {
-  animation: hrtDeflate 0.45s ease;
+  animation: hrtDeflate 0.24s ease-out;
 }
 @keyframes hrtDeflate {
-  0% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(0.7) rotate(-10deg);
-  }
-  55% {
-    transform: scale(0.85) rotate(8deg);
-  }
-  75% {
-    transform: scale(0.95) rotate(-4deg);
-  }
-  100% {
-    transform: scale(1) rotate(0);
+  50% {
+    transform: scale(0.88);
   }
 }
 /* count rolls up / down */
@@ -1207,83 +1295,6 @@ body.dark #chatForm input:focus {
 @keyframes hrtDown {
   from {
     transform: translateY(-70%);
-    opacity: 0;
-  }
-}
-
-/* burst layer: ring + mini hearts (red) + dots (gold) */
-.hrt-fx {
-  position: fixed;
-  z-index: 200;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-.hrt-ring {
-  position: absolute;
-  left: -18px;
-  top: -18px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 3px solid #e5484d;
-  animation: hrtRing 0.55s ease-out both;
-}
-@keyframes hrtRing {
-  0% {
-    transform: scale(0.3);
-    opacity: 1;
-    border-color: #e5484d;
-  }
-  60% {
-    border-color: var(--gold);
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-    border-width: 1px;
-    border-color: var(--gold);
-  }
-}
-.hrt-fx i {
-  position: absolute;
-  animation: hrtFly 0.75s cubic-bezier(0.15, 0.75, 0.35, 1) both;
-}
-.hrt-fx .p-hrt {
-  left: -6px;
-  top: -6px;
-  width: 12px;
-  height: 12px;
-  color: #e5484d;
-}
-.hrt-fx .p-hrt .ic {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
-  stroke-width: 1;
-}
-.hrt-fx .p-dot {
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 6px rgba(255, 200, 61, 0.8);
-}
-@keyframes hrtFly {
-  0% {
-    transform: translate(0, 0) scale(0.2) rotate(0);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--x), calc(var(--y) - 10px)) scale(1) rotate(var(--r));
     opacity: 0;
   }
 }
@@ -1427,12 +1438,8 @@ body.dark .cm-rate-v {
 .hrt-n {
   display: inline-block; /* so the count can roll */
 }
-.hrt-fx.in-dlg {
-  position: absolute; /* inside the open dialog (it scrolls), see hearts.js burst() */
-}
 
-/* Reduced motion (e.g. Windows "Animation effects" off): no bouncing, tilting
-   or flying pieces, but still clear feedback: a gentle swell, a soft glow that
+/* Reduced motion (e.g. Windows "Animation effects" off): no motion, but still clear feedback: a gentle swell, a soft glow that
    fades in place, and the count fading in. */
 @media (prefers-reduced-motion: reduce) {
   .hrt.pop,
@@ -1448,9 +1455,6 @@ body.dark .cm-rate-v {
   .hrt-n.up,
   .hrt-n.down {
     animation: hrtFadeSoft 0.4s ease;
-  }
-  .hrt-fx.soft .hrt-ring {
-    animation: hrtRingSoft 0.7s ease-out both;
   }
 }
 @keyframes hrtSwellSoft {
@@ -1471,21 +1475,6 @@ body.dark .cm-rate-v {
     box-shadow: 0 0 0 6px rgba(229, 72, 77, 0);
   }
 }
-@keyframes hrtRingSoft {
-  0% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-    border-color: var(--gold);
-  }
-}
-
 /* ---------- Namo: quick replies, consent note, follow-up question (chat.js / insights.js) ---------- */
 .msg .c-qr {
   display: flex;
@@ -1966,7 +1955,242 @@ input.bad-tel {
     grid-template-columns: 1fr;
   }
 }
+/* test bot: neutral slate, a line mark instead of an emoji */
 .role-b.role-bot {
-  background: #f1e9ff;
-  color: #5b2bb5;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eef1f6;
+  color: #3a4a63;
+}
+.role-b .ic {
+  width: 12px;
+  height: 12px;
+}
+.av.av-bot {
+  background: #eef1f6;
+  color: #3a4a63;
+  box-shadow: inset 0 0 0 1px #d8dfea;
+}
+.av.av-bot .ic {
+  width: 56%;
+  height: 56%;
+  stroke-width: 1.8;
+}
+
+/* Discover is a light page: plain white, no glow */
+body[data-page="discover"] {
+  background: #fff;
+}
+/* a faint green hue on the Like side (left) and red on the Pass side (right); each deepens as the card is
+   swiped toward it (--lk / --ps from discover.js) */
+body[data-page="discover"] .dpage:before,
+body[data-page="discover"] .dpage:after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  translate: none;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+body[data-page="discover"] .dpage:before {
+  background: radial-gradient(70% 110% at 0% 50%, rgba(22, 163, 74, 0.26), rgba(22, 163, 74, 0) 72%);
+  opacity: calc(0.55 + 0.45 * var(--lk, 0));
+}
+body[data-page="discover"] .dpage:after {
+  background: radial-gradient(70% 110% at 100% 50%, rgba(220, 38, 38, 0.22), rgba(220, 38, 38, 0) 72%);
+  opacity: calc(0.55 + 0.45 * var(--ps, 0));
+}
+body[data-page="discover"] .dpage.dragging:before,
+body[data-page="discover"] .dpage.dragging:after {
+  transition: none;
+}
+body[data-page="discover"] .rail > button,
+body[data-page="discover"] .more > summary {
+  box-shadow: 0 4px 14px rgba(10, 47, 115, 0.1);
+}
+body[data-page="discover"] #dPass:not(:disabled):hover {
+  color: rgb(220, 38, 38);
+  border-color: rgba(220, 38, 38, 0.5);
+}
+
+/* ---------- Discover on phones ---------- */
+@media (max-width: 560px) {
+  /* room at the bottom so the Ask Namo button never covers the stats */
+  body[data-page="discover"] .dpage {
+    padding: 8px 12px 92px;
+  }
+  body[data-page="discover"] .dpage .dhead {
+    margin-bottom: 4px;
+  }
+  body[data-page="discover"] .dpage .deckwrap {
+    gap: 12px;
+  }
+  /* the hue reaches less far in on a narrow screen, so it stays at the edges */
+  body[data-page="discover"] .dpage:before {
+    background: radial-gradient(60% 80% at 0% 55%, rgba(22, 163, 74, 0.24), rgba(22, 163, 74, 0) 75%);
+  }
+  body[data-page="discover"] .dpage:after {
+    background: radial-gradient(60% 80% at 100% 55%, rgba(220, 38, 38, 0.2), rgba(220, 38, 38, 0) 75%);
+  }
+  body[data-page="discover"] .rail {
+    gap: 12px;
+  }
+  body[data-page="discover"] .rail > button,
+  body[data-page="discover"] .more > summary {
+    width: 46px;
+    height: 46px;
+  }
+  body[data-page="discover"] .rail #dLike,
+  body[data-page="discover"] .rail #dPass {
+    width: 56px;
+    height: 56px;
+  }
+  /* stats: one compact line */
+  body[data-page="discover"] .dstat {
+    gap: 6px;
+    margin-top: 12px;
+  }
+  body[data-page="discover"] .dstat span {
+    font-size: 11.5px;
+    padding: 4px 10px;
+  }
+  body[data-page="discover"] .dstat span[title] {
+    display: none;
+  }
+  /* blur is costly on phone GPUs: no spotlight blur, no backdrop blur on the label */
+  body[data-page="discover"] .deck::before {
+    filter: none;
+  }
+  body[data-page="discover"] .sw-flag {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ---------- site footer (nav.js Nav.footer(): three link columns + a bottom bar) ---------- */
+footer.site-foot {
+  padding: 0;
+  background: #f7faff;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 14.5px;
+}
+footer.site-foot .wrap {
+  height: auto;
+  padding: 0 20px;
+}
+footer.site-foot .sf-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  padding-top: 44px;
+  padding-bottom: 30px;
+}
+.sf-cols h2 {
+  margin: 0 0 14px;
+  font:
+    700 15px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+}
+.sf-cols ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+.sf-cols a,
+.sf-cols button,
+.sf-legal a,
+.sf-legal button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+}
+.sf-cols a:hover,
+.sf-cols button:hover,
+.sf-legal a:hover,
+.sf-legal button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+footer.site-foot .sf-note {
+  margin: 0 auto;
+  padding-bottom: 18px;
+  font-size: 13px;
+  color: var(--mute);
+}
+footer.site-foot .sf-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 20px;
+  padding-bottom: 26px;
+  border-top: 1px solid var(--line);
+}
+.sf-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+}
+.sf-legal > * + *::before {
+  content: "·";
+  margin: 0 9px;
+  color: var(--mute);
+  text-decoration: none;
+  display: inline-block;
+}
+.sf-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 700;
+}
+.sf-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sf-meta .ic {
+  width: 18px;
+  height: 18px;
+}
+.sf-meta a {
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+/* keep the bottom bar clear of the Ask Namo button */
+@media (min-width: 701px) {
+  footer.site-foot .sf-bar {
+    padding-right: 190px;
+  }
+}
+@media (max-width: 700px) {
+  footer.site-foot .sf-cols {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding-top: 34px;
+    padding-bottom: 22px;
+  }
+  footer.site-foot .sf-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 90px;
+  }
 }

@@ -85,8 +85,9 @@ so if you move or add a file, update that map and the `<script>` tags in the pag
 |---|---|---|
 | `browse.js` | Rooms (`index.html`) | Search, filters, room cards, compare, the add-property form. |
 | `owners.js` | Rooms | "List your place" plan prices and plan buttons. |
-| `hero-fx.js` | Rooms | The top banner's intro animation, grid spotlight and counters. |
-| `discover.js` | Discover (`discover.html`) | The swipe deck: like, pass, bookmark, undo. |
+| `hero-fx.js` | Rooms | The top banner's intro animation, scroll depth and counters. |
+| `discover.js` | Discover (`discover.html`) | The cover-flow strip: browse sideways, swipe up to like, down to pass; Saved tab. |
 | `mylistings.js` | My listings (`mylistings.html`) | The owner's editor: photos, details, rules, save. |
 | `people.js` | Landowners (`people.html`) | Your account (view and edit) and every account sorted into landowners and students. |
 | `messages.js` | Messages (`messages.html`) | Chats with landowners and students, offers, and tenant group chats. |
+| `about.js` | About us (`about.html`) | What we believe and the team cards (edit `TEAM` to fill in the five developers). |

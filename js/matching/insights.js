@@ -336,7 +336,7 @@ var Insights = (function () {
         "I'm still getting to know you: so far I've seen " +
         p.n +
         (p.n === 1 ? " room" : " rooms") +
-        " you opened, hearted or saved. Look around a bit more (open a few rooms, heart the ones you like, skip the ones you don't) and ask me again! 🔍"
+        " you opened, hearted or saved. Look around a bit more (open a few rooms, heart the ones you like, skip the ones you don't) and ask me again!"
       );
     var li = [];
     if (p.type)
@@ -382,7 +382,7 @@ var Insights = (function () {
   /** The consent question, with Yes / No buttons (chat.js handles data-consent). */
   function askHTML() {
     return (
-      "Can I learn from what you do on DormNamo? 🧠 I'd look at the rooms you open (and how long you look), heart, skip, save and search for, so I can understand what you like and suggest better matches." +
+      "Can I learn from what you do on DormNamo? I'd look at the rooms you open (and how long you look), heart, skip, save and search for, so I can understand what you like and suggest better matches." +
       '<small class="c-note">It stays in this browser. I never look at other websites, your cookies or your history, and you can say “stop learning” any time.</small>' +
       '<span class="c-qr"><button type="button" data-consent="1">Yes, learn from my activity</button><button type="button" data-consent="0">No thanks</button></span>'
     );

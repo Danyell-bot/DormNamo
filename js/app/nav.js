@@ -179,6 +179,77 @@ var Nav = (function () {
       location.reload();
     };
   }
-  return { render: render, account: account, unread: unread };
+  /* ---------- footer, shared by every page that has <footer id="siteFooter"> ----------
+     Only links to things that exist. Buttons: data-foot="namo" opens the chat, "privacy" the cookie choice. */
+  var FOOT = [
+    {
+      h: "Students",
+      links: [
+        ["Find a room", "index.html#finder"],
+        ["Rooms picked for you", "discover.html"],
+        ["Saved rooms", "discover.html#saved"],
+        ["Messages", "messages.html"],
+        ["Ask Namo", "namo"],
+      ],
+    },
+    {
+      h: "Landowners",
+      links: [
+        ["List your place", "index.html#addForm"],
+        ["Plans and pricing", "index.html#owners"],
+        ["My listings", "mylistings.html"],
+        ["Landowner directory", "people.html"],
+        ["Try a chat with the test bot", "messages.html"],
+      ],
+    },
+    {
+      h: "DormNamo",
+      links: [
+        ["About us", "about.html"],
+        ["Meet the team", "about.html#team"],
+        ["How matching works", "about.html#how"],
+        ["Privacy & cookies", "privacy"],
+      ],
+    },
+  ];
+  function footer() {
+    var f = document.getElementById("siteFooter");
+    if (!f) return;
+    var item = function (l) {
+      return (
+        "<li>" +
+        (/\.html/.test(l[1])
+          ? '<a href="' + l[1] + '">' + esc(l[0]) + "</a>"
+          : '<button type="button" data-foot="' + l[1] + '">' + esc(l[0]) + "</button>") +
+        "</li>"
+      );
+    };
+    f.setAttribute("aria-label", "Site");
+    f.innerHTML =
+      '<div class="wrap sf-cols">' +
+      FOOT.map(function (c) {
+        return '<div class="sf-col"><h2>' + c.h + "</h2><ul>" + c.links.map(item).join("") + "</ul></div>";
+      }).join("") +
+      "</div>" +
+      '<p class="wrap sf-note">Listings come from public Google Maps data. Rent, rules and amenities stay unverified until you confirm them with the owner.</p>' +
+      '<div class="wrap sf-bar"><div class="sf-legal"><span>© ' +
+      new Date().getFullYear() +
+      ' DormNamo</span><span>A CCC100 project by Team Gwapo</span><a href="about.html">About</a>' +
+      '<button type="button" data-foot="privacy">Privacy</button></div>' +
+      '<div class="sf-meta"><span>' +
+      ico("globe") +
+      "English</span><span><b>₱</b> PHP</span></div></div>";
+    f.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-foot]");
+      if (!b) return;
+      if (b.dataset.foot === "namo" && window.Chat) Chat.open();
+      if (b.dataset.foot === "privacy" && window.Consent)
+        Consent.show(function (yes) {
+          toast(yes ? "Your preferences will be remembered" : "Saved preferences deleted. Essential only.");
+        });
+    });
+  }
+  return { render: render, account: account, unread: unread, footer: footer };
 })();
 Nav.render();
+Nav.footer();

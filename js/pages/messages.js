@@ -60,7 +60,7 @@ var Messages = (function () {
     if (m.kind === "interest") return who + "Interested in " + (m.data.name || "a place");
     if (m.kind === "offer") return who + "Offer: " + php(m.data.rent) + " a month";
     var n = m.data && m.data.imgs ? m.data.imgs.length : 0;
-    return who + (m.text || (n > 1 ? "📷 " + n + " photos" : n ? "📷 Photo" : ""));
+    return who + (m.text || (n > 1 ? n + " photos" : n ? "Photo" : ""));
   }
   function listHTML() {
     var all = Inbox.threads(),
@@ -148,8 +148,13 @@ var Messages = (function () {
       (me() && window.TestBot
         ? '<div class="mx-bot">' +
           (TestBot.exists()
-            ? '<span>🤖 The test bot is on.</span><button type="button" class="linkbtn" id="mxBotOff">Remove test bot</button>'
-            : '<button type="button" class="btn alt sm" id="mxBotOn">🤖 Try it with a test bot</button><small class="meta">A pretend landowner that answers by itself, so you can test chats, photos, emojis and offers.</small>') +
+            ? "<span>" +
+              ico("bot") +
+              "The test bot is on.</span>" +
+              '<button type="button" class="linkbtn" id="mxBotOff">Remove test bot</button>'
+            : '<button type="button" class="btn alt sm" id="mxBotOn">' +
+              ico("bot") +
+              'Try it with a test bot</button><small class="meta">A pretend landowner that answers by itself, so you can test chats, photos, emojis and offers.</small>') +
           "</div>"
         : "")
     );
@@ -417,7 +422,7 @@ var Messages = (function () {
       (t.type === "group" && membersOpen ? membersHTML(t) : "") +
       '<div class="mx-log" id="mxLog" aria-live="polite">' +
       placeCard(t) +
-      (body || '<div class="mx-sys">Say hello 👋</div>') +
+      (body || '<div class="mx-sys">Say hello</div>') +
       "</div>" +
       (offerOpen && canOffer ? offerFormHTML(t) : "") +
       (pending.length
@@ -453,7 +458,9 @@ var Messages = (function () {
       '<form class="mx-comp" id="mxComp">' +
       '<button type="button" class="mx-tool" id="mxEmoji" aria-label="Emoji" aria-expanded="' +
       emojiOpen +
-      '">😊</button>' +
+      '">' +
+      ico("smile") +
+      "</button>" +
       '<button type="button" class="mx-tool" id="mxPhoto" aria-label="Add photos">' +
       ico("image") +
       "</button>" +

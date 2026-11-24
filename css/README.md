@@ -40,3 +40,4 @@ then `owners → finder` on the Rooms page and `owners → listings` on My listi
 | `listings.css` | The "My listings" owner page. |
 | `people.css` | The Landowners page: your account and the landowner / student directory. |
 | `messages.css` | The Messages page: conversation list, chat bubbles, offers, tenant groups. |
+| `about.css` | The About us page: mission, values, how matching works, the team. |

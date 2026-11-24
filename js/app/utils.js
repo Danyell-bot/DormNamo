@@ -275,6 +275,24 @@ var ICONS = {
   send: '<path d="M21 3 10 14"/><path d="M21 3l-6.5 18-4.5-7-7-4.5L21 3z"/>',
   copy: '<rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/>',
   bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  globe:
+    '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/>',
+  // social networks (About us team cards), same line style as the rest
+  "s-github":
+    '<path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>',
+  "s-facebook":
+    '<path d="M17 2.5h-2.8A4.7 4.7 0 0 0 9.5 7.2V10H7v3.8h2.5v7.7h3.8v-7.7H16l.8-3.8h-3.5V7.6c0-.6.4-1.1 1.1-1.1H17z"/>',
+  "s-x": '<path d="M4 4h4.6L20 20h-4.6z"/><path d="M19.5 4 13.4 10.9M4.5 20l6.1-6.9"/>',
+  "s-instagram":
+    '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
+  "s-linkedin":
+    '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+  up: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>',
+  down: '<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>',
+  namo: '<path d="M4 10.2 12 4l8 6.2V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01"/>',
+  bot: '<rect x="4.5" y="8" width="15" height="11" rx="3"/><path d="M12 8V5.5"/><circle cx="12" cy="4.3" r="1.2"/><path d="M9.5 12.5v1.5M14.5 12.5v1.5"/><path d="M2.5 12.5v2.5M21.5 12.5v2.5"/>',
+  smile:
+    '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/>',
   phone:
     '<path d="M5 4h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 5.1 5.1l1.4-2.3L19 14.5V18a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
 };

@@ -1,0 +1,262 @@
+/* about.css - the About us page: mission, what we believe, how matching works, the team. */
+
+.ab-page section {
+  padding: 0; /* base.css pads every section */
+}
+.ab-hero {
+  padding: 56px 0 40px !important;
+  background: #f7faff;
+  border-bottom: 1px solid var(--line);
+}
+.ab-hero .eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+.ab-hero h1 {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.ab-hero p {
+  margin: 16px 0 0;
+  max-width: 62ch;
+  font-size: 17px;
+  color: var(--mute);
+}
+
+.ab-sec {
+  padding: 56px 0 !important;
+}
+.ab-sec + .ab-sec {
+  border-top: 1px solid var(--line);
+}
+.ab-sec h2 {
+  margin: 0 0 8px;
+  font-size: clamp(24px, 3.4vw, 32px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.ab-sec .ab-lead {
+  margin: 0 0 28px;
+  max-width: 62ch;
+  color: var(--mute);
+}
+
+/* what we believe */
+.ab-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.ab-value {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+.ab-value .ic {
+  width: 26px;
+  height: 26px;
+  color: var(--brand);
+}
+.ab-value h3 {
+  margin: 12px 0 6px;
+  font-size: 18px;
+  color: var(--ink);
+}
+.ab-value p {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--mute);
+}
+
+/* how matching works */
+.ab-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.ab-steps li {
+  position: relative;
+  padding: 22px 22px 22px 64px;
+  border-radius: 18px;
+  background: #f7faff;
+  border: 1px solid var(--line);
+  color: var(--mute);
+  font-size: 14.5px;
+}
+.ab-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--goldink);
+  font-weight: 800;
+}
+.ab-steps b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+/* the team */
+.ab-team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+}
+.ab-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 20px 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  text-align: center;
+}
+.ab-photo {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ab-ini {
+  background: hsl(var(--av, 210) 65% 92%);
+  color: hsl(var(--av, 210) 60% 30%);
+  font:
+    800 30px "Bricolage Grotesque",
+    sans-serif;
+}
+.ab-member h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--ink);
+}
+.ab-role {
+  margin: 4px 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+.ab-bio {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.ab-focus {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--mute);
+}
+.ab-focus b {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+/* social links: GitHub, Facebook, X, Instagram, LinkedIn (about.js SOCIALS) */
+.ab-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.ab-social a,
+.ab-social span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #f7faff;
+  color: var(--ink);
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s;
+}
+.ab-social a:hover,
+.ab-social a:focus-visible {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+.ab-social span.off {
+  opacity: 0.35;
+  cursor: default;
+}
+.ab-social .ic {
+  width: 17px;
+  height: 17px;
+}
+
+/* closing call to action */
+.ab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px;
+  border-radius: 22px;
+  background: var(--ink);
+  color: #fff;
+}
+.ab-cta h2 {
+  margin: 0;
+  color: #fff;
+}
+.ab-cta p {
+  margin: 6px 0 0;
+  color: #cfe0ff;
+}
+.ab-cta-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ab-cta .btn.alt {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.ab-cta .btn.gold {
+  background: var(--gold);
+  color: var(--goldink);
+}
+.ab-cta .btn.gold:hover {
+  background: #ffbe1a;
+}

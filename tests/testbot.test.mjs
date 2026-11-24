@@ -69,16 +69,16 @@ test("the bot's replies: interest, questions, emojis, photos, offers", () => {
     JSON.parse(
       run(`JSON.stringify(TestBot.reply(${JSON.stringify(m)}, { type: "dm" }, ${JSON.stringify(ctx)}))`),
     );
-  assert.match(
-    say({ kind: "interest", text: "" }, { first: "Ana" })[0].say,
-    /^Hi Ana! 👋 .*test bot landowner/,
-  );
+  assert.match(say({ kind: "interest", text: "" }, { first: "Ana" })[0].say, /^Hi Ana! .*test bot landowner/);
   assert.match(say({ kind: "text", text: "how much is the rent?" })[0].say, /₱3,000 a month/);
   assert.match(say({ kind: "text", text: "do you have wifi" })[0].say, /Wi-Fi is included/);
   assert.match(say({ kind: "text", text: "what's the curfew" })[0].say, /Curfew is 10 pm/);
   assert.equal(say({ kind: "text", text: "can I see photos?" })[0].photo, true);
-  assert.equal(say({ kind: "text", text: "😍😍" })[0].say, "🥰🏠");
-  assert.equal(say({ kind: "text", text: "👍" })[0].say, "😄👍");
+  assert.equal(
+    say({ kind: "text", text: "😍😍" })[0].say,
+    "Glad you like it! Let me know if you have any questions about the room.",
+  );
+  assert.equal(say({ kind: "text", text: "👍" })[0].say, "Noted! Anything else you'd like to know?");
   const pic = say({ kind: "text", text: "", data: { imgs: [PHOTO, PHOTO] } })[0];
   assert.match(pic.say, /Thanks for the 2 photos!/);
   assert.equal(pic.photo, true);
@@ -124,7 +124,7 @@ test("start a test chat, talk, send photos and emojis, negotiate, join the tenan
   // emojis only
   b.run(`Inbox.send("${tid}", "🎉")`);
   await botTurn(b);
-  assert.equal(last().text, "😄👍");
+  assert.equal(last().text, "Noted! Anything else you'd like to know?");
 
   // a low offer: the bot counters; accepting the counter makes Ana a tenant in the group chat
   b.run(`Inbox.offer("${tid}", { rent: 2000 })`);

@@ -1,7 +1,5 @@
 /* ==========================================================
    hero-fx.js - motion for the Rooms page hero (index.html only)
-   - spotlight: a darker copy of the graph-paper grid follows the
-     mouse inside a soft circle (mouse only, eased with lerp)
    - scramble: the stats flicker through random digits, then settle
      left to right on the real value
    - intro: header + hero content rise in once the site is shown
@@ -13,49 +11,6 @@ var HeroFX = (function () {
   var hero = document.querySelector(".hero");
   var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var played = false;
-
-  /* ---------- grid spotlight ---------- */
-  function spotlight() {
-    if (!hero) return;
-    var tx = 0,
-      ty = 0,
-      x = 0,
-      y = 0,
-      raf = 0,
-      active = false;
-    function step() {
-      x += (tx - x) * 0.16;
-      y += (ty - y) * 0.16; // ease toward the pointer
-      hero.style.setProperty("--mx", x.toFixed(1) + "px");
-      hero.style.setProperty("--my", y.toFixed(1) + "px");
-      raf = Math.abs(tx - x) > 0.4 || Math.abs(ty - y) > 0.4 ? requestAnimationFrame(step) : 0;
-    }
-    hero.addEventListener("pointermove", function (e) {
-      if (e.pointerType !== "mouse") return;
-      var r = hero.getBoundingClientRect();
-      tx = e.clientX - r.left;
-      ty = e.clientY - r.top;
-      if (!active) {
-        active = true;
-        if (!raf) {
-          x = tx;
-          y = ty;
-        }
-        hero.classList.add("hot");
-      }
-      if (reduced) {
-        x = tx;
-        y = ty;
-        step();
-        return;
-      }
-      if (!raf) raf = requestAnimationFrame(step);
-    });
-    hero.addEventListener("pointerleave", function () {
-      active = false;
-      hero.classList.remove("hot");
-    });
-  }
 
   /* ---------- number scramble ---------- */
   // Changing digits moves nothing on screen, so this also runs with reduced motion on.
@@ -193,7 +148,6 @@ var HeroFX = (function () {
     }
   }
 
-  spotlight();
   handoff();
   return { play: play, scramble: scramble };
 })();

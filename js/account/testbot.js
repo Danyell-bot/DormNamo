@@ -19,7 +19,7 @@ var TestBot = (function () {
     NAME = "Namo Test Landowner",
     LID = 990001, // listing id: far above the ids in data.js
     BIO =
-      "🤖 A test bot account, not a real person. It answers like a landowner so you can try messages, photos, emojis, offers and the tenant group. Its listing is not a real place.",
+      "A test bot account, not a real person. It answers like a landowner so you can try messages, photos, emojis, offers and the tenant group. Its listing is not a real place.",
     LISTING = {
       id: LID,
       ref: "7e57b07a-0000-4000-8000-00000000b07a",
@@ -90,7 +90,7 @@ var TestBot = (function () {
               group:
                 "Welcome to the house group, " +
                 hi +
-                "! 🏠 Rent is due every 5th. Ask here if you need anything. (test bot)",
+                "! Rent is due every 5th. Ask here if you need anything. (test bot)",
             },
           ];
     if (m.kind === "interest")
@@ -99,7 +99,7 @@ var TestBot = (function () {
           say:
             "Hi " +
             hi +
-            "! 👋 Thanks for your interest in " +
+            "! Thanks for your interest in " +
             LISTING.n +
             ". I'm a test bot landowner, so you can try everything here: ask about rent, Wi-Fi, water, curfew or visits, send a photo or an emoji, or tap Make an offer.",
         },
@@ -114,7 +114,7 @@ var TestBot = (function () {
             say:
               "Deal at " +
               peso(rent) +
-              " a month! 🎉 I added you to our tenant group. You'll find it under Groups in Messages.",
+              " a month! I added you to our tenant group. You'll find it under Groups in Messages.",
           },
         ];
       if (!ctx.offers) {
@@ -146,7 +146,7 @@ var TestBot = (function () {
           say:
             "Thanks for the " +
             (imgs.length > 1 ? imgs.length + " photos" : "photo") +
-            "! 📸 Here's one of our rooms (a test picture):",
+            "! Here's one of our rooms (a test picture):",
           photo: true,
         },
       ];
@@ -155,16 +155,16 @@ var TestBot = (function () {
       return [
         {
           say: /❤|😍|🥰|💕/.test(raw)
-            ? "🥰🏠"
+            ? "Glad you like it! Let me know if you have any questions about the room."
             : /😢|😭|☹|🙁/.test(raw)
-              ? "🤗 Don't worry, we'll find you a room!"
-              : "😄👍",
+              ? "Don't worry, we'll find you a room!"
+              : "Noted! Anything else you'd like to know?",
         },
       ];
     var rules = [
       [
         /\b(photos?|pictures?|pics?|images?|look like)\b/,
-        { say: "Sure! Here's one of our rooms (a test picture): 📷", photo: true },
+        { say: "Sure! Here's one of our rooms (a test picture):", photo: true },
       ],
       [
         /\b(rent|price|how much|cost|monthly|deposit|advance)\b/,
@@ -175,8 +175,8 @@ var TestBot = (function () {
             " a month for a bedspace, water included, electricity is separate. 1 month advance + 1 month deposit.",
         },
       ],
-      [/\bwi-?fi\b|\binternet\b/, { say: "Yes, Wi-Fi is included in the rent. 📶" }],
-      [/\bwater\b/, { say: "Water is included and runs 24/7. 💧" }],
+      [/\bwi-?fi\b|\binternet\b/, { say: "Yes, Wi-Fi is included in the rent." }],
+      [/\bwater\b/, { say: "Water is included and runs 24/7." }],
       [
         /\b(electric|electricity|power|kuryente)\b/,
         { say: "Electricity is separate: each room has its own sub-meter." },
@@ -187,11 +187,11 @@ var TestBot = (function () {
       ],
       [
         /\b(free|vacan\w*|available|slot|room for)\b/,
-        { say: "Yes! 2 rooms (2 per room) are free from June. ✅" },
+        { say: "Yes! 2 rooms (2 per room) are free from June." },
       ],
       [
         /\b(visit|see it|view|tour|schedule)\b/,
-        { say: "You can visit any day, 9 am to 5 pm. Just message me first. 🙂" },
+        { say: "You can visit any day, 9 am to 5 pm. Just message me first." },
       ],
       [
         /\b(where|address|location|located)\b/,
@@ -199,11 +199,8 @@ var TestBot = (function () {
           say: "We're in Brgy. Tibanga, a 6-minute walk to MSU-IIT. (This is a test listing, not a real address.)",
         },
       ],
-      [/\b(thanks|thank you|salamat|ty)\b/, { say: "You're welcome! 😊" }],
-      [
-        /\b(hi|hello|hey|good (morning|afternoon|evening))\b/,
-        { say: "Hello " + hi + "! 👋 How can I help?" },
-      ],
+      [/\b(thanks|thank you|salamat|ty)\b/, { say: "You're welcome!" }],
+      [/\b(hi|hello|hey|good (morning|afternoon|evening))\b/, { say: "Hello " + hi + "! How can I help?" }],
     ];
     for (var i = 0; i < rules.length; i++) if (rules[i][0].test(text)) return [rules[i][1]];
     return [
@@ -278,7 +275,7 @@ var TestBot = (function () {
         if (r && r.group)
           Inbox.send(
             r.group.id,
-            "Welcome to the house group, " + first + "! 🏠 Rent is due every 5th. (test bot)",
+            "Welcome to the house group, " + first + "! Rent is due every 5th. (test bot)",
             { as: ID },
           );
       } else if (a.offer) Inbox.offer(t.id, a.offer, ID);

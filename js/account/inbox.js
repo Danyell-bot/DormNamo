@@ -343,7 +343,7 @@ var Inbox = (function () {
     if (g.members.indexOf(tenant) < 0) {
       g.members.push(tenant);
       g.roles[tenant] = "tenant";
-      post(d, g, null, "system", nameOf(tenant) + " joined as a tenant. Welcome! 👋");
+      post(d, g, null, "system", nameOf(tenant) + " joined as a tenant. Welcome!");
     }
     return g;
   }

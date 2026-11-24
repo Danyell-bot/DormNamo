@@ -31,6 +31,7 @@ function undo() {
     i = S[k].lastIndexOf(l.id);
   if (i >= 0) S[k].splice(i, 1);
   if (l.t === "like" && window.Hearts) Hearts.sync(l.id);
+  want = l.id;
   for (var j = S.log.length - 1; j >= 0; j--)
     if (S.log[j].id === l.id && S.log[j].w !== 0.3 && S.log[j].w !== 2) {
       S.log.splice(j, 1);
@@ -82,8 +83,9 @@ function walk(h) {
 function cap1(t) {
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
-function cardHTML(s, top) {
-  var h = s.h,
+function cardHTML(s, o) {
+  var top = o === 0,
+    h = s.h,
     f = facts(h);
   // key facts; null = not stated anywhere, shown as "Unverified" (never guessed)
   var spec = [
@@ -104,16 +106,16 @@ function cardHTML(s, top) {
     .slice(0, 4);
   return (
     '<div class="sw' +
-    (top ? "" : " back") +
+    (top ? "" : " side") +
+    '" data-o="' +
+    o +
     '" data-id="' +
     h.id +
-    '">' +
+    '"' +
+    (top ? "" : ' aria-hidden="true"') +
+    ">" +
     (top
-      ? '<span class="glow gl fb-like" aria-hidden="true"></span><span class="glow gp fb-pass" aria-hidden="true"></span><span class="stamp l fb-like">' +
-        ico("heart") +
-        'LIKE</span><span class="stamp p fb-pass">' +
-        ico("x") +
-        "PASS</span>"
+      ? '<span class="sw-flag l" aria-hidden="true">Like</span><span class="sw-flag p" aria-hidden="true">Pass</span>'
       : "") +
     '<div class="ph">' +
     Photos.thumb(h) +
@@ -179,15 +181,18 @@ function cardHTML(s, top) {
           .join("") +
         "</div>"
       : "") +
-    '</div><div class="sw-hint">Tap for details · Swipe right to like, left to pass</div></div>'
+    '</div><div class="sw-hint">Tap for details</div></div>'
   );
 }
 function draw() {
   Q = queue();
-  if (window.dpage) {
-    feedback(null, 0, 0);
-    deck.classList.remove("drag");
+  if (want != null) {
+    // keep the room that just slid into focus (or came back with undo) in the middle after re-ranking
+    for (var w = 0; w < Q.length; w++) if (Q[w].h.id === want) pos = w;
+    want = null;
   }
+  pos = Math.max(0, Math.min(pos, Q.length - 1));
+  if (window.dpage) feedback(null, 0, 0);
   var done = S.done;
   if (!done) {
     deck.innerHTML =
@@ -205,9 +210,14 @@ function draw() {
       draw();
     };
   } else {
-    deck.innerHTML = (Q[1] ? cardHTML(Q[1], 0) : "") + cardHTML(Q[0], 1);
-    bind(deck.querySelector(".sw:not(.back)"));
+    var html = "";
+    for (var o = -SPAN; o <= SPAN; o++) if (Q[pos + o]) html += cardHTML(Q[pos + o], o);
+    deck.innerHTML = html;
+    lay(0, 0, 0);
+    dposShow();
+    nudge();
   }
+  if (!(done && Q.length) && $("dPos")) $("dPos").hidden = true;
   ["dUndo"].forEach(function (i) {
     $(i).disabled = !S.hist.length;
   });
@@ -232,6 +242,8 @@ function draw() {
     return a.indexOf(v) === i;
   });
   $("dSavedN").textContent = all.length;
+  $("dSavedTab").textContent = all.length;
+  $("dSavedTab").hidden = !all.length;
   $("dSaved").innerHTML = all.length
     ? all
         .map(function (id) {
@@ -244,149 +256,314 @@ function draw() {
                 esc(h.n) +
                 "</b><small>" +
                 peso(h.p) +
-                '</small></span><button class="btn alt sm" type="button" onclick="open(' +
+                '</small></span><button class="btn alt sm" type="button" data-open="' +
                 id +
-                ')">Details</button></div>'
+                '">Details</button></div>'
             : "";
         })
         .join("")
     : '<p class="meta">Nothing yet. Like or bookmark a room and it shows up here.</p>';
 }
-/* Swipe feedback. --lk / --ps (drag progress toward like / pass, 0..1) and --pull go on the page, so the
-   card stamps, the full-page tint (.dtint), the rail heart and the card underneath all follow the same numbers. */
-var dpage = deck.closest(".dpage") || document.body;
-dpage.insertAdjacentHTML(
-  "afterbegin",
-  '<div class="dtint" aria-hidden="true"><i class="t-like"></i><i class="t-pass"></i></div>',
+/* ---- cover flow ----
+   One room is in focus in the middle; the rooms ranked around it sit behind it on both sides, smaller,
+   dimmer and blurred. Sideways drags (or the arrow keys, or a sideways trackpad scroll) browse the strip.
+   Up likes the focused room, down passes it; the card leaves that way and its neighbour glides into focus.
+   --lk / --ps (0..1) on .dpage light the card's Like / Pass label and the guides beside the deck. */
+var dpage = deck.closest(".dpage") || document.body,
+  pos = 0, // index in Q of the focused room
+  want = null, // room id to focus after the next draw()
+  busy = 0, // an exit or browse animation is running
+  EASE = "cubic-bezier(.22,.61,.36,1)",
+  dSmall = matchMedia("(max-width: 560px)").matches,
+  SPAN = dSmall ? 2 : 3, // neighbours drawn on each side
+  BLUR = dSmall ? 1.4 : 2.2; // px of blur per step away from the focus
+deck.insertAdjacentHTML(
+  "beforebegin",
+  '<div class="dguide up" aria-hidden="true">' +
+    ico("up") +
+    "<b>Like</b></div>" +
+    '<div class="dguide down" aria-hidden="true"><b>Pass</b>' +
+    ico("down") +
+    "</div>",
 );
+deck.insertAdjacentHTML("afterend", '<div class="dpos" id="dPos" aria-live="polite"></div>');
+function pad2(n) {
+  return (n < 10 ? "0" : "") + n;
+}
+function dposShow(at) {
+  var el = $("dPos");
+  if (!el) return;
+  var i = at == null ? pos : at,
+    n = Q.length;
+  el.hidden = !n;
+  el.innerHTML =
+    '<span class="dph up">' +
+    ico("up") +
+    "Like</span><b>" +
+    pad2(i + 1) +
+    "</b><i></i><span>" +
+    pad2(n) +
+    '</span><span class="dph down">Pass' +
+    ico("down") +
+    "</span>";
+  el.style.setProperty("--dp", n ? ((i + 1) / n) * 100 + "%" : "0%");
+}
+function nudge() {
+  var c = focusCard(),
+    k = "dormnamo:nudged";
+  try {
+    if (!c || !c.animate || calm() || sessionStorage.getItem(k) || !matchMedia("(max-width: 1179px)").matches)
+      return;
+    sessionStorage.setItem(k, "1");
+  } catch (e) {
+    return;
+  }
+  var a = c.animate(
+    [
+      { translate: "0 0", offset: 0 },
+      { translate: "0 -22px", offset: 0.3 },
+      { translate: "0 0", offset: 0.55 },
+      { translate: "0 14px", offset: 0.78 },
+      { translate: "0 0", offset: 1 },
+    ],
+    { duration: 1700, delay: 700, easing: "ease-in-out" },
+  );
+  // the hints light up with the card's movement
+  var t0 = performance.now() + 700;
+  (function glow(t) {
+    var p = (t - t0) / 1700;
+    if (p > 1) return feedback(null, 0, 0);
+    if (p > 0)
+      feedback(
+        null,
+        p < 0.55 ? Math.sin((p / 0.55) * Math.PI) : 0,
+        p >= 0.55 ? Math.sin(((p - 0.55) / 0.45) * Math.PI) : 0,
+      );
+    requestAnimationFrame(glow);
+  })(performance.now());
+  c.addEventListener(
+    "pointerdown",
+    function () {
+      a.cancel();
+    },
+    { once: true },
+  );
+}
 function feedback(c, like, pass) {
   dpage.style.setProperty("--lk", like);
   dpage.style.setProperty("--ps", pass);
-  dpage.style.setProperty("--pull", Math.max(like, pass));
-  if (c) c.classList.toggle("armed", like >= 1 || pass >= 1); // past the threshold: the stamp thunks in
 }
 function calm() {
   return matchMedia("(prefers-reduced-motion:reduce)").matches;
 }
-/** A fan of hearts (like) or crosses (pass) flying off the card. */
-function burst(type) {
-  if (calm()) return;
-  var wrap = deck.parentNode,
-    b = document.createElement("div"),
-    n = 9,
-    html = "",
-    like = type === "like";
-  for (var i = 0; i < n; i++) {
-    var ang = (((like ? -115 : -65) + ((like ? 1 : -1) * i * 105) / (n - 1)) * Math.PI) / 180,
-      dist = 110 + ((i * 37) % 80);
-    html +=
-      '<i style="--x:' +
-      Math.round(Math.cos(ang) * dist) +
-      "px;--y:" +
-      Math.round(Math.sin(ang) * dist) +
-      "px;--r:" +
-      (i % 2 ? 1 : -1) * (14 + i * 5) +
-      "deg;--s:" +
-      (0.7 + ((i * 13) % 6) / 10) +
-      ";animation-delay:" +
-      i * 22 +
-      'ms">' +
-      ico(like ? "heart" : "x") +
-      "</i>";
-  }
-  b.className = "burst " + type;
-  b.setAttribute("aria-hidden", "true");
-  b.innerHTML = html;
-  b.style.left = deck.offsetLeft + deck.offsetWidth / 2 + "px";
-  b.style.top = deck.offsetTop + deck.offsetHeight * 0.38 + "px";
-  wrap.appendChild(b);
+function focusCard() {
+  return deck.querySelector('.sw[data-o="0"]');
+}
+/** Spacing so each side card peeks out a fixed amount past the one in front of it. */
+function metrics() {
+  var c = deck.querySelector(".sw"),
+    cw = c ? c.offsetWidth : 360,
+    room = Math.max(0, (deck.clientWidth - cw) / 2),
+    p1 = Math.max(18, Math.min(room * 0.5, cw * 0.3)),
+    p2 = p1 * 0.6;
+  return { s1: 0.045 * cw + p1, s2: 0.045 * cw + p2, h: deck.clientHeight };
+}
+/** Place one card at offset o (fractional while dragging) and vertical lift dy. */
+function put(el, o, dy, m, ms) {
+  var a = Math.abs(o),
+    k = Math.min(a, 2),
+    x = (o < 0 ? -1 : 1) * (m.s1 * Math.min(a, 1) + m.s2 * Math.max(0, a - 1)),
+    sc = 1 - 0.09 * Math.min(a, 3) - Math.min(Math.abs(dy) / 3000, 0.04);
+  el.style.transition = ms
+    ? "transform " + ms + "ms " + EASE + ",filter " + ms + "ms " + EASE + ",opacity " + ms + "ms " + EASE
+    : "none";
+  el.style.transform =
+    "translate3d(calc(-50% + " +
+    x.toFixed(1) +
+    "px)," +
+    dy.toFixed(1) +
+    "px," +
+    (-90 * Math.min(a, 2)).toFixed(1) +
+    "px) rotateY(" +
+    ((o < 0 ? 1 : -1) * 16 * Math.min(a, 1)).toFixed(2) +
+    "deg) scale(" +
+    sc.toFixed(3) +
+    ")";
+  el.style.filter =
+    a < 0.02
+      ? "none"
+      : "blur(" +
+        (k * BLUR).toFixed(2) +
+        "px) saturate(" +
+        (1 - 0.35 * k).toFixed(2) +
+        ") contrast(" +
+        (1 - 0.12 * k).toFixed(2) +
+        ") brightness(" +
+        (1 + 0.04 * k).toFixed(2) +
+        ")";
+  el.style.opacity = (a > 2 ? Math.max(0, 3 - a) : 1 - 0.14 * k).toFixed(2);
+  el.style.zIndex = 20 - Math.round(a * 4);
+  el.classList.toggle("is-focus", a < 0.5);
+}
+/** Lay out the strip shifted by `shift` cards (positive = toward the next room), the focus card moved by dy. */
+function lay(shift, dy, ms) {
+  var m = metrics();
+  deck.querySelectorAll(".sw").forEach(function (el) {
+    var o = +el.dataset.o;
+    put(el, o - shift, o === 0 ? dy : 0, m, ms);
+  });
+}
+/** Browse to another room in the strip. */
+function go(to) {
+  if (busy || !Q.length) return;
+  to = Math.max(0, Math.min(to, Q.length - 1));
+  var ms = calm() ? 0 : 340;
+  feedback(null, 0, 0);
+  lay(to - pos, 0, ms);
+  if (to === pos) return;
+  dposShow(to);
+  busy = 1;
   setTimeout(function () {
-    b.remove();
-  }, 1200);
+    busy = 0;
+    pos = to;
+    want = Q[to].h.id;
+    draw();
+  }, ms);
 }
-function fly(c, dx, dy, type) {
-  feedback(c, type === "like" ? 1 : 0, type === "pass" ? 1 : 0);
-  c.classList.add("armed");
-  deck.classList.add("drag");
-  burst(type);
-  var id = +c.dataset.id;
-  c.style.transition = "transform .34s cubic-bezier(.3,.6,.4,1), opacity .34s ease";
-  c.style.transform = "translate(" + dx + "px," + (dy - 40) + "px) rotate(" + dx / 14 + "deg)";
+/** Like (the card leaves upward) or pass (downward); the next room glides into focus. */
+function decide(type) {
+  var c = focusCard();
+  if (busy || !c) return;
+  busy = 1;
+  var id = +c.dataset.id,
+    up = type === "like",
+    ms = calm() ? 0 : 360,
+    m = metrics(),
+    fill = Q[pos + 1] ? 1 : -1, // which side closes the gap
+    next = Q[pos + fill];
+  feedback(c, up ? 1 : 0, up ? 0 : 1);
+  c.style.transition = "transform " + ms + "ms " + EASE + ",opacity " + ms + "ms ease";
+  c.style.transform = "translate3d(-50%," + (up ? -1 : 1) * Math.round(m.h * 0.9) + "px,0) scale(.94)";
   c.style.opacity = 0;
-  setTimeout(
-    function () {
-      act(type, id);
-    },
-    calm() ? 0 : 290,
-  );
+  deck.querySelectorAll(".sw.side").forEach(function (el) {
+    var o = +el.dataset.o;
+    if ((fill > 0 && o > 0) || (fill < 0 && o < 0)) put(el, o - fill, 0, m, ms);
+  });
+  setTimeout(function () {
+    busy = 0;
+    want = next ? next.h.id : null;
+    act(type, id);
+  }, ms);
 }
-function bind(c) {
-  var x0,
-    y0,
-    dx = 0,
-    dy = 0,
-    on = 0;
-  function settle() {
-    on = 0;
-    dpage.classList.remove("dragging");
-  }
-  function back() {
-    // springy snap back to the middle
-    c.style.transition = "transform .45s cubic-bezier(.3,1.5,.5,1)";
-    c.style.transform = "";
-    feedback(c, 0, 0);
-    setTimeout(function () {
-      deck.classList.remove("drag");
-    }, 450);
-  }
-  c.onpointerdown = function (e) {
+// one set of pointer handlers on the deck: decide the axis after a few pixels, then follow the finger on it
+(function () {
+  var x0, y0, t0, c, o0, lock, on, dx, dy, m;
+  deck.addEventListener("pointerdown", function (e) {
+    if (e.button > 0 || busy) return;
+    c = e.target.closest(".sw");
+    if (!c) return;
     on = 1;
+    lock = 0;
+    dx = dy = 0;
     x0 = e.clientX;
     y0 = e.clientY;
-    dx = dy = 0;
-    c.style.transition = "none";
-    c.setPointerCapture(e.pointerId);
-    dpage.classList.add("dragging");
-    deck.classList.add("drag");
-  };
-  c.onpointermove = function (e) {
+    t0 = Date.now();
+    o0 = +c.dataset.o;
+    m = metrics();
+  });
+  deck.addEventListener("pointermove", function (e) {
     if (!on) return;
     dx = e.clientX - x0;
     dy = e.clientY - y0;
-    c.style.transform = "translate(" + dx + "px," + Math.min(dy, 0) + "px) rotate(" + dx / 18 + "deg)";
-    feedback(c, cl(dx / 100), cl(-dx / 100));
-  };
-  c.onpointerup = function () {
+    if (!lock) {
+      if (Math.abs(dx) < 7 && Math.abs(dy) < 7) return;
+      lock = Math.abs(dx) > Math.abs(dy) ? "x" : o0 === 0 ? "y" : "none";
+      if (lock !== "none") {
+        deck.setPointerCapture(e.pointerId);
+        dpage.classList.add("dragging");
+      }
+    }
+    if (lock === "x") {
+      var shift = -dx / m.s1,
+        to = pos + shift,
+        last = Q.length - 1;
+      if (to < 0)
+        shift = -pos + to * 0.25; // rubber band at the ends
+      else if (to > last) shift = last - pos + (to - last) * 0.25;
+      lay(shift, 0, 0);
+    } else if (lock === "y") {
+      lay(0, dy, 0);
+      feedback(c, cl(-dy / 120), cl(dy / 120));
+    }
+  });
+  function end(cancel) {
     if (!on) return;
-    settle();
-    var id = +c.dataset.id;
-    if (dx > 100) fly(c, 520, dy, "like");
-    else if (dx < -100) fly(c, -520, dy, "pass");
+    on = 0;
+    dpage.classList.remove("dragging");
+    var dt = Math.max(1, Date.now() - t0),
+      vx = dx / dt,
+      vy = dy / dt;
+    if (cancel || lock === "none") {
+      if (lock === "x" || lock === "y") lay(0, 0, 260);
+      feedback(null, 0, 0);
+    } else if (!lock) {
+      // a tap: open the focused room, or bring a side room into focus
+      if (o0 === 0) open(+c.dataset.id);
+      else go(pos + o0);
+    } else if (lock === "x") {
+      var n = Math.round(-dx / m.s1);
+      if (!n && Math.abs(dx) > 30 && Math.abs(vx) > 0.45) n = dx < 0 ? 1 : -1;
+      go(pos + n);
+    } else if (dy < -110 || (dy < -40 && vy < -0.5)) decide("like");
+    else if (dy > 110 || (dy > 40 && vy > 0.5)) decide("pass");
     else {
-      back();
-      if (dy < -110 || (Math.abs(dx) < 6 && Math.abs(dy) < 6)) open(id);
+      lay(0, 0, calm() ? 0 : 260);
+      feedback(null, 0, 0);
     }
-  };
-  c.onpointercancel = function () {
-    if (on) {
-      settle();
-      back();
-    }
-  };
-}
+  }
+  deck.addEventListener("pointerup", function () {
+    end(false);
+  });
+  deck.addEventListener("pointercancel", function () {
+    end(true);
+  });
+  // a sideways trackpad / shift+wheel scroll browses; a plain vertical wheel still scrolls the card's text
+  var acc = 0,
+    quiet;
+  deck.addEventListener(
+    "wheel",
+    function (e) {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      acc += e.deltaX;
+      clearTimeout(quiet);
+      quiet = setTimeout(function () {
+        acc = 0;
+      }, 180);
+      if (Math.abs(acc) > 70 && !busy) {
+        go(pos + (acc > 0 ? 1 : -1));
+        acc = 0;
+      }
+    },
+    { passive: false },
+  );
+  window.addEventListener("resize", function () {
+    if (!busy) lay(0, 0, 0);
+  });
+})();
 function current() {
-  return Q[0];
+  return Q[pos];
 }
 $("dLike").onclick = function () {
-  var c = deck.querySelector(".sw:not(.back)");
-  c && fly(c, 520, 0, "like");
+  decide("like");
 };
 $("dPass").onclick = function () {
-  var c = deck.querySelector(".sw:not(.back)");
-  c && fly(c, -520, 0, "pass");
+  decide("pass");
 };
 $("dMark").onclick = function () {
-  current() && act("mark", current().h.id);
+  if (!current()) return;
+  want = current().h.id;
+  act("mark", want);
 };
 $("dInfo").onclick = function () {
   current() && open(current().h.id);
@@ -402,29 +579,45 @@ document.querySelectorAll(".more .pop button").forEach(function (b) {
     if (d) d.open = false;
   });
 });
+// Saved list "Details". Not an inline onclick="open(id)": inline handlers look names up on `document`
+// first, so `open` there is document.open(), which wipes the page blank.
+$("dSaved").addEventListener("click", function (e) {
+  var b = e.target.closest("[data-open]");
+  if (b) open(+b.dataset.open);
+});
+function tab(saved) {
+  dpage.classList.toggle("on-saved", saved);
+  $("tSaved").setAttribute("aria-selected", saved);
+  $("tFor").setAttribute("aria-selected", !saved);
+  $("dSavedBox").open = true;
+  if (!saved) lay(0, 0, 0);
+}
+$("tSaved").onclick = function () {
+  tab(true);
+};
+$("tFor").onclick = function () {
+  tab(false);
+};
 deck.onkeydown = function (e) {
   var k = e.key;
-  if (k === "ArrowRight") $("dLike").click();
-  else if (k === "ArrowLeft") $("dPass").click();
-  else if (k === "ArrowUp") {
-    e.preventDefault();
-    $("dInfo").click();
-  } else if (k === "z" || k === "Z") undo();
+  if (k === "ArrowUp") decide("like");
+  else if (k === "ArrowDown") decide("pass");
+  else if (k === "ArrowRight") go(pos + 1);
+  else if (k === "ArrowLeft") go(pos - 1);
+  else if (k === "Enter") $("dInfo").click();
+  else if (k === "z" || k === "Z") undo();
+  else return;
+  e.preventDefault();
 };
 
 // ---- page hooks ------------------------------------------------------
 var _act = act,
   SAY = { like: "Liked", pass: "Passed", mark: "Bookmarked" };
 act = function (type, id) {
-  if (type === "like") {
-    var b = $("dLike");
-    b.classList.remove("pop");
-    void b.offsetWidth;
-    b.classList.add("pop");
-  } // quick heart pulse
   _act(type, id);
   toast(SAY[type]);
 };
 function pageInit() {
   draw();
+  if (location.hash === "#saved") tab(true); // footer "Saved rooms"
 }

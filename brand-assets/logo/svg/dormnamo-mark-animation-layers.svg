@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1 1 26 31" width="260" height="310">
+  <!-- Layers for the door-opening animation (the website logo's hover):
+       door-light  : gold light behind the doors (#ffc83d)
+       leaf-left   : hinge at x=3,  y=16.5  -> scaleX 100% to 30%, skewY 0 to -9 deg
+       leaf-right  : hinge at x=25, y=16.5  -> scaleX 100% to 30%, skewY 0 to +9 deg
+       Timing on the site: 0.5 s, cubic-bezier(0.3, 1.25, 0.5, 1). -->
+  <g id="door-light"><path d="M3 28.4V14a11 11 0 0 1 22 0v14.4a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 28.4z" fill="#ffc83d"/></g>
+  <g id="leaf-left"><path d="M3 28.4V14A11 11 0 0 1 13.2 3.03V30H4.6A1.6 1.6 0 0 1 3 28.4zM9.450000000000001 18.6a1.45 1.45 0 1 0 2.9 0a1.45 1.45 0 1 0 -2.9 0z" fill="#0a47a9" fill-rule="evenodd"/></g>
+  <g id="leaf-right"><path d="M14.8 3.03A11 11 0 0 1 25 14v14.4a1.6 1.6 0 0 1-1.6 1.6H14.8zM15.650000000000002 18.6a1.45 1.45 0 1 0 2.9 0a1.45 1.45 0 1 0 -2.9 0z" fill="#0a47a9" fill-rule="evenodd"/></g>
+</svg>

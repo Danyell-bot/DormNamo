@@ -573,13 +573,26 @@ $("addForm").onsubmit = function (e) {
     facts: {},
     plan: plan,
     f: window.Owners && Owners.isFeatured && Owners.isFeatured(plan) ? 1 : 0,
+    pay: window.Owners && Owners.payMode ? Owners.payMode(plan) : "full",
   });
+  if (res.error === "limit") {
+    $("aMsg").innerHTML = res.pro
+      ? "Owner Pro covers " + res.max + " places, and you’ve listed " + res.max + "."
+      : "Basic covers " +
+        res.max +
+        " places for free, and you’ve used both. Choose <b>Owner Pro</b> to list up to " +
+        Listings.LIMIT.pro +
+        ".";
+    return;
+  }
   if (res.error) {
     $("aMsg").textContent = "Couldn’t save the listing: this browser’s storage is full.";
     return;
   }
   this.reset();
   ddSync("aB");
+  ddSync("aPlan");
+  if (window.Owners && Owners.bill) Owners.bill();
   $("aMsg").innerHTML =
     "Added with " +
     esc(planName) +

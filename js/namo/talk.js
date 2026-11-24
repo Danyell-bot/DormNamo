@@ -89,8 +89,8 @@ var Talk = (function () {
         "hello namo",
       ],
       say: [
-        "{greet}, {name}! 👋 What are you looking for in a room today?",
-        "Hey {name}! 😊 Want something cheaper, closer to campus, or with Wi-Fi?",
+        "{greet}, {name}! What are you looking for in a room today?",
+        "Hey {name}! Want something cheaper, closer to campus, or with Wi-Fi?",
         "Hi {name}! I'm here. Tell me what matters most to you in a room.",
       ],
     },
@@ -105,8 +105,8 @@ var Talk = (function () {
         "how have you been",
       ],
       say: [
-        "I'm doing great, thanks for asking! 😊 How's the room hunt going?",
-        "All good here, just sorting rooms. 🏠 How about you, {name}?",
+        "I'm doing great, thanks for asking! How's the room hunt going?",
+        "All good here, just sorting rooms. How about you, {name}?",
       ],
     },
     {
@@ -118,13 +118,13 @@ var Talk = (function () {
     {
       id: "thanks",
       ex: ["thank you", "thanks", "thank you so much", "thanks a lot", "ty", "appreciate it"],
-      say: ["You're welcome! 😊", "Anytime, {name}!", "No problem at all! Anything else you want in a room?"],
+      say: ["You're welcome!", "Anytime, {name}!", "No problem at all! Anything else you want in a room?"],
     },
     {
       id: "bye",
       ex: ["bye", "goodbye", "see you", "see you later", "good night", "gotta go", "talk later"],
       say: [
-        "Bye {name}! Good luck with the room hunt. 🏠",
+        "Bye {name}! Good luck with the room hunt.",
         "See you! Your preferences are saved, so I'll remember them.",
       ],
     },
@@ -142,13 +142,13 @@ var Talk = (function () {
         "introduce yourself",
       ],
       say: [
-        "I'm Namo, DormNamo's room helper. 🤖 I run right in your browser, so I'm not a person and not an online AI, but I can chat, explain why a room fits you, and compare places.",
+        "I'm Namo, DormNamo's room helper. I run right in your browser, so I'm not a person and not an online AI, but I can chat, explain why a room fits you, and compare places.",
       ],
     },
     {
       id: "maker",
       ex: ["who made you", "who created you", "who built you", "who is your creator"],
-      say: ["I was made by Team Gwapo for CCC100 as part of DormNamo. 🛠️"],
+      say: ["I was made by Team Gwapo for CCC100 as part of DormNamo."],
     },
     {
       id: "help",
@@ -207,7 +207,7 @@ var Talk = (function () {
         "how do i get the room",
       ],
       say: [
-        "Open a listing (tap any match card) to see the owner's phone number and a Google Maps link. Since many owners don't post rent, call or visit to confirm price and availability. In Discover, tap 💬 to save a room as an inquiry.",
+        "Open a listing (tap any match card) to see the owner's phone number and a Google Maps link. Since many owners don't post rent, call or visit to confirm price and availability. In Discover, tap to save a room as an inquiry.",
       ],
     },
     {
@@ -258,15 +258,15 @@ var Talk = (function () {
         "this is frustrating",
       ],
       say: [
-        "That sounds rough, {name}. 💙 Room hunting is stressful, especially far from home. Let's make it smaller: tell me the one thing that matters most (price, distance or safety) and I'll start there.",
-        "I hear you. Take a breath, we'll find something. 🫶 Want me to show your best matches so far?",
+        "That sounds rough, {name}. Room hunting is stressful, especially far from home. Let's make it smaller: tell me the one thing that matters most (price, distance or safety) and I'll start there.",
+        "I hear you. Take a breath, we'll find something. Want me to show your best matches so far?",
       ],
       pend: { act: "show" },
     },
     {
       id: "happy",
       ex: ["im happy", "yay", "i found a room", "im excited", "i got a place", "finally found one"],
-      say: ["Yay! 🎉 That's great news, {name}!", "Love that energy! 😄 Anything else I can help with?"],
+      say: ["Yay! That's great news, {name}!", "Love that energy! Anything else I can help with?"],
     },
     {
       id: "praise",
@@ -282,8 +282,8 @@ var Talk = (function () {
         "very helpful",
       ],
       say: [
-        "Aww, thank you! 🥰",
-        "That made my day. 😊 Anything else?",
+        "Aww, thank you!",
+        "That made my day. Anything else?",
         "Thanks, {name}! I'm still learning, so that means a lot.",
       ],
     },
@@ -301,7 +301,7 @@ var Talk = (function () {
         "they ignored me when i visited",
       ],
       say: [
-        "Sorry that happened, {name}. 😕 If it was at one of the listings, leave a comment on it so other students know what to expect. Want me to show you other places?",
+        "Sorry that happened, {name}. If it was at one of the listings, leave a comment on it so other students know what to expect. Want me to show you other places?",
       ],
       pend: { act: "show" },
     },
@@ -318,23 +318,23 @@ var Talk = (function () {
         "bad bot",
       ],
       say: [
-        "Sorry about that, {name}. 🙏 I'm still learning. Short phrases like “cheaper”, “must have wifi” or “near campus” work best, and you can always say <b>undo</b>.",
+        "Sorry about that, {name}. I'm still learning. Short phrases like “cheaper”, “must have wifi” or “near campus” work best, and you can always say <b>undo</b>.",
       ],
     },
     {
       id: "joke",
       ex: ["tell me a joke", "make me laugh", "say something funny", "joke", "im bored", "entertain me"],
       say: [
-        "Why did the student bring a ladder to the boarding house? They heard the rent was going up. 🪜",
-        "My favorite room type? A <i>bed</i>-space, because I'm always tired of searching. 😴",
-        "Landlord: “The room comes with a view.” Me: “Of what?” Landlord: “The neighbor's wall.” 🧱",
-        "I told my roommate to stop using my Wi-Fi. Now we have a strong connection. 📶",
+        "Why did the student bring a ladder to the boarding house? They heard the rent was going up.",
+        "My favorite room type? A <i>bed</i>-space, because I'm always tired of searching.",
+        "Landlord: “The room comes with a view.” Me: “Of what?” Landlord: “The neighbor's wall.”",
+        "I told my roommate to stop using my Wi-Fi. Now we have a strong connection.",
       ],
     },
     {
       id: "laugh",
       ex: ["haha", "lol", "hehe", "lmao", "hahaha"],
-      say: ["😄", "Glad that landed! Anything else?"],
+      say: ["Glad that landed! Anything else?", "Happy to help. Anything else?"],
     },
     {
       id: "yes",
@@ -355,9 +355,9 @@ var Talk = (function () {
       id: "casual",
       ex: ["bro", "breh", "yo bro", "hey man", "yo dude", "whats good", "sup bro", "hey dude", "wassup bro"],
       say: [
-        "Hey {name}! 😄 What's up? Room hunting, or just hanging out?",
-        "Yo! 🙌 Need help finding a place near campus?",
-        "Sup! 😎 Tell me your budget or what you need, and I'll find you something.",
+        "Hey {name}! What's up? Room hunting, or just hanging out?",
+        "Yo! Need help finding a place near campus?",
+        "Sup! Tell me your budget or what you need, and I'll find you something.",
       ],
     },
     {
@@ -373,8 +373,8 @@ var Talk = (function () {
         "transferee",
       ],
       say: [
-        "Nice to meet you, {name}! 🎓 Tell me your budget and how far you're okay walking, and I'll find a good fit.",
-        "Welcome! 🏠 First things first: about how much can you pay a month, and do you have online classes?",
+        "Nice to meet you, {name}! Tell me your budget and how far you're okay walking, and I'll find a good fit.",
+        "Welcome! First things first: about how much can you pay a month, and do you have online classes?",
       ],
     },
     {
@@ -466,15 +466,13 @@ var Talk = (function () {
         "do you have a crush",
         "i love you namo",
       ],
-      say: [
-        "Haha, my heart belongs to well-ventilated rooms with 24/7 water. 💘 But I'll help you find yours!",
-      ],
+      say: ["Haha, my heart belongs to well-ventilated rooms with 24/7 water. But I'll help you find yours!"],
     },
     {
       id: "food",
       ex: ["im hungry", "where to eat", "food near campus", "where can i buy food"],
       say: [
-        "I only know rooms for now 🍚, but a room with a kitchen helps with food costs. Want me to prefer rooms with a kitchen?",
+        "I only know rooms for now, but a room with a kitchen helps with food costs. Want me to prefer rooms with a kitchen?",
       ],
       pend: { text: "prefer kitchen" },
     },
@@ -482,7 +480,7 @@ var Talk = (function () {
       id: "weather",
       ex: ["whats the weather", "is it raining", "will it rain", "is it hot today"],
       say: [
-        "I can't check the weather, sorry! ☔ Iligan gets plenty of rain though, so a place close to campus saves you wet walks. Want closer rooms?",
+        "I can't check the weather, sorry! Iligan gets plenty of rain though, so a place close to campus saves you wet walks. Want closer rooms?",
       ],
       pend: { text: "closer" },
     },

@@ -36,27 +36,7 @@ body.dark .tabs a.on {
   isolation: isolate;
   background: linear-gradient(180deg, #f7faff 0%, #fff 100%);
 }
-/* graph paper: fine 20px squares with stronger lines every 100px, fading out toward the edges */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(10, 71, 169, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.13) 1px, transparent 1px),
-    linear-gradient(rgba(10, 71, 169, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.055) 1px, transparent 1px);
-  background-size:
-    100px 100px,
-    100px 100px,
-    20px 20px,
-    20px 20px;
-  background-position: center top;
-  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 30%, #000 45%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 90% at 50% 30%, #000 45%, transparent 100%);
-}
-/* soft blue and gold light on top of the grid */
+/* soft blue and gold light */
 .hero::after {
   content: "";
   position: absolute;
@@ -214,46 +194,6 @@ body.dark .tabs a.on {
   }
 }
 
-/* ---------- grid spotlight (js/pages/hero-fx.js sets --mx/--my) ---------- */
-/* a darker copy of the grid, visible only in a soft circle around the mouse */
-.hero-grid-hot {
-  background-image:
-    radial-gradient(circle 230px at var(--mx, 50%) var(--my, 50%), rgba(10, 71, 169, 0.07), transparent 70%),
-    linear-gradient(rgba(10, 71, 169, 0.42) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.42) 1px, transparent 1px),
-    linear-gradient(rgba(10, 71, 169, 0.2) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.2) 1px, transparent 1px);
-  background-size:
-    100% 100%,
-    100px 100px,
-    100px 100px,
-    20px 20px,
-    20px 20px;
-  background-position:
-    0 0,
-    center top,
-    center top,
-    center top,
-    center top;
-  -webkit-mask-image: radial-gradient(
-    circle 210px at var(--mx, 50%) var(--my, 50%),
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 40%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    circle 210px at var(--mx, 50%) var(--my, 50%),
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 40%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.45s ease;
-}
-.hero.hot .hero-grid-hot {
-  opacity: 1;
-}
-
 /* ---------- small hover details ---------- */
 .kicker-dot {
   position: relative;
@@ -295,8 +235,7 @@ body.dark .tabs a.on {
 /* ---------- opening transition ---------- */
 /* <html class="intro"> is set in the page head; HeroFX.play() swaps it for .intro-run */
 .intro header,
-.intro .hero .wrap > *,
-.intro .hero-grid:not(.hero-grid-hot) {
+.intro .hero .wrap > * {
   opacity: 0;
 }
 /* The headline is the page's largest content, so it is never hidden or animated: browsers only count an animated
@@ -317,16 +256,6 @@ body.dark .tabs a.on {
     filter: none;
   }
 }
-@keyframes heroGrid {
-  from {
-    opacity: 0;
-    transform: scale(1.06);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 @keyframes navDrop {
   from {
     opacity: 0;
@@ -339,9 +268,6 @@ body.dark .tabs a.on {
 }
 .intro-run header {
   animation: navDrop 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.intro-run .hero-grid:not(.hero-grid-hot) {
-  animation: heroGrid 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 .intro-run .hero .wrap > * {
   animation: heroRise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -372,15 +298,11 @@ body.dark .tabs a.on {
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-run header,
-  .intro-run .hero .wrap > *,
-  .intro-run .hero-grid:not(.hero-grid-hot) {
+  .intro-run .hero .wrap > * {
     animation-name: heroFade;
   }
   .kicker-dot::after {
     animation: none;
-  }
-  .hero-grid-hot {
-    transition: none;
   }
 }
 
@@ -510,23 +432,6 @@ body.dark .tabs a.on {
   transform: translateY(calc(var(--hp, 0) * -36px));
   opacity: calc(1 - var(--hp, 0) * 0.55);
   will-change: transform, opacity;
-}
-.hero-grid {
-  transform: translateY(calc(var(--hp, 0) * 50px));
-}
-.hero-grid-hot {
-  -webkit-mask-image: radial-gradient(
-    circle 210px at var(--mx, 50%) calc(var(--my, 50%) - var(--hp, 0) * 50px),
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 40%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    circle 210px at var(--mx, 50%) calc(var(--my, 50%) - var(--hp, 0) * 50px),
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 40%,
-    transparent 100%
-  );
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-next svg {

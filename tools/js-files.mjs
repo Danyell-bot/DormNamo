@@ -15,7 +15,7 @@ export const FOLDERS = {
   matching: ["matching", "twotower", "insights"], // ranking rooms for each student
   maps: ["nearby-core", "maps", "pin-tool"], // map, nearby places, walking routes, pin tool
   namo: ["explain", "namo-guard", "namo-ai", "knowledge", "websearch", "talk", "chat"], // Namo the chatbot
-  pages: ["browse", "owners", "hero-fx", "discover", "mylistings", "people", "messages"], // code used by one page only
+  pages: ["browse", "owners", "hero-fx", "discover", "mylistings", "people", "messages", "about"], // code used by one page only
 };
 
 const WHERE = {};

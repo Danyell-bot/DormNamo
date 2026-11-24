@@ -120,15 +120,18 @@ function avatarHTML(id, name, cls) {
     });
   return (
     '<span class="av ' +
+    (/^bot-/.test(id) ? "av-bot " : "") +
     (cls || "") +
     '" style="--av:' +
     hue +
     '" aria-hidden="true">' +
-    esc(
-      String(name || "?")
-        .charAt(0)
-        .toUpperCase(),
-    ) +
+    (/^bot-/.test(id)
+      ? ico("bot")
+      : esc(
+          String(name || "?")
+            .charAt(0)
+            .toUpperCase(),
+        )) +
     "</span>"
   );
 }

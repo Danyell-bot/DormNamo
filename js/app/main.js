@@ -17,7 +17,7 @@ function startSite() {
   var n = window.Inbox ? Inbox.unread() : 0;
   if (n && document.body.dataset.page !== "messages")
     Chat.notify(
-      "📬 You have <b>" +
+      "You have <b>" +
         n +
         (n === 1 ? " new message" : " new messages") +
         '</b> in <a href="messages.html">Messages</a>.',

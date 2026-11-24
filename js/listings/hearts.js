@@ -156,60 +156,7 @@ var Hearts = (function () {
     });
   }
 
-  /* ---------- click animation ----------
-     Heart: squash-and-stretch bounce, a ring that flashes out, and a burst of
-     mini hearts (red) and dots (gold, the brand accent). Un-heart: a quick
-     deflate wobble. The burst is drawn in a fixed layer on <body>, so the card
-     photo's rounded, clipped corners don't cut it off. */
-  function calm() {
-    return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }
-  function burst(b) {
-    var ic = b.querySelector(".ic");
-    if (!ic) return;
-    var r = ic.getBoundingClientRect(),
-      fx = document.createElement("div"),
-      soft = calm(),
-      n = soft ? 0 : 12, // reduced motion: just a soft glow, nothing flies
-      html = '<span class="hrt-ring"></span>';
-    for (var i = 0; i < n; i++) {
-      var a = (i / n) * Math.PI * 2 + (i % 2 ? 0.26 : 0), // alternate rings so it looks hand-thrown
-        d = (i % 2 ? 30 : 40) + (i % 3) * 6;
-      html +=
-        '<i class="' +
-        (i % 2 ? "p-dot" : "p-hrt") +
-        '" style="--x:' +
-        Math.round(Math.cos(a) * d) +
-        "px;--y:" +
-        Math.round(Math.sin(a) * d) +
-        "px;--r:" +
-        ((i % 4) - 1.5) * 24 +
-        "deg;animation-delay:" +
-        (i % 3) * 25 +
-        'ms">' +
-        (i % 2 ? "" : ico("heart")) +
-        "</i>";
-    }
-    fx.className = "hrt-fx" + (soft ? " soft" : "");
-    fx.setAttribute("aria-hidden", "true");
-    fx.innerHTML = html;
-    // a modal <dialog> sits in the top layer, above anything on <body>, so draw inside it there
-    var dlg = b.closest("dialog");
-    if (dlg) {
-      var d = dlg.getBoundingClientRect();
-      fx.classList.add("in-dlg");
-      fx.style.left = r.left - d.left - dlg.clientLeft + dlg.scrollLeft + r.width / 2 + "px";
-      fx.style.top = r.top - d.top - dlg.clientTop + dlg.scrollTop + r.height / 2 + "px";
-      dlg.appendChild(fx);
-    } else {
-      fx.style.left = r.left + r.width / 2 + "px";
-      fx.style.top = r.top + r.height / 2 + "px";
-      document.body.appendChild(fx);
-    }
-    setTimeout(function () {
-      fx.remove();
-    }, 900);
-  }
+  /* ---------- click animation: a short, quiet scale (no flying particles) ---------- */
   function play(b, cls) {
     b.classList.remove("pop", "unpop");
     void b.offsetWidth; // restart the animation on quick repeat clicks
@@ -222,11 +169,10 @@ var Hearts = (function () {
     if (!b || !window.USER) return;
     e.preventDefault();
     var on = toggle(+b.dataset.heart);
-    // every copy of this heart (card + dialog) bounces; the burst comes from the one that was clicked
+    // every copy of this heart (card + dialog) answers the click
     document.querySelectorAll('[data-heart="' + b.dataset.heart + '"]').forEach(function (x) {
       play(x, on ? "pop" : "unpop");
     });
-    if (on) burst(b);
   });
 
   return {

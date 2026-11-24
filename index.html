@@ -42,8 +42,6 @@
 
     <main id="top">
       <div class="hero">
-        <div class="hero-grid" aria-hidden="true"></div>
-        <div class="hero-grid hero-grid-hot" aria-hidden="true"></div>
         <div class="hero-fade" aria-hidden="true"></div>
         <div class="wrap">
           <span class="kicker"
@@ -311,26 +309,26 @@
       </section>
 
       <section id="owners">
-        <div class="sec-grid" aria-hidden="true"></div>
         <div class="wrap">
           <div class="sh">
             <div>
               <span class="eyebrow">For owners</span>
               <h2>Own a boarding house? List it here.</h2>
-              <p>Start free. Pay only when you want more students to find your rooms.</p>
+              <p>List up to 2 places free. Pay only when you want more students to find your rooms.</p>
             </div>
           </div>
           <div class="bill" role="group" aria-label="Owner Pro billing">
             <button type="button" data-bill="m" aria-pressed="true">Monthly</button
             ><button type="button" data-bill="y" aria-pressed="false">
-              Yearly <span class="save">Save 20%</span>
+              Yearly <span class="save">2 months free</span>
             </button>
           </div>
+          <p class="season" id="season" role="status" hidden></p>
           <div class="plans">
             <article class="plan">
               <div class="plan-h">
                 <h3>Basic</h3>
-                <p>Get your rooms online today</p>
+                <p>Live in about a minute</p>
               </div>
               <div class="plan-p"><b>₱0</b><span>forever</span></div>
               <a class="btn alt plan-cta" href="#addForm" data-plan="basic">List for free</a>
@@ -347,7 +345,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>1 listing with your rates and photos</span>
+                  ><span>Up to 2 places with your rates and photos</span>
                 </li>
                 <li>
                   <svg
@@ -389,7 +387,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>Tenant reviews</span>
+                  ><span>Tenant reviews and hearts that stay with your listing</span>
                 </li>
               </ul>
             </article>
@@ -405,7 +403,10 @@
                   30 days<i>Best value</i></button
                 ><button type="button" role="radio" data-boost="bsem" aria-checked="false">Semester</button>
               </div>
-              <div class="plan-p"><b id="bPrice">₱399</b><span id="bPer">for 30 days</span></div>
+              <div class="plan-p">
+                <s class="was" id="bWas" hidden>₱1,499</s><b id="bPrice">₱399</b
+                ><span id="bPer">for 30 days</span>
+              </div>
               <p class="plan-note" id="bNote">About ₱13 a day, the price of one jeepney ride.</p>
               <a class="btn plan-cta gold" href="#addForm" data-plan="b30" id="bCta">Boost a listing</a>
               <ul>
@@ -449,7 +450,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>Views and inquiries report for the boost</span>
+                  ><span>Weekly report: views, hearts and new inquiries</span>
                 </li>
                 <li>
                   <svg
@@ -463,7 +464,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>Best timed before enrollment season</span>
+                  ><span>Only 3 Featured spots per barangay</span>
                 </li>
               </ul>
             </article>
@@ -473,10 +474,12 @@
                 <p>For owners with several properties</p>
               </div>
               <div class="plan-p">
-                <s class="was" id="proWas" hidden>₱499</s><b id="proPrice">₱499</b
+                <s class="was" id="proWas" hidden>₱549</s><b id="proPrice">₱549</b
                 ><span id="proPer">per month</span>
               </div>
-              <p class="plan-note" id="proNote">Includes 2 free 7-day boosts a month (₱298 value).</p>
+              <p class="plan-note" id="proNote">
+                About ₱18 a day. Includes 2 free 7-day boosts a month (₱298 value).
+              </p>
               <a class="btn plan-cta navy" href="#addForm" data-plan="pro-m" id="proCta">Start Owner Pro</a>
               <ul>
                 <li>
@@ -505,7 +508,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>2 free 7-day boosts every month</span>
+                  ><span>2 free 7-day boosts a month, unused ones carry over</span>
                 </li>
                 <li>
                   <svg
@@ -519,7 +522,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>Priority verification badge</span>
+                  ><span>Verified Landowner badge</span>
                 </li>
                 <li>
                   <svg
@@ -533,7 +536,7 @@
                     aria-hidden="true"
                   >
                     <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-                  ><span>Views and inquiries dashboard</span>
+                  ><span>Weekly report: views, hearts and new inquiries</span>
                 </li>
                 <li>
                   <svg
@@ -565,7 +568,7 @@
                 aria-hidden="true"
               >
                 <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
-              >No contract. Cancel anytime.</span
+              >No contract. Cancel anytime. Boosts never auto-renew.</span
             ><span
               ><svg
                 class="ic"
@@ -580,7 +583,7 @@
                 <path d="m5 12.5 4.5 4.5L19 7.5" /></svg
               >Basic stays free.</span
             ><span class="roi"
-              >Example: one filled bedspace at ₱2,000 a month covers Owner Pro 4 times over.</span
+              >An empty bedspace at ₱2,000 a month costs you more than 4 months of Owner Pro.</span
             >
           </p>
           <form class="owner" id="addForm">
@@ -621,14 +624,15 @@
             <label>Near<select id="aS"></select></label>
             <label
               >Plan<select id="aPlan">
-                <option value="basic">Basic · Free</option>
+                <option value="basic">Basic · Free (up to 2 places)</option>
                 <option value="b7">Featured boost · 7 days · ₱149</option>
                 <option value="b30">Featured boost · 30 days · ₱399</option>
                 <option value="bsem">Featured boost · Semester · ₱1,499</option>
-                <option value="pro-m">Owner Pro · Monthly · ₱499</option>
-                <option value="pro-y">Owner Pro · Yearly · ₱4,788 (save 20%)</option>
+                <option value="pro-m">Owner Pro · Monthly · ₱549</option>
+                <option value="pro-y">Owner Pro · Yearly · ₱5,388 (2 months free)</option>
               </select></label
             >
+            <div class="full bill-sum" id="aBill" aria-live="polite"></div>
             <label class="full"
               >Short description<textarea
                 id="aD"
@@ -645,13 +649,7 @@
       </section>
     </main>
 
-    <footer>
-      <div class="wrap">
-        DormNamo · Your Home Away From Home. A student project by Team Gwapo (CCC100). Listings come from
-        public Google Maps data; rent, rules and amenities stay unverified until you confirm them with the
-        owner.
-      </div>
-    </footer>
+    <footer id="siteFooter" class="site-foot"></footer>
 
     <div class="cmpbar" id="cmpbar" hidden>
       <span id="cmpTxt"></span><button class="btn sm" id="cmpGo">Compare</button

@@ -18,7 +18,7 @@ var People = (function () {
   }
   function badges(p) {
     return (
-      (p.bot ? '<i class="role-b role-bot">🤖 Test bot</i>' : "") +
+      (p.bot ? '<i class="role-b role-bot">' + ico("bot") + "Test bot</i>" : "") +
       (p.owner ? '<i class="role-b role-owner">Landowner</i>' : "") +
       (p.student ? '<i class="role-b role-student">' + (p.owner ? "Also renting" : "Student") + "</i>" : "")
     );

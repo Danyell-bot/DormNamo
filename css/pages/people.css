@@ -30,24 +30,6 @@
   overflow: hidden;
   padding: 40px 0 22px !important;
 }
-.pp-top .sec-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(10, 71, 169, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.1) 1px, transparent 1px),
-    linear-gradient(rgba(10, 71, 169, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.045) 1px, transparent 1px);
-  background-size:
-    100px 100px,
-    100px 100px,
-    20px 20px,
-    20px 20px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 30% 0%, #000 25%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 90% at 30% 0%, #000 25%, transparent 100%);
-}
 .pp-top h1 {
   font-size: clamp(30px, 4.6vw, 44px);
   color: var(--ink);

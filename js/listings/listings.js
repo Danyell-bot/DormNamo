@@ -56,7 +56,28 @@ var Listings = (function () {
     );
   }
 
-  /** Insert or update one record (owner set from USER). Returns {rec} or {error: "full" | "error"}. */
+  /* How many places one account may list: Basic (free) covers 2, Owner Pro covers 5.
+     Keep in step with the plan cards in index.html and owners.js. */
+  var LIMIT = { free: 2, pro: 5 };
+  function isPro(plan) {
+    return plan === "pro-m" || plan === "pro-y";
+  }
+  /** {used, max, pro} for the account uid (default: the logged-in user); `plan` = the plan being added. */
+  function quota(plan, uid) {
+    uid = uid || (window.USER ? USER.id : "guest");
+    var m = load().filter(function (r) {
+        return r.uid === uid;
+      }),
+      pro =
+        isPro(plan) ||
+        m.some(function (r) {
+          return isPro(r.plan);
+        });
+    return { used: m.length, max: pro ? LIMIT.pro : LIMIT.free, pro: pro };
+  }
+
+  /** Insert or update one record (owner set from USER).
+      Returns {rec} or {error: "full" | "error" | "limit", max}. "limit": a new place past the plan's quota. */
   function save(rec) {
     var a = load(),
       now = Date.now(),
@@ -69,6 +90,10 @@ var Listings = (function () {
     rec.at = rec.at || now;
     rec.upd = now;
     for (i = 0; i < a.length && a[i].id !== rec.id; i++);
+    if (i === a.length && !/^bot-/.test(rec.uid)) {
+      var q = quota(rec.plan, rec.uid);
+      if (q.used >= q.max) return { error: "limit", max: q.max, pro: q.pro };
+    }
     a[i] = rec;
     var err = store(a);
     if (err) return { error: err };
@@ -206,6 +231,8 @@ var Listings = (function () {
   return {
     all: all,
     mine: mine,
+    quota: quota,
+    LIMIT: LIMIT,
     get: get,
     save: save,
     remove: remove,

@@ -645,6 +645,18 @@ var ML = (function () {
       return;
     }
     var res = Listings.save(r);
+    if (res.error === "limit") {
+      toast(
+        res.pro
+          ? "Owner Pro covers " + res.max + " places. Remove one to add another."
+          : "Basic covers " +
+              res.max +
+              " places for free. Owner Pro lets you list up to " +
+              Listings.LIMIT.pro +
+              ".",
+      );
+      return;
+    }
     if (res.error) {
       toast(
         res.error === "full"

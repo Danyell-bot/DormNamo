@@ -27,15 +27,20 @@
     <link rel="stylesheet" href="css/components/onboarding.css" />
     <link rel="stylesheet" href="css/base/mobile.css" />
   </head>
-  <body data-page="discover" class="dark">
+  <body data-page="discover">
     <header id="siteHeader"></header>
     <main class="dpage">
       <div class="dhead">
-        <div>
-          <h1>For you</h1>
-          <p class="dsub">Rooms ranked for you. Swipe right to like, left to pass.</p>
+        <h1 class="vh">For you</h1>
+        <div class="dtabs" role="tablist" aria-label="Discover">
+          <button type="button" role="tab" id="tSaved" aria-selected="false" aria-controls="dSavedBox">
+            Saved<b id="dSavedTab" hidden></b>
+          </button>
+          <button type="button" role="tab" id="tFor" aria-selected="true" aria-controls="dForBox">
+            For you
+          </button>
         </div>
-        <button class="btn alt sm" id="dPref" type="button">
+        <button class="dicon" id="dPref" type="button" aria-label="Edit preferences" title="Edit preferences">
           <svg
             class="ic"
             viewBox="0 0 24 24"
@@ -48,19 +53,19 @@
           >
             <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
             <circle cx="15" cy="7" r="2" />
-            <circle cx="9" cy="17" r="2" /></svg
-          >Edit preferences
+            <circle cx="9" cy="17" r="2" />
+          </svg>
         </button>
       </div>
-      <div class="deckwrap">
+      <div class="deckwrap" id="dForBox" role="tabpanel">
         <div
           class="deck"
           id="deck"
           tabindex="0"
-          aria-label="Dorm recommendations. Arrow right to like, left to pass, up for details, Z to undo."
+          aria-label="Dorm recommendations. Arrow up to like, down to pass, left and right to browse, Enter for details, Z to undo."
         ></div>
         <div class="rail">
-          <button id="dLike" type="button" aria-label="Like" title="Like (→)">
+          <button id="dPass" type="button" aria-label="Pass" title="Pass (↓)">
             <svg
               class="ic"
               viewBox="0 0 24 24"
@@ -71,12 +76,10 @@
               stroke-linejoin="round"
               aria-hidden="true"
             >
-              <path
-                d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3.2 5 6.6 5c2.1 0 3.4 1.2 5.4 3.3C14 6.2 15.3 5 17.4 5c3.4 0 5.3 3.4 3.8 6.4C19 15.6 12 20 12 20z"
-              />
+              <path d="M6 6l12 12M18 6 6 18" />
             </svg>
           </button>
-          <button id="dInfo" type="button" aria-label="Details and ask landlord" title="Details (↑)">
+          <button id="dInfo" type="button" aria-label="Details and ask landlord" title="Details (Enter)">
             <svg
               class="ic"
               viewBox="0 0 24 24"
@@ -92,6 +95,23 @@
               <path d="M12 7.6v.01" />
             </svg>
           </button>
+          <button id="dLike" type="button" aria-label="Like" title="Like (↑)">
+            <svg
+              class="ic"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3.2 5 6.6 5c2.1 0 3.4 1.2 5.4 3.3C14 6.2 15.3 5 17.4 5c3.4 0 5.3 3.4 3.8 6.4C19 15.6 12 20 12 20z"
+              />
+            </svg>
+          </button>
+
           <details class="more">
             <summary aria-label="More actions" title="More">
               <svg
@@ -121,19 +141,6 @@
                 >
                   <path d="M6 3.5h12v17l-6-4.3-6 4.3z" /></svg
                 >Bookmark</button
-              ><button id="dPass" type="button">
-                <svg
-                  class="ic"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M6 6l12 12M18 6 6 18" /></svg
-                >Pass <kbd>←</kbd></button
               ><button id="dUndo" type="button">
                 <svg
                   class="ic"
@@ -154,11 +161,12 @@
         </div>
       </div>
       <div class="dstat" id="dStat" aria-live="polite"></div>
-      <details class="saved">
+      <details class="saved" id="dSavedBox" role="tabpanel">
         <summary><span>Liked &amp; bookmarked</span><b id="dSavedN">0</b></summary>
         <div id="dSaved"></div>
       </details>
     </main>
+    <footer id="siteFooter" class="site-foot"></footer>
     <div class="overlay" id="auth" hidden></div>
     <div class="overlay" id="ob" hidden></div>
     <div id="toast" role="status" aria-live="polite"></div>

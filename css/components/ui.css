@@ -398,15 +398,13 @@ dialog[open] {
     body,
     html.intro-run header,
     html.intro-run .hero .wrap > *,
-    html.intro-run .hero-grid,
     #finder.searched .grid > .card,
     #finder.searched .filters,
     .hrt.pop,
     .hrt.pop .ic,
     .hrt.unpop .ic,
     .hrt-n.up,
-    .hrt-n.down,
-    .hrt-fx .hrt-ring
+    .hrt-n.down
   ),
   *:before,
   *:after {

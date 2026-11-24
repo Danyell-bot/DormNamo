@@ -6,25 +6,6 @@
 .overlay {
   background: var(--bg);
 }
-.overlay::before {
-  /* faint graph-paper grid, like the hero */
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(10, 71, 169, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 100%);
-}
-body.dark .overlay::before {
-  background-image:
-    linear-gradient(rgba(157, 183, 230, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(157, 183, 230, 0.08) 1px, transparent 1px);
-}
 .overlay {
   isolation: isolate;
 }

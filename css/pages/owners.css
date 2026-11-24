@@ -7,25 +7,6 @@
   overflow: hidden;
   background: linear-gradient(180deg, #fff 0%, #f7faff 30%, #fffaf0 100%);
 }
-#owners .sec-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(10, 71, 169, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.1) 1px, transparent 1px),
-    linear-gradient(rgba(10, 71, 169, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 71, 169, 0.045) 1px, transparent 1px);
-  background-size:
-    100px 100px,
-    100px 100px,
-    20px 20px,
-    20px 20px;
-  background-position: center top;
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);
-}
 #owners .sh {
   text-align: center;
   justify-content: center;
@@ -449,4 +430,92 @@
   color: var(--mute);
   text-decoration-thickness: 2px;
   text-decoration-color: rgba(200, 40, 40, 0.7);
+}
+
+/* season banner over the plans (owners.js: peak, early-bird countdown, quiet) */
+.season {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 22px;
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  font-size: 14px;
+  color: var(--ink);
+  text-align: center;
+}
+.season b {
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  background: var(--ink);
+  color: #fff;
+}
+.season[data-season="early"] b {
+  background: var(--gold);
+  color: var(--goldink);
+}
+.season[data-season="peak"] b {
+  background: #16a34a;
+}
+
+/* what will be charged, under the plan in the add-property form */
+.bill-sum {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f7faff;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.bill-sum:empty {
+  display: none;
+}
+.bill-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.bill-h span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+.bill-h b {
+  font:
+    800 20px/1.1 "Bricolage Grotesque",
+    sans-serif;
+}
+#owners .owner .bill-parts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+#owners .owner .bill-parts input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--brand);
+}
+.bill-sum ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  color: var(--mute);
 }
