@@ -1,5 +1,5 @@
 /* ==========================================================
-   geocode.mjs - save exact coordinates for every listing in js/data.js
+   geocode.mjs - save exact coordinates for every listing in js/data/data.js
    Usage:  npm run geocode              (only listings that need it)
            npm run geocode -- --dry-run (show what would change)
            npm run geocode -- --force   (redo all, except geo: "manual")
@@ -17,9 +17,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseHouses, setGeoFields, needsGeocode, nameMatches } from "./geo-lib.mjs";
+import { jsPath } from "./js-files.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const DATA = path.join(ROOT, "js", "data.js");
+const DATA = jsPath("data");
 try {
   process.loadEnvFile(path.join(ROOT, ".env"));
 } catch {

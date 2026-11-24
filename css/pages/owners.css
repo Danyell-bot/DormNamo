@@ -1,0 +1,452 @@
+/* owners.css - "List your place": pricing cards, billing switch and the add-property form.
+   Same look as the hero: graph-paper grid, white cards, thin borders, soft shadows, gold accents. */
+
+#owners {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fff 0%, #f7faff 30%, #fffaf0 100%);
+}
+#owners .sec-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(10, 71, 169, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(10, 71, 169, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.045) 1px, transparent 1px);
+  background-size:
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);
+}
+#owners .sh {
+  text-align: center;
+  justify-content: center;
+}
+#owners .sh h2:after {
+  margin: 8px auto 0;
+}
+#owners .sh p {
+  margin-left: auto;
+  margin-right: auto;
+}
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: #eef4fd;
+  border: 1px solid var(--line);
+  padding: 4px 12px;
+  border-radius: 99px;
+}
+
+/* monthly / yearly switch */
+.bill {
+  display: flex;
+  width: max-content;
+  margin: 6px auto 26px;
+  padding: 4px;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  box-shadow: 0 4px 14px rgba(10, 47, 115, 0.06);
+}
+.bill button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: none;
+  color: var(--mute);
+  font:
+    700 14px Figtree,
+    system-ui,
+    sans-serif;
+  padding: 8px 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.bill button[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+.bill .save {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--gold);
+  color: var(--goldink);
+}
+
+/* plan cards */
+#owners .plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+@media (max-width: 900px) {
+  #owners .plans {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+}
+#owners .plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 26px 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(10, 47, 115, 0.07);
+  transition:
+    opacity 0.5s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease; /* opacity: keeps the scroll reveal (fx.js) fading in */
+}
+#owners .plan:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(10, 47, 115, 0.12);
+}
+#owners .plan.pop {
+  border: 2px solid var(--brand);
+  box-shadow: 0 22px 50px rgba(10, 71, 169, 0.18);
+}
+@media (min-width: 901px) {
+  #owners .plan.pop {
+    transform: translateY(-10px);
+  }
+  #owners .plan.pop:hover {
+    transform: translateY(-14px);
+  }
+}
+.plan-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  translate: -50% 0;
+  background: var(--gold);
+  color: var(--goldink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 5px 14px;
+  border-radius: 99px;
+  box-shadow: 0 4px 12px rgba(184, 138, 0, 0.3);
+  white-space: nowrap;
+}
+.plan-h h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--ink);
+}
+.plan-h p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--mute);
+}
+.plan-p {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.plan-p b {
+  font:
+    800 42px/1 "Bricolage Grotesque",
+    sans-serif;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.plan-p span {
+  font-size: 14px;
+  color: var(--mute);
+}
+.plan-p b.bump {
+  animation: bump 0.35s ease;
+}
+@keyframes bump {
+  40% {
+    transform: translateY(-3px);
+    color: var(--brand);
+  }
+}
+.plan-note {
+  margin: -6px 0 0;
+  font-size: 13px;
+  color: #8a6300;
+  font-weight: 600;
+}
+.plan-cta {
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  padding: 12px 18px;
+  font-weight: 800;
+  border-radius: 12px;
+}
+.plan-cta.gold {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--goldink);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+}
+.plan-cta.gold:hover {
+  background: #ffbe1a;
+}
+.plan-cta.navy {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+.plan-cta.navy:hover {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+#owners .plan ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ink);
+}
+#owners .plan li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+#owners .plan li .ic,
+.plan-foot .ic {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  padding: 3px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  background: #fff1c2;
+  color: #8a6300;
+  stroke-width: 3;
+  margin-top: 1px;
+}
+#owners .plan.pop li .ic {
+  background: var(--gold);
+  color: var(--goldink);
+}
+
+/* boost length picker */
+.boost {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 4px;
+  background: #f3f7fd;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.boost button {
+  position: relative;
+  border: 0;
+  background: none;
+  border-radius: 9px;
+  padding: 8px 4px;
+  font:
+    700 13px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--mute);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.boost button[aria-checked="true"] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(10, 47, 115, 0.12);
+}
+.boost button i {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  translate: -50% 0;
+  font-style: normal;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: var(--brand);
+  color: #fff;
+}
+.bill button:focus-visible,
+.boost button:focus-visible,
+.plan-cta:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* reassurance line */
+.plan-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 22px;
+  margin: 30px 0 0;
+  font-size: 14px;
+  color: var(--ink);
+}
+.plan-foot span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.plan-foot .roi {
+  flex-basis: 100%;
+  justify-content: center;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* add-property form */
+#owners .owner {
+  margin-top: 34px;
+  padding: 26px;
+  gap: 16px 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(10, 47, 115, 0.07);
+}
+.owner-h h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--ink);
+}
+.owner-h p {
+  margin: 4px 0 0;
+}
+#owners .owner label {
+  color: var(--ink);
+}
+#owners .owner input,
+#owners .owner select,
+#owners .owner textarea {
+  font:
+    500 15px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  background: #fbfdff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+#owners .owner input:focus,
+#owners .owner select:focus,
+#owners .owner textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.35);
+}
+/* Room type / Near / Plan use the styled Dropdown (js/app/select.js), dressed like the inputs */
+#owners .owner label.dd {
+  position: relative;
+}
+#owners .owner .dd-btn {
+  padding: 11px 14px;
+  font:
+    500 15px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  background: #fbfdff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+#owners .owner .dd-btn:hover {
+  border-color: #b9cdee;
+}
+#owners .owner .dd-open .dd-btn,
+#owners .owner .dd-btn:focus-visible {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.35);
+}
+#owners .owner .dd-list {
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 0;
+}
+.owner-f {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.owner-f .btn {
+  padding: 12px 26px;
+  font-weight: 800;
+  border-radius: 12px;
+}
+#owners .owner.picked {
+  animation: picked 1.2s ease;
+}
+@keyframes picked {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 200, 61, 0.6);
+  }
+  30% {
+    box-shadow: 0 0 0 8px rgba(255, 200, 61, 0.35);
+  }
+  100% {
+    box-shadow: 0 10px 30px rgba(10, 47, 115, 0.07);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #owners .plan,
+  #owners .plan:hover,
+  #owners .plan.pop {
+    transform: none;
+  }
+}
+
+/* yearly Owner Pro: the monthly price struck through as the anchor */
+.plan-p s.was {
+  font:
+    700 20px/1 "Bricolage Grotesque",
+    sans-serif;
+  color: var(--mute);
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(200, 40, 40, 0.7);
+}

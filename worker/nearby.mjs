@@ -11,12 +11,14 @@
      ALLOWED_ORIGINS         comma list of site origins, e.g. "https://you.github.io,http://localhost:5500"
      ALLOWED_AREA            "lat,lng,km" circle where lookups are allowed (cost guard)
      CACHE_TTL_SECONDS       default 86400 (24 h), clamped to 60 s .. 30 days
-     NEARBY_CATEGORIES       comma list of category keys (default: all in js/nearby-core.js)
+     NEARBY_CATEGORIES       comma list of category keys (default: all in js/maps/nearby-core.js)
      ROUTES_MODE             off (default) | WALK | DRIVE: travel times for the top 5 per category
+   POST /namo (Namo replies worded by Google Gemini, free tier) lives in namo.mjs; see its header for GEMINI_API_KEY etc.
    Binding: NEARBY_CACHE (KV namespace). Without it an in-memory cache is used (per isolate).
    ========================================================== */
-import Core from "../js/nearby-core.js";
+import Core from "../js/maps/nearby-core.js";
 import { makeCache, memoryStore, cacheKey, clampTtl, ERROR_TTL_S } from "./cache.mjs";
+import { handleNamo } from "./namo.mjs";
 
 const PLACES_URL = "https://places.googleapis.com/v1/places:searchNearby";
 const ROUTES_URL = "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix";
@@ -178,7 +180,8 @@ function corsHeaders(origin, allowed) {
   const h = { Vary: "Origin" };
   if (origin && (allowed.includes("*") || allowed.includes(origin))) {
     h["Access-Control-Allow-Origin"] = origin;
-    h["Access-Control-Allow-Methods"] = "GET, OPTIONS";
+    h["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
+    h["Access-Control-Allow-Headers"] = "Content-Type";
     h["Access-Control-Max-Age"] = "86400";
   }
   return h;
@@ -206,6 +209,14 @@ export function createHandler(deps = {}) {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     if (origin && !cors["Access-Control-Allow-Origin"])
       return json(403, { error: "origin_not_allowed", message: "This site is not in ALLOWED_ORIGINS." });
+    // Namo replies worded by Gemini (worker/namo.mjs). A browser request must come from an allowed site.
+    if (url.pathname.replace(/\/+$/, "") === "/namo")
+      return handleNamo(request, env, {
+        fetchFn,
+        now,
+        json,
+        originOk: allowed.includes("*") || !!(origin && cors["Access-Control-Allow-Origin"]),
+      });
     if (request.method !== "GET") return json(405, { error: "method_not_allowed" });
     if (url.pathname.replace(/\/+$/, "") !== "/nearby")
       return json(404, { error: "not_found", message: "Use GET /nearby?lat=..&lng=.." });

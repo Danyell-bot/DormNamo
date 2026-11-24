@@ -5,7 +5,7 @@
 .dev.vars
 worker/.dev.vars
 # generated from .env by `npm run config`
-js/config.js
+js/app/config.js
 
 node_modules/
 .wrangler/

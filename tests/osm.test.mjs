@@ -1,8 +1,10 @@
+// Free OpenStreetMap mode: Overpass results, pins.js, pin drafts and the saved nearby-places snapshot.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
-import Core from "../js/nearby-core.js";
+import Core from "../js/maps/nearby-core.js";
+import { jsPath } from "../tools/js-files.mjs";
 
 const O = { lat: 8.241213, lng: 124.245297 };
 
@@ -75,7 +77,7 @@ test("pins.js entries are valid and land on the right listings", () => {
   ctx.self = ctx;
   vm.createContext(ctx);
   for (const f of ["data", "utils", "pins", "nearby-core", "maps"])
-    vm.runInContext(fs.readFileSync(`js/${f}.js`, "utf8"), ctx, { filename: f });
+    vm.runInContext(fs.readFileSync(jsPath(f), "utf8"), ctx, { filename: f });
   const pinned = vm.runInContext("HOUSES.filter(function (h) { return h.lat != null; })", ctx);
   const pins = vm.runInContext("PINS", ctx);
   assert.equal(pinned.length, Object.keys(pins).length);
@@ -94,7 +96,7 @@ test("draft pins from pin.html override the file, and null removes a pin", () =>
   ctx.self = ctx;
   vm.createContext(ctx);
   for (const f of ["data", "utils", "pins", "nearby-core", "maps"])
-    vm.runInContext(fs.readFileSync(`js/${f}.js`, "utf8"), ctx, { filename: f });
+    vm.runInContext(fs.readFileSync(jsPath(f), "utf8"), ctx, { filename: f });
   const house = (id) => vm.runInContext(`HOUSES.filter(function (h) { return h.id === ${id}; })[0]`, ctx);
   const h1 = house(1),
     h7 = house(7);
@@ -115,7 +117,7 @@ test("pinned dorm with a snapshot gets nearby places instantly, without any netw
   ctx.self = ctx;
   vm.createContext(ctx);
   for (const f of ["data", "utils", "pins", "nearby-snapshot", "nearby-core", "maps"])
-    vm.runInContext(fs.readFileSync(`js/${f}.js`, "utf8"), ctx, { filename: f });
+    vm.runInContext(fs.readFileSync(jsPath(f), "utf8"), ctx, { filename: f });
   const h = vm.runInContext("HOUSES.filter(function (h) { return h.id === 7; })[0]", ctx);
   const d = await vm.runInContext("DNMaps", ctx).nearby(h);
   assert.equal(d.source, "osm");

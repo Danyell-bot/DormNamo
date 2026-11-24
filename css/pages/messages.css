@@ -1,0 +1,773 @@
+/* messages.css - Messages page (messages.html, js/pages/messages.js): conversation list on the left,
+   the open chat on the right (one column on phones, with a Back button). Bubbles: yours blue on the
+   right, theirs white on the left; system notes centered; interest and offer cards in gold. */
+
+.mx-page {
+  background: linear-gradient(180deg, #fff 0%, #f7faff 200px, #f7faff 100%);
+  padding: 18px 0 24px;
+}
+/* Ask Namo would cover the send button here; Namo stays in the account menu */
+body[data-page="messages"] #chat .fab,
+body[data-page="messages"] #chat .c-peek {
+  display: none;
+}
+.mx-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 16px;
+  height: calc(100dvh - 73px - 42px);
+  min-height: 480px;
+}
+.mx-side,
+.mx-chat {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(10, 47, 115, 0.05);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---------- conversation list ---------- */
+.mx-side-h {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 10px;
+}
+.mx-side-h h1 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.mx-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: #eef4fd;
+  border-radius: 99px;
+}
+.mx-tabs button {
+  flex: 1;
+  border: 0;
+  background: none;
+  font:
+    700 13px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--mute);
+  padding: 6px 8px;
+  border-radius: 99px;
+  cursor: pointer;
+}
+.mx-tabs button span {
+  opacity: 0.7;
+  font-size: 11.5px;
+}
+.mx-tabs button[aria-selected="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+.mx-list {
+  overflow-y: auto;
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  flex: 1;
+  scrollbar-width: thin;
+}
+.mx-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+}
+.mx-item:hover {
+  background: #f6f9fe;
+}
+.mx-item.on {
+  background: #eef4fd;
+  border-color: #c9daf5;
+}
+.mx-item:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: -3px;
+}
+.mx-it {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+.mx-it-h {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.mx-it-h b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14.5px;
+}
+.mx-it-h small {
+  flex: none;
+  font-size: 11.5px;
+  color: var(--mute);
+}
+.mx-sub {
+  font-size: 12px;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mx-prev {
+  font-size: 13px;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mx-item.new .mx-prev {
+  color: var(--ink);
+  font-weight: 700;
+}
+.mx-dot {
+  align-self: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border-radius: 99px;
+  background: #e0313f;
+  color: #fff;
+  font:
+    800 10.5px/1 Figtree,
+    system-ui,
+    sans-serif;
+}
+.mx-st {
+  font-style: normal;
+  font-weight: 700;
+}
+.mx-st.inquiry {
+  color: var(--brand);
+}
+.mx-st.negotiating {
+  color: #9a6b00;
+}
+.mx-st.agreed {
+  color: #1d7a46;
+}
+.mx-st.declined {
+  color: var(--mute);
+}
+.mx-gav {
+  background: var(--gold);
+  color: var(--goldink);
+}
+.mx-gav .ic {
+  width: 20px;
+  height: 20px;
+}
+.mx-none {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 30px 14px;
+  color: var(--mute);
+  font-size: 13.5px;
+}
+.mx-none .ic {
+  width: 30px;
+  height: 30px;
+  color: var(--brand);
+}
+.mx-none p {
+  margin: 0;
+}
+
+/* ---------- chat ---------- */
+.mx-empty {
+  margin: auto;
+  max-width: 380px;
+  text-align: center;
+  padding: 24px;
+  color: var(--mute);
+}
+.mx-empty .ic {
+  width: 44px;
+  height: 44px;
+  color: var(--brand);
+}
+.mx-empty h2 {
+  color: var(--ink);
+  margin: 10px 0 6px;
+  font-size: 21px;
+}
+.mx-h {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.mx-back {
+  display: none;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: #eef4fd;
+  color: var(--brand);
+  cursor: pointer;
+}
+.mx-back .ic {
+  width: 18px;
+  height: 18px;
+}
+.mx-h-t {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+}
+.mx-h-t b {
+  font-size: 16px;
+  color: var(--ink);
+}
+.mx-h-t small {
+  font-size: 12.5px;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mx-h-acts {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.mx-h-acts .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+.mx-h-acts .ic {
+  width: 16px;
+  height: 16px;
+}
+.mx-members {
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #f9fbff;
+  font-size: 13.5px;
+}
+.mx-mem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mx-mem span {
+  flex: 1;
+  min-width: 0;
+}
+.mx-leave {
+  justify-self: start;
+  color: #c0392b;
+}
+.mx-log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(10, 71, 169, 0.06) 1px, transparent 0) 0 0 / 18px 18px,
+    #fbfcff;
+  scrollbar-width: thin;
+}
+/* the place this chat is about + deal steps */
+.mx-place {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  margin-bottom: 6px;
+}
+.mx-place-b {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+}
+.mx-place-b img {
+  width: 64px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.mx-place-b span {
+  display: grid;
+}
+.mx-place-b small {
+  color: var(--mute);
+  font-size: 12px;
+}
+.mx-place-b:hover b {
+  text-decoration: underline;
+}
+.mx-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  counter-reset: st;
+}
+.mx-steps li {
+  counter-increment: st;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mute);
+  padding-top: 8px;
+  border-top: 4px solid var(--line);
+}
+.mx-steps li::before {
+  content: counter(st) ". ";
+}
+.mx-steps li.done {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.mx-steps li.on {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.mx-steps.closed li {
+  opacity: 0.5;
+}
+.mx-day {
+  text-align: center;
+  margin: 6px 0;
+}
+.mx-day span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mute);
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.mx-sys {
+  align-self: center;
+  max-width: 85%;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--mute);
+  background: #f1f5fc;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+.mx-msg {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  max-width: 78%;
+}
+.mx-msg.me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.mx-col {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.mx-msg.me .mx-col {
+  justify-items: end;
+}
+.mx-from {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand);
+  padding-left: 4px;
+}
+.mx-bub {
+  padding: 9px 13px;
+  border-radius: 18px 18px 18px 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 14.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.mx-msg.me .mx-bub {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  border-radius: 18px 18px 6px 18px;
+}
+.mx-at {
+  font-size: 10.5px;
+  color: var(--mute);
+  padding: 0 4px;
+}
+/* interest and offer cards */
+.mx-card {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #fffaeb;
+  border: 1px solid #f3dc98;
+  color: var(--ink);
+  min-width: 220px;
+}
+.mx-card p {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+.mx-card small {
+  color: var(--mute);
+  font-size: 12px;
+}
+.mx-card-k {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a6300;
+}
+.mx-card-k .ic {
+  width: 14px;
+  height: 14px;
+}
+.mx-rent {
+  font:
+    800 24px/1.1 "Bricolage Grotesque",
+    sans-serif;
+}
+.mx-rent small {
+  font:
+    600 13px Figtree,
+    system-ui,
+    sans-serif;
+}
+.mx-offer.accepted {
+  background: #e9f7ef;
+  border-color: #9fd8b5;
+}
+.mx-offer.declined,
+.mx-offer.replaced {
+  opacity: 0.6;
+}
+.mx-offer.replaced .mx-rent {
+  text-decoration: line-through;
+}
+.mx-state {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mute);
+  margin-top: 4px;
+}
+.mx-offer.accepted .mx-state {
+  color: #1d7a46;
+}
+.mx-ans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+/* offer form + composer */
+.mx-offer-f {
+  display: grid;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: #fffaeb;
+}
+.mx-of-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.mx-offer-f label {
+  display: grid;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.mx-offer-f input {
+  font:
+    500 14px Figtree,
+    system-ui,
+    sans-serif;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #fff;
+  color: var(--ink);
+  min-width: 0;
+}
+.mx-of-acts {
+  display: flex;
+  gap: 6px;
+}
+.mx-comp {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.mx-comp textarea {
+  flex: 1;
+  resize: none;
+  font:
+    500 14.5px/1.4 Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 10px 14px;
+  max-height: 140px;
+  background: #f9fbff;
+}
+.mx-comp textarea:focus,
+.mx-offer-f input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.35);
+}
+.mx-comp .c-send {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  flex: none;
+}
+.mx-comp .c-send .ic {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- phones: one column, list or chat ---------- */
+@media (max-width: 760px) {
+  .mx-page {
+    padding: 8px 0 10px;
+  }
+  .mx-grid {
+    grid-template-columns: 1fr;
+    height: calc(100dvh - 73px - 18px);
+  }
+  .mx-grid .mx-chat {
+    display: none;
+  }
+  .mx-grid.open .mx-side {
+    display: none;
+  }
+  .mx-grid.open .mx-chat {
+    display: flex;
+  }
+  .mx-back {
+    display: grid;
+  }
+  .mx-msg {
+    max-width: 88%;
+  }
+  .mx-h-acts {
+    width: 100%;
+  }
+  .mx-of-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- photos, emojis and the test bot ---------- */
+.mx-imgs {
+  display: grid;
+  gap: 4px;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 260px;
+}
+.mx-imgs.n2,
+.mx-imgs.n4 {
+  grid-template-columns: 1fr 1fr;
+}
+.mx-imgs.n3 {
+  grid-template-columns: 1fr 1fr;
+}
+.mx-imgs.n3 .mx-img:first-child {
+  grid-column: 1 / -1;
+}
+.mx-img {
+  padding: 0;
+  border: 0;
+  background: #dfe7f5;
+  cursor: zoom-in;
+  display: block;
+}
+.mx-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+.mx-imgs.n1 .mx-img img {
+  aspect-ratio: auto;
+}
+.mx-col > .mx-imgs + .mx-bub {
+  margin-top: 4px;
+}
+.mx-bub.mx-big {
+  font-size: 34px;
+  line-height: 1.15;
+  background: none !important;
+  border: 0 !important;
+  padding: 0 2px;
+}
+.mx-pend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 0;
+  border-top: 1px solid var(--line);
+  background: #fff;
+  overflow-x: auto;
+}
+.mx-pimg {
+  position: relative;
+  flex: none;
+}
+.mx-pimg img {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+.mx-pimg button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+.mx-pimg button .ic {
+  width: 12px;
+  height: 12px;
+}
+.mx-emojis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+  gap: 2px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 8px 10px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+.mx-emojis button {
+  font-size: 22px;
+  line-height: 1;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+.mx-emojis button:hover,
+.mx-emojis button:focus-visible {
+  background: #eef4fd;
+  outline: none;
+}
+.mx-tool {
+  flex: none;
+  width: 40px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--brand);
+  font-size: 20px;
+  cursor: pointer;
+}
+.mx-tool .ic {
+  width: 21px;
+  height: 21px;
+}
+.mx-tool:hover,
+.mx-tool[aria-expanded="true"] {
+  background: #eef4fd;
+}
+.mx-comp {
+  gap: 4px;
+}
+.mx-bot {
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: #f9fbff;
+  font-size: 13px;
+}
+.mx-bot .btn {
+  justify-self: start;
+}

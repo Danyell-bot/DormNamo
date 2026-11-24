@@ -1,3 +1,4 @@
+// worker/cache.mjs: the time-limited cache for nearby-place lookups (expiry, error TTL, keys).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { makeCache, memoryStore, cacheKey, clampTtl, DEFAULT_TTL_S, MAX_TTL_S } from "../worker/cache.mjs";

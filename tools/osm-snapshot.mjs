@@ -1,6 +1,6 @@
 /* ==========================================================
    osm-snapshot.mjs - save nearby places for every pinned dorm into
-   js/nearby-snapshot.js, so the listing dialog shows them instantly
+   js/data/nearby-snapshot.js, so the listing dialog shows them instantly
    instead of waiting on the free (slow, often busy) Overpass servers.
    Usage: npm run nearby            (dorms without a fresh snapshot)
           npm run nearby -- --all   (refresh every pinned dorm)
@@ -11,10 +11,11 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
-import Core from "../js/nearby-core.js";
+import Core from "../js/maps/nearby-core.js";
+import { jsPath } from "./js-files.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = path.join(ROOT, "js", "nearby-snapshot.js");
+const OUT = jsPath("nearby-snapshot");
 const SERVERS = [
   "https://overpass-api.de/api/interpreter",
   "https://overpass.kumi.systems/api/interpreter",
@@ -29,7 +30,7 @@ ctx.window = ctx;
 ctx.self = ctx;
 vm.createContext(ctx);
 for (const f of ["data", "utils", "pins", "nearby-core", "maps"])
-  vm.runInContext(fs.readFileSync(path.join(ROOT, "js", f + ".js"), "utf8"), ctx, { filename: f });
+  vm.runInContext(fs.readFileSync(jsPath(f), "utf8"), ctx, { filename: f });
 const houses = vm.runInContext("HOUSES.filter(function (h) { return h.lat != null && h.lng != null; })", ctx);
 let snap = {};
 if (fs.existsSync(OUT)) {
@@ -103,5 +104,5 @@ fs.writeFileSync(
     JSON.stringify(snap) +
     ";\n",
 );
-console.log(done + " updated, " + failed + " failed. Wrote js/nearby-snapshot.js");
+console.log(done + " updated, " + failed + " failed. Wrote js/data/nearby-snapshot.js");
 if (failed) process.exitCode = 1;

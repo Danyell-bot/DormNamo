@@ -1,0 +1,466 @@
+/* people.css - accounts page (people.html, js/pages/people.js): your account on the left,
+   landowners / students / everyone on the right. Same look as My listings: graph-paper header,
+   white cards, thin borders, gold accents. Role badges and avatars are in css/base/brand.css. */
+
+.pp-page {
+  background: linear-gradient(180deg, #fff 0%, #f7faff 260px, #f7faff 100%);
+  min-height: calc(100dvh - 73px);
+}
+.pp-page section {
+  padding: 0; /* base.css pads every section */
+}
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+  background: #eef4fd;
+  border: 1px solid var(--line);
+  padding: 4px 12px;
+  border-radius: 99px;
+}
+
+/* ---------- header ---------- */
+.pp-top {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 40px 0 22px !important;
+}
+.pp-top .sec-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(10, 71, 169, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(10, 71, 169, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 71, 169, 0.045) 1px, transparent 1px);
+  background-size:
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 30% 0%, #000 25%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 90% at 30% 0%, #000 25%, transparent 100%);
+}
+.pp-top h1 {
+  font-size: clamp(30px, 4.6vw, 44px);
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.pp-top h1::after {
+  content: "";
+  display: block;
+  height: 6px;
+  width: 56px;
+  border-radius: 9px;
+  background: var(--gold);
+  margin-top: 8px;
+}
+.pp-top p {
+  margin: 10px 0 0;
+  color: var(--mute);
+  max-width: 60ch;
+}
+
+/* ---------- layout ---------- */
+.pp-body {
+  padding: 8px 0 64px !important;
+}
+.pp-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .pp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.pp-side {
+  position: sticky;
+  top: 92px;
+  scroll-margin-top: 92px;
+}
+@media (max-width: 900px) {
+  .pp-side {
+    position: static;
+  }
+}
+.pp-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 4px 16px rgba(10, 47, 115, 0.05);
+}
+.pp-me {
+  display: grid;
+  gap: 12px;
+}
+.pp-me .eyebrow {
+  justify-self: start;
+  margin: 0;
+}
+.pp-me h2,
+.pp-prof h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.pp-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.pp-head h3 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--ink);
+}
+.pp-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.pp-desc {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand);
+}
+.pp-bio {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-line;
+}
+.pp-info {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--line);
+}
+.pp-info div {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 8px;
+  font-size: 13.5px;
+}
+.pp-info dt {
+  color: var(--mute);
+  font-weight: 700;
+}
+.pp-info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.pp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pp-stats span {
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: #f3f7fd;
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--mute);
+}
+.pp-stats b {
+  color: var(--ink);
+}
+.pp-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.pp-acts .btn,
+.pp-prow .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+.pp-acts .ic,
+.pp-prow .ic {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- edit form ---------- */
+.pp-edit label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.pp-edit input:not([type="checkbox"]),
+.pp-edit select,
+.pp-edit textarea {
+  font:
+    500 14.5px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pp-edit textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+.pp-edit input:focus,
+.pp-edit select:focus,
+.pp-edit textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.35);
+}
+.pp-roles {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.pp-roles legend {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+label.pp-check {
+  display: flex !important;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+}
+label.pp-check:has(input:checked) {
+  border-color: var(--brand);
+  background: #f3f7fd;
+}
+label.pp-check input {
+  margin-top: 3px;
+  accent-color: var(--brand);
+  width: 16px;
+  height: 16px;
+}
+label.pp-check span {
+  display: grid;
+  gap: 1px;
+}
+label.pp-check small {
+  font-weight: 500;
+  color: var(--mute);
+}
+.pp-edit .err {
+  margin: 0;
+  color: #c0392b;
+  font-size: 13px;
+  min-height: 1em;
+}
+
+/* ---------- list ---------- */
+.pp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.pp-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: #eef4fd;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+}
+.pp-tabs button {
+  border: 0;
+  background: none;
+  font:
+    700 14px Figtree,
+    system-ui,
+    sans-serif;
+  color: var(--mute);
+  padding: 7px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+}
+.pp-tabs button span {
+  font-size: 12px;
+  opacity: 0.75;
+}
+.pp-tabs button[aria-selected="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+.pp-q {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  background: #fff;
+  flex: 1;
+  max-width: 320px;
+  min-width: 200px;
+}
+.pp-q .ic {
+  width: 17px;
+  height: 17px;
+  color: var(--mute);
+}
+.pp-q input {
+  border: 0;
+  outline: none;
+  font:
+    500 14px Figtree,
+    system-ui,
+    sans-serif;
+  flex: 1;
+  min-width: 0;
+  background: none;
+  color: var(--ink);
+}
+.pp-q:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(255, 200, 61, 0.35);
+}
+.pp-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.pp-person {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+.pp-person:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(10, 47, 115, 0.1);
+}
+.pp-places {
+  display: grid;
+  gap: 6px;
+}
+.pp-place {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f9fbff;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  min-width: 0;
+}
+.pp-place:hover {
+  border-color: var(--gold);
+}
+.pp-place img {
+  width: 48px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+}
+.pp-place span {
+  display: grid;
+  min-width: 0;
+}
+.pp-place b {
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pp-place small {
+  font-size: 11.5px;
+  color: var(--mute);
+}
+.pp-prow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.pp-prow .pp-place {
+  flex: 1;
+}
+.pp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.pp-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mute);
+}
+.pp-empty .ic {
+  width: 34px;
+  height: 34px;
+  color: var(--brand);
+}
+.pp-note {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0 0;
+  font-size: 12.5px;
+}
+.pp-note .ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ---------- profile dialog ---------- */
+.pp-prof {
+  display: grid;
+  gap: 12px;
+  padding: 22px 24px 24px;
+}
+.pp-prof .pp-head {
+  padding-right: 40px;
+}

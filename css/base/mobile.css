@@ -1,0 +1,225 @@
+/* mobile.css - phones and touch screens. Loaded LAST on every page, so these rules win at equal specificity.
+   Only phone/touch fixes live here; desktop looks are unchanged. Checked with headless Chromium at 360-414 px. */
+
+/* ---------- every touch device ---------- */
+@media (pointer: coarse) {
+  /* iPhones zoom the whole page when a text box under 16px gets focus: keep every field at 16px */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  /* no grey flash on tap; the yellow focus ring and :active states show the tap instead */
+  a,
+  button,
+  [role="button"],
+  label {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* hover lifts don't exist on touch: stop them sticking after a tap */
+  .card:hover,
+  .pp-person:hover,
+  .ml-item:hover,
+  .rp:hover {
+    transform: none;
+  }
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 760px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  /* comfortable tap targets (at least ~40 px) for small buttons */
+  .btn.sm {
+    min-height: 40px;
+  }
+  .linkbtn {
+    min-height: 36px;
+  }
+  /* dialogs use the whole screen width and respect the notch / home bar */
+  dialog,
+  #dlg {
+    width: calc(100vw - 16px);
+    max-width: none;
+    max-height: calc(100dvh - 16px);
+    margin: auto;
+  }
+  #dlg.cmp-wide {
+    width: calc(100vw - 16px);
+  }
+  /* Ask Namo stays clear of the iPhone home bar */
+  #chat {
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ---------- phones: Namo's preview bubble stays small (it used to cover half the screen) ---------- */
+@media (max-width: 760px) {
+  .c-peek {
+    width: min(270px, calc(100vw - 24px));
+    bottom: calc(100% + 8px);
+  }
+  .c-peek-b {
+    padding: 9px 2px 9px 10px;
+    gap: 8px;
+  }
+  .c-peek-b .c-av {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
+  .c-peek-m {
+    font-size: 13px;
+  }
+  .c-peek-t {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* the last things on a page never hide under Ask Namo */
+  main,
+  .pp-page,
+  .mlpage {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+  .mx-page {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ---------- phones: Compare fits two places side by side ---------- */
+@media (max-width: 760px) {
+  .cmp-d {
+    padding: 16px 12px 14px;
+    gap: 12px;
+  }
+  .cmp-h {
+    padding-right: 40px;
+  }
+  .cmp-h h2 {
+    font-size: 21px;
+  }
+  .cmp-h p {
+    font-size: 12.5px;
+  }
+  .cmp-close {
+    top: -4px;
+    right: -2px;
+    width: 34px;
+    height: 34px;
+  }
+  .cmp-t[data-n="2"] {
+    min-width: 0;
+  }
+  .cmp-t[data-n="3"] {
+    min-width: 470px; /* three places: swipe sideways inside the table, labels stay put */
+  }
+  .cmp-t th,
+  .cmp-t td {
+    padding: 8px;
+    font-size: 13px;
+  }
+  .cmp-t tbody th[scope="row"],
+  .cmp-corner {
+    width: 82px;
+    font-size: 11.5px;
+  }
+  .cmp-g th {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+  .cmp-ph {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 6px;
+    border-radius: 10px;
+  }
+  .cmp-rm {
+    top: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+  }
+  .cmp-name {
+    font-size: 14px;
+  }
+  .cmp-sub {
+    font-size: 11.5px;
+    margin-bottom: 6px;
+  }
+  .cmp-view {
+    width: 100%;
+    justify-content: center;
+    padding: 7px 8px;
+    font-size: 12.5px;
+  }
+  .cmp-pct {
+    font-size: 19px;
+  }
+  .cmp-chips span {
+    font-size: 11px;
+  }
+}
+
+/* ---------- phones: My listings save bar docks at the bottom, full width ---------- */
+@media (max-width: 760px) {
+  .ml-bar {
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    margin-right: 0;
+    padding: 10px 10px 10px 14px;
+    gap: 8px;
+  }
+  .ml-bar-msg {
+    font-size: 13px;
+    flex: 1 1 100%;
+  }
+  .ml-bar-acts {
+    flex: 1 1 100%;
+  }
+  .ml-bar-acts .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  /* the bar has the actions here; Namo is still in the account menu */
+  body[data-page="listings"] #chat .fab,
+  body[data-page="listings"] #chat .c-peek {
+    display: none;
+  }
+}
+
+/* ---------- phones: the Compare bar docks across the bottom, and Ask Namo moves up above it ---------- */
+@media (max-width: 760px) {
+  .cmpbar {
+    left: 8px;
+    right: 8px;
+    transform: none;
+    max-width: none;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    padding: 8px 8px 8px 14px;
+    gap: 8px;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(10, 47, 115, 0.3);
+  }
+  #cmpTxt {
+    flex: 1;
+    min-width: 0;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .cmpbar .btn {
+    flex: none;
+    padding-inline: 14px;
+  }
+  /* while two or three rooms are picked, Ask Namo sits just above the bar instead of on top of it */
+  body:has(#cmpbar:not([hidden])) #chat {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+  body:has(#cmpbar:not([hidden])) main {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  }
+}

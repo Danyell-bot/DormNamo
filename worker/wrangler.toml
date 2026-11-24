@@ -1,13 +1,15 @@
 # Cloudflare Worker that proxies Google Places for the "Nearby Places" section.
 # Deploy:  npx wrangler deploy --config worker/wrangler.toml
 # Secret:  npx wrangler secret put GOOGLE_MAPS_SERVER_KEY --config worker/wrangler.toml
+# Secret:  npx wrangler secret put GEMINI_API_KEY --config worker/wrangler.toml   (Namo AI wording, FREE tier:
+#          create the key in Google AI Studio in a project with NO billing, so nothing can ever be charged)
 name = "dormnamo-nearby"
 main = "nearby.mjs"
 compatibility_date = "2026-10-01"
 
 [vars]
 # Your site's origins (GitHub Pages + local dev server). "*" allows any site (not recommended).
-ALLOWED_ORIGINS = "https://YOUR-USERNAME.github.io,http://localhost:5500,http://127.0.0.1:5500"
+ALLOWED_ORIGINS = "https://ramitannn.github.io,http://localhost:5500,http://127.0.0.1:5500"
 # Only answer for locations inside this circle: "lat,lng,km" (MSU-IIT, 100 km covers Iligan + CDO).
 ALLOWED_AREA = "8.2408,124.2437,100"
 CACHE_TTL_SECONDS = "86400"
@@ -15,6 +17,11 @@ CACHE_TTL_SECONDS = "86400"
 ROUTES_MODE = "off"
 # Leave empty for all categories, or e.g. "convenience,grocery,mall,retail"
 NEARBY_CATEGORIES = ""
+# Namo AI wording (POST /namo, worker/namo.mjs). Free-tier model; past the free quota Google answers 429
+# and Namo uses its own wording. The limits keep usage well inside the free quota.
+GEMINI_MODEL = "gemini-3.5-flash-lite"
+NAMO_DAILY_LIMIT = "500"
+NAMO_PER_IP = "30"
 
 # Server-side cache with TTL. Create it with:
 #   npx wrangler kv namespace create NEARBY_CACHE
