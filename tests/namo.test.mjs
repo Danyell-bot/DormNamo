@@ -343,7 +343,72 @@ test("no strong match: Namo offers a web search once, and searches when asked", 
   assert.match(go, /nothing about your account/i);
   // any Iligan barangay is understood as the area, even without "in"
   assert.match(n.say("look online for a pala-o boarding house"), /boarding houses within 1 km of Pala-o/);
+  // other ways people ask for places DormNamo doesn't list
+  for (const msg of [
+    "search other dorms outside website",
+    "find boarding houses outside dormnamo",
+    "show me places not on dormnamo",
+    "are there other dorms elsewhere",
+  ])
+    assert.match(namo().say(msg), /Searching the web/, msg);
   // ordinary room talk never starts a web search
   for (const msg of ["i want a room near campus", "find me something cheaper", "is uy pad online?"])
     assert.doesNotMatch(n.say(msg), /Searching the web/, msg);
+});
+
+test("when Namo isn't sure, Gemini may answer; Namo's guess stays under it and 'yes' still works", () => {
+  // a message the rules only nearly understand ("Did you mean …?")
+  const n = namo();
+  const html = String(n.run('Chat.reply("edit prefs")'));
+  assert.match(html, /Did you mean/, "still a near miss for the rules");
+  const job = n.run("Chat.aiJob()");
+  assert.ok(job, "a near miss leaves a job for Gemini");
+  assert.match(job.extra, /Or did you mean “.+”\? Just say yes\./);
+  // a total miss also goes to Gemini, without the extra line
+  const m = namo();
+  m.run('Chat.reply("qwzx plorf vrrb")');
+  assert.equal(m.run("Chat.aiJob().extra"), "");
+});
+
+test("messages starting with help, undo or reset never crash Namo", () => {
+  for (const msg of [
+    "help me pls",
+    "help",
+    "what can you do",
+    "undo",
+    "go back please",
+    "reset",
+    "start over",
+  ]) {
+    const out = namo().say(msg);
+    assert.ok(out.trim().length > 0, msg);
+  }
+});
+
+test("questions about Namo itself: where the data comes from, and whether it learns", () => {
+  for (const msg of [
+    "how do you get your data",
+    "where do you get your data?",
+    "where do the listings come from",
+  ]) {
+    const out = namo().say(msg);
+    assert.match(out, /Google Maps/, msg);
+    assert.doesNotMatch(out, /doing great|All good here/, msg + " is not small talk");
+  }
+  for (const msg of [
+    "can you learn",
+    "do you learn from me?",
+    "do you remember me",
+    "are you getting smarter",
+  ]) {
+    const n = namo();
+    const out = n.say(msg);
+    assert.match(out, /train a small model/, msg);
+    assert.equal(n.run("Chat.aiJob()"), null, msg + " is answered by Namo, not Gemini");
+    assert.notEqual(n.run("S.learn"), true, msg + " does not switch learning on by itself");
+  }
+  assert.match(namo().say("how are you"), /doing great|All good here/);
+  const n = namo();
+  n.run("S.learn = true");
+  assert.match(n.say("stop learning"), /stopped learning/);
 });

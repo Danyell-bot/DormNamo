@@ -142,7 +142,7 @@ var Talk = (function () {
         "introduce yourself",
       ],
       say: [
-        "I'm Namo, DormNamo's room helper. I run right in your browser, so I'm not a person and not an online AI, but I can chat, explain why a room fits you, and compare places.",
+        "I'm Namo, DormNamo's room helper, not a person. I run right in your browser: I read what you need, rank rooms, explain why one fits and compare places. If you allow it, Google Gemini helps me word some answers, but I choose every fact and check its wording first.",
       ],
     },
     {
@@ -160,6 +160,9 @@ var Talk = (function () {
         "commands",
         "what do you do",
         "how does this work",
+        "how does it work",
+        "how does dormnamo work",
+        "how do i use this site",
       ],
       act: "help",
     },
@@ -188,10 +191,26 @@ var Talk = (function () {
         "why is rent missing",
         "why no amenities",
         "is the info accurate",
-        "where is the data from",
       ],
       say: [
         "The listings are real places from Google Maps. Most owners don't publish rent or amenities online, so I show “Rate on request” or “unverified” instead of guessing. Call or visit the owner to confirm.",
+      ],
+    },
+    {
+      id: "data",
+      ex: [
+        "how do you get your data",
+        "where do you get your data",
+        "where is the data from",
+        "where does the information come from",
+        "what is your source",
+        "where do the listings come from",
+        "how do you know about the dorms",
+        "are the listings real",
+        "how do you get information",
+      ],
+      say: [
+        "The rooms are real places near MSU-IIT taken from public Google Maps listings, plus places landowners add themselves on DormNamo. Maps, nearby stores and walking routes come from OpenStreetMap. I never make up rent, amenities or rules: if a listing doesn't say it, I tell you it's unverified. What I know about you is only what you set or do here: your preferences, likes and passes.",
       ],
     },
     {
@@ -392,6 +411,9 @@ var Talk = (function () {
         "what do you know about me",
         "summary of my preferences",
         "show my preferences",
+        "change my preferences",
+        "edit my preferences",
+        "update my preferences",
       ],
       act: "prefs",
     },
@@ -426,7 +448,18 @@ var Talk = (function () {
     },
     {
       id: "more",
-      ex: ["more", "show more", "other options", "next", "anything else", "more rooms", "show others"],
+      ex: [
+        "more",
+        "show more",
+        "other options",
+        "next",
+        "anything else",
+        "more rooms",
+        "show others",
+        "gimme more",
+        "next ones",
+        "more choices",
+      ],
       act: "more",
     },
     {

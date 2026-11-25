@@ -1521,6 +1521,12 @@ body.dark .cm-rate-v {
   line-height: 1.45;
   color: var(--mute);
 }
+/* Namo's own guess, kept under a Gemini answer when Namo wasn't sure ("Or did you mean …? Just say yes.") */
+.msg .c-alt {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--mute);
+}
 .msg .c-follow {
   margin: 10px 0 0;
   padding-top: 10px;

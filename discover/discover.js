@@ -455,9 +455,19 @@ function decide(type) {
     act(type, id);
   }, ms);
 }
-// one set of pointer handlers on the deck: decide the axis after a few pixels, then follow the finger on it
+// One set of pointer handlers on the deck: decide the axis after a few pixels, then follow the finger on it.
+// One swipe = one room: sideways the finger moves a whole card per `per` px (about 60% of a card's width, not the
+// small visual gap between cards, which is only ~30 px on phones), the strip stops at the next room and resists
+// past it, and flicks use the speed of the last ~100 ms rather than the average over the whole gesture.
 (function () {
-  var x0, y0, t0, c, o0, lock, on, dx, dy, m;
+  var x0, y0, c, o0, lock, on, dx, dy, m, per, trail;
+  /** Finger speed (px/ms) over the last ~100 ms: what a flick feels like when the finger lifts. */
+  function speed() {
+    var a = trail[0],
+      b = trail[trail.length - 1],
+      t = Math.max(16, b[0] - a[0]);
+    return { x: (b[1] - a[1]) / t, y: (b[2] - a[2]) / t };
+  }
   deck.addEventListener("pointerdown", function (e) {
     if (e.button > 0 || busy) return;
     c = e.target.closest(".sw");
@@ -467,25 +477,32 @@ function decide(type) {
     dx = dy = 0;
     x0 = e.clientX;
     y0 = e.clientY;
-    t0 = Date.now();
     o0 = +c.dataset.o;
     m = metrics();
+    per = Math.max(120, (focusCard() || c).offsetWidth * 0.6);
+    trail = [[Date.now(), x0, y0]];
   });
   deck.addEventListener("pointermove", function (e) {
     if (!on) return;
     dx = e.clientX - x0;
     dy = e.clientY - y0;
+    var now = Date.now();
+    trail.push([now, e.clientX, e.clientY]);
+    while (trail.length > 2 && now - trail[0][0] > 100) trail.shift();
     if (!lock) {
-      if (Math.abs(dx) < 7 && Math.abs(dy) < 7) return;
-      lock = Math.abs(dx) > Math.abs(dy) ? "x" : o0 === 0 ? "y" : "none";
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      // sideways only when clearly sideways; otherwise up/down (like/pass) on the focused card
+      lock = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : o0 === 0 ? "y" : "none";
       if (lock !== "none") {
         deck.setPointerCapture(e.pointerId);
         dpage.classList.add("dragging");
       }
     }
     if (lock === "x") {
-      var shift = -dx / m.s1,
-        to = pos + shift,
+      var shift = -dx / per,
+        a = Math.abs(shift);
+      if (a > 1) shift = (shift < 0 ? -1 : 1) * (1 + (a - 1) * 0.2); // one room per swipe: resist past the next
+      var to = pos + shift,
         last = Q.length - 1;
       if (to < 0)
         shift = -pos + to * 0.25; // rubber band at the ends
@@ -493,16 +510,14 @@ function decide(type) {
       lay(shift, 0, 0);
     } else if (lock === "y") {
       lay(0, dy, 0);
-      feedback(c, cl(-dy / 120), cl(dy / 120));
+      feedback(c, cl(-dy / 110), cl(dy / 110));
     }
   });
   function end(cancel) {
     if (!on) return;
     on = 0;
     dpage.classList.remove("dragging");
-    var dt = Math.max(1, Date.now() - t0),
-      vx = dx / dt,
-      vy = dy / dt;
+    var v = speed();
     if (cancel || lock === "none") {
       if (lock === "x" || lock === "y") lay(0, 0, 260);
       feedback(null, 0, 0);
@@ -511,11 +526,12 @@ function decide(type) {
       if (o0 === 0) open(+c.dataset.id);
       else go(pos + o0);
     } else if (lock === "x") {
-      var n = Math.round(-dx / m.s1);
-      if (!n && Math.abs(dx) > 30 && Math.abs(vx) > 0.45) n = dx < 0 ? 1 : -1;
-      go(pos + n);
-    } else if (dy < -110 || (dy < -40 && vy < -0.5)) decide("like");
-    else if (dy > 110 || (dy > 40 && vy > 0.5)) decide("pass");
+      // past ~30% of the way, or a quick flick the same way, moves exactly one room
+      var dir = dx < 0 ? 1 : -1,
+        flick = Math.abs(v.x) > 0.35 && (v.x < 0 ? 1 : -1) === dir && Math.abs(dx) > 16;
+      go(Math.abs(dx) > per * 0.3 || flick ? pos + dir : pos);
+    } else if (dy < -90 || (dy < -28 && v.y < -0.45)) decide("like");
+    else if (dy > 90 || (dy > 28 && v.y > 0.45)) decide("pass");
     else {
       lay(0, 0, calm() ? 0 : 260);
       feedback(null, 0, 0);
@@ -527,22 +543,28 @@ function decide(type) {
   deck.addEventListener("pointercancel", function () {
     end(true);
   });
-  // a sideways trackpad / shift+wheel scroll browses; a plain vertical wheel still scrolls the card's text
+  // a sideways trackpad / shift+wheel scroll browses; a plain vertical wheel still scrolls the card's text.
+  // One gesture = one room: after a move, the rest of that gesture (and its momentum) is ignored until the
+  // wheel has been quiet for a moment.
   var acc = 0,
+    spent = false,
     quiet;
   deck.addEventListener(
     "wheel",
     function (e) {
       if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
       e.preventDefault();
-      acc += e.deltaX;
       clearTimeout(quiet);
       quiet = setTimeout(function () {
         acc = 0;
-      }, 180);
-      if (Math.abs(acc) > 70 && !busy) {
+        spent = false;
+      }, 220);
+      if (spent) return;
+      acc += e.deltaX;
+      if (Math.abs(acc) > 60 && !busy) {
         go(pos + (acc > 0 ? 1 : -1));
         acc = 0;
+        spent = true;
       }
     },
     { passive: false },

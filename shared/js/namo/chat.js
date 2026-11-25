@@ -257,7 +257,18 @@ var Chat = (function () {
   // ---- parse one message into preference changes
   function parse(text, prefsTopic) {
     var P = JSON.parse(JSON.stringify(S.P)),
-      out = { P: P, hit: false, intent: null, seen: [], why: [] };
+      // every field reply() reads, so the early returns below ("help", "undo", "reset") are complete too
+      out = {
+        P: P,
+        hit: false,
+        intent: null,
+        seen: [],
+        why: [],
+        asks: [],
+        houses: [],
+        house: null,
+        question: false,
+      };
     var raw = text.toLowerCase();
     if (/\b(reset|start over|clear (all|everything))\b/.test(raw)) {
       out.intent = "reset";
@@ -951,6 +962,9 @@ var Chat = (function () {
   var LEARN_OFF =
     /\b(stop (learning|tracking)|don'?t (track|learn|watch)|turn off learning|forget (my|what you) (activity|history|learned|know)|forget me)\b/;
   var LEARN_ON = /\b(start learning|learn from (me|my)|turn on learning|you can learn)\b/;
+  // questions about learning: "can you learn?", "do you learn from me?", "do you remember me?", "are you getting smarter?"
+  var LEARN_Q =
+    /\b(can|do|does|will|are|how|is) (you|namo|it)\b[^.?!]{0,25}\b(learn\w*|remember\w*|track\w*|smarter|improv\w*|adapt\w*|train\w*)\b/;
   var TASTE =
     /\b(what (do|did) i (usually )?(like|prefer)|my taste|analy[sz]e (me|my)|based on (my )?(activity|history|likes|browsing)|what (have you|did you) learn\w*|know what i like|my habits)\b/;
   function offerHTML(sugs) {
@@ -1294,6 +1308,17 @@ var Chat = (function () {
         return NamoAI.on() ? "I'm already using Gemini to word my answers." : NamoAI.askHTML();
     }
     if (window.Insights) {
+      // a question about learning ("can you learn?", "do you remember me?") gets an answer, not a switch
+      if (LEARN_Q.test(lower) && !LEARN_OFF.test(lower))
+        return (
+          "Yes, in two ways. Your hearts, likes and passes always train a small model in your browser, so the rooms I put first get closer to your taste. " +
+          (Insights.on()
+            ? "You also let me learn from your activity (rooms you open, how long you look, your searches). Ask “what do I like?” to see it, or say “stop learning”."
+            : Insights.asked()
+              ? "You asked me not to learn from your activity, so I don't look at which rooms you open or search for. Say “learn from me” if you change your mind."
+              : "With your OK I can also learn from your activity: rooms you open, how long you look, your searches.<br><br>" +
+                Insights.askHTML())
+        );
       if (LEARN_OFF.test(lower)) {
         Insights.setConsent(false);
         return "Okay, I stopped learning from your activity and deleted what I'd collected (rooms opened, time spent, searches). Your hearts and swipes still shape your matches like before.";
@@ -1415,15 +1440,21 @@ var Chat = (function () {
       );
     if (/show|recommend|find|suggest|which|options/.test(lower))
       return "Here's what fits you best:" + matchesHTML();
+    // Namo isn't sure from here on, so Gemini may answer the message itself (if it's on and the student said yes):
+    // about rooms -> from Namo's knowledge (listings named or top matches + preferences); otherwise small talk.
+    var roomish = window.Know && (r.houses.length || Know.attrs(text).length || ROOMCTX.test(lower));
+    function geminiJob(extra) {
+      aiJob = roomish
+        ? { mode: "explain", facts: Know.retrieve(text), extra: extra }
+        : { mode: "chat", facts: "", extra: extra };
+    }
     if (t && t.guess) {
+      // a near miss: Gemini answers; Namo's guess stays underneath, and "yes" still does it
       ctx.pending = t.pend;
+      geminiJob('<p class="c-alt">Or did you mean “' + esc(t.guess) + "”? Just say yes.</p>");
       return "I'm not 100% sure. Did you mean “" + esc(t.guess) + "”?";
     }
-    // Gemini may answer: about rooms -> from Namo's knowledge (listings named or top matches + preferences); else small talk
-    var roomish = window.Know && (r.houses.length || Know.attrs(text).length || ROOMCTX.test(lower));
-    aiJob = roomish
-      ? { mode: "explain", facts: Know.retrieve(text), extra: "" }
-      : { mode: "chat", facts: "", extra: "" };
+    geminiJob("");
     return FALLBACK[miss++ % FALLBACK.length].replace("{name}", first());
   }
   function done() {
@@ -1582,8 +1613,9 @@ var Chat = (function () {
     if (window.S && typeof queue === "function" && queue()[0]) lastTop = queue()[0].h.id;
   }
   /* ---------- web search when DormNamo has no good match (websearch.js) ---------- */
+  // "search the web", "look online", "search other dorms outside the website", "places not on dormnamo"…
   var WEB_RX =
-      /\b(search|look|check|browse|find|hunt)\b[^.?!]{0,40}\b(the )?(web|online|internet|google|elsewhere|outside dormnamo)\b|\bweb ?search\b|\bsearch (the )?(web|internet)\b|\bmore places (online|on the web)\b/,
+      /\b(search|look|check|browse|find|hunt|show)\b[^.?!]{0,40}\b((the )?(web|online|internet|google|elsewhere)|outside( of)?( the| this)? ?(dormnamo|website|web ?site|site|app|list)|not (on|in|listed on|listed in) (dormnamo|the (web ?site|site|app|list)))\b|\bweb ?search\b|\bsearch (the )?(web|internet)\b|\bmore places (online|on the web)\b|\b(other|more) (dorms?|places|rooms|boarding ?houses?|apartments?)\b[^.?!]{0,30}\b(outside|elsewhere|online|not (on|in|listed))\b/,
     GOOD_MATCH = 80, // below this, Namo offers to search the web
     webHinted = false,
     webSearched = false;
@@ -1814,5 +1846,9 @@ var Chat = (function () {
     ask: ask,
     parse: parse,
     reply: reply,
+    /** For tests: what reply() left for Gemini (null = Namo's answer is final). */
+    aiJob: function () {
+      return aiJob;
+    },
   };
 })();
