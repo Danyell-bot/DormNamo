@@ -224,20 +224,66 @@
   }
 }
 
-/* ---------- phones: the on-screen keyboard never covers a chat box ----------
-   fx.js sets --kb / --vvh and html.kb-open from the visible area (iPhones); Android shrinks the page itself
-   (interactive-widget=resizes-content in every page's viewport meta), so there --kb stays 0. */
+/* ---------- phones: the keyboard never covers what you type (every phone size) ----------
+   fx.js sets html.typing (a text field has focus), html.kb-open (an iPhone keyboard covers the screen) and
+   --kb / --vvh / --vvtop. Android shrinks the page itself (interactive-widget=resizes-content), so there only
+   .typing applies. The focused field is also scrolled to the middle of what's visible (fx.js). */
 @media (max-width: 760px) {
-  /* Namo: the window sits on top of the keyboard and fits the space that's left */
+  /* floating bars step aside while you type, so they don't sit on the keyboard over the field */
+  html.typing #chat .fab,
+  html.typing #chat .c-peek,
+  html.typing .cmpbar,
+  html.typing .ml-bar,
+  html.typing .ck {
+    visibility: hidden;
+  }
+
+  /* Namo: the window sits right on top of the keyboard and fits the space that's left */
   html.kb-open #chat {
     bottom: calc(var(--kb, 0px) + 8px);
   }
   html.kb-open .cpanel {
     height: min(560px, calc(var(--vvh, 100dvh) - 20px));
   }
-  /* Messages: the conversation shrinks to the visible area, so the composer stays just above the keyboard */
+
+  /* Messages: the conversation is pinned to the visible area, composer just above the keyboard */
   html.kb-open body[data-page="messages"] .mx-grid {
-    height: calc(var(--vvh, 100dvh) - 73px - 18px);
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    top: calc(var(--vvtop, 0px) + 8px);
+    height: calc(var(--vvh, 100dvh) - 16px);
     min-height: 0;
+    z-index: 60;
+  }
+
+  /* full-page screens (sign-up, log in, the questionnaire) end at the keyboard and scroll inside */
+  html.kb-open .overlay {
+    bottom: var(--kb, 0px);
+  }
+
+  /* dialogs (details with comments, profile edit, Compare): fit the visible area above the keyboard */
+  html.kb-open dialog[open] {
+    inset: calc(var(--vvtop, 0px) + 8px) 0 auto 0;
+    margin: 0 auto;
+    max-height: calc(var(--vvh, 100dvh) - 16px);
+  }
+}
+
+/* ---------- phones: Namo as a sheet across the screen ----------
+   On narrow phones the 380 px window left thin margins and a short message area; it now spans the width and
+   uses most of the height (less when the keyboard is up, see above). */
+@media (max-width: 560px) {
+  #chat .cpanel {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    height: min(640px, calc(100dvh - 96px));
+  }
+  html.kb-open #chat .cpanel {
+    bottom: calc(var(--kb, 0px) + 8px);
+    height: min(640px, calc(var(--vvh, 100dvh) - 16px));
   }
 }

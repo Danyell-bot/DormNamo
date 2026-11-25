@@ -13,6 +13,45 @@ function city(h) {
 var ICON =
   '<svg viewBox="0 0 64 64" fill="none" stroke="#8fb0e0" stroke-width="3" stroke-linejoin="round" aria-hidden="true"><path d="M8 30L32 10l24 20M14 26v28h36V26"/><path d="M26 54V38h12v16"/></svg>';
 var D = $("dlg");
+
+/* The dialog glides in (CSS: #dlg[open]) and out. Every way of closing it goes through D.close() (the ✕, Esc,
+   "View details" from Saved, Compare, profile links…), so close() is wrapped once here: it adds .closing, waits
+   for the short exit animation, then really closes. Opening again while it's still closing finishes the
+   close first, because showModal() on a dialog that is still open throws. */
+(function () {
+  if (!D || !D.showModal) return;
+  var nativeClose = D.close.bind(D),
+    nativeShow = D.showModal.bind(D),
+    timer = null,
+    OUT = 190; // ms, matches dlgOut in details.css
+  function finish(v) {
+    clearTimeout(timer);
+    timer = null;
+    D.classList.remove("closing");
+    if (D.open) nativeClose(v);
+  }
+  D.close = function (v) {
+    if (!D.open || timer) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return nativeClose(v);
+    D.classList.add("closing");
+    timer = setTimeout(function () {
+      finish(v);
+    }, OUT);
+  };
+  D.showModal = function () {
+    if (timer) {
+      finish();
+      void D.offsetWidth; // let the entrance play again for the next room
+    }
+    if (!D.open) nativeShow();
+  };
+  // Esc: animate out too, instead of the browser's instant close
+  D.addEventListener("cancel", function (e) {
+    e.preventDefault();
+    D.close();
+  });
+})();
+
 function open(id) {
   var h = HOUSES.filter(function (x) {
     return x.id === id;
@@ -86,8 +125,16 @@ function open(id) {
   D.scrollTop = 0; // start at the top even if the last listing was scrolled
   Photos.mount(D, h);
   Photos.mountRooms(D, h); // room photos open in their own viewer, apart from the cover
-  if (window.DNMaps) DNMaps.mount(h); // map + nearby places load after the dialog is visible
   if (window.Comments) Comments.mount(D, h);
+  // the map and nearby places start once the dialog has glided in, so building them doesn't stutter the entrance
+  var showing = (open.n = (open.n || 0) + 1);
+  if (window.DNMaps)
+    setTimeout(
+      function () {
+        if (D.open && open.n === showing) DNMaps.mount(h);
+      },
+      matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300,
+    );
 }
 
 /** Copy a listing's full reference number ([data-copy] from refHTML in utils.js). */

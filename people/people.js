@@ -252,7 +252,7 @@ var People = (function () {
       chips +
       '</div><label class="pp-q">' +
       ico("search") +
-      '<input id="ppQ" type="search" placeholder="Search names, places, areas" aria-label="Search accounts" value="' +
+      '<input id="ppQ" type="search" enterkeyhint="search" placeholder="Search names, places, areas" aria-label="Search accounts" value="' +
       esc(q) +
       '"></label></div>' +
       (shown.length

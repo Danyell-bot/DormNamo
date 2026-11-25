@@ -1514,12 +1514,17 @@ var Chat = (function () {
       ico("x") +
       "</button></header>" +
       '<div class="clog" id="chatLog" aria-live="polite"></div><div class="cchips" id="chatChips"></div>' +
-      '<form id="chatForm"><input id="chatIn" autocomplete="off" placeholder="Describe your ideal room…" aria-label="Message"><button class="btn sm c-send" type="submit" aria-label="Send">' +
+      '<form id="chatForm"><input id="chatIn" autocomplete="off" enterkeyhint="send" placeholder="Describe your ideal room…" aria-label="Message"><button class="btn sm c-send" type="submit" aria-label="Send">' +
       ico("send") +
       "</button></form></section>";
     document.body.appendChild(box);
     log = $("chatLog");
     input = $("chatIn");
+    // phones: the window shrinks above the keyboard (mobile.css); keep the newest message in view
+    if (window.visualViewport)
+      visualViewport.addEventListener("resize", function () {
+        if (document.activeElement === input) log.scrollTop = log.scrollHeight;
+      });
     var tips = [
       "What's best for me?",
       "Cheaper, under 3k",

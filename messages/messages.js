@@ -467,7 +467,7 @@ var Messages = (function () {
       ico("image") +
       "</button>" +
       '<input type="file" id="mxFile" accept="image/*" multiple hidden>' +
-      '<textarea id="mxIn" rows="1" maxlength="2000" placeholder="Write a message…" aria-label="Message"></textarea><button class="btn c-send" type="submit" aria-label="Send">' +
+      '<textarea id="mxIn" rows="1" maxlength="2000" enterkeyhint="send" placeholder="Write a message…" aria-label="Message"></textarea><button class="btn c-send" type="submit" aria-label="Send">' +
       ico("send") +
       "</button></form>"
     );

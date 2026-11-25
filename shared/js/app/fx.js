@@ -182,25 +182,72 @@ function toast(m) {
   FX.toast(m);
 }
 
-/* ---------- phone keyboards ----------
-   Android (with interactive-widget=resizes-content in the viewport meta) shrinks the page itself when the
-   keyboard opens. iPhones don't: the keyboard slides over fixed and full-height parts (Namo's chat, the
-   Messages composer). From the visible area (visualViewport) this sets, on <html>:
-     --kb   how many px the keyboard covers at the bottom of the screen (0 when closed)
-     --vvh  the visible height
-     .kb-open  while a keyboard covers more than 120 px
-   and mobile.css lifts those parts above it. */
+/* ---------- phones: typing never hides behind the keyboard ----------
+   Android (interactive-widget=resizes-content in every page's viewport meta) shrinks the page when the
+   keyboard opens. iPhones don't: the keyboard slides over the page. From the visible area (visualViewport)
+   this keeps, on <html>:
+     --kb     px the keyboard covers at the bottom of the screen (0 when closed)
+     --vvh    the visible height        --vvtop  how far the visible area is panned down (iPhone)
+     .typing  while a text field has focus (both platforms): floating bars step aside
+     .kb-open while a keyboard covers more than 120 px (iPhone): panels shrink to the visible area
+   and mobile.css uses them. On top of that, the field being typed in is scrolled into view (centered) when
+   the keyboard or a bar covers it: search, filters, sign-up, the questionnaire, My listings, comments… */
 (function () {
   var vv = window.visualViewport,
     root = document.documentElement;
   if (!vv) return;
+  /** A keyboard can only be up while someone types in a text field; a shorter visible area alone isn't
+      enough (the address bar, zoom and phone previews change it too). */
+  function field(a) {
+    if (!a) return false;
+    if (a.isContentEditable || a.tagName === "TEXTAREA") return true;
+    return (
+      a.tagName === "INPUT" &&
+      !/^(checkbox|radio|button|submit|reset|range|file|color|image|hidden)$/i.test(a.type || "")
+    );
+  }
+  function phone() {
+    return window.innerWidth <= 760;
+  }
   function update() {
-    var kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+    var t = field(document.activeElement),
+      kb = t ? Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) : 0;
     root.style.setProperty("--kb", kb + "px");
     root.style.setProperty("--vvh", Math.round(vv.height) + "px");
+    root.style.setProperty("--vvtop", Math.round(vv.offsetTop) + "px");
+    root.classList.toggle("typing", t && phone());
     root.classList.toggle("kb-open", kb > 120);
   }
-  vv.addEventListener("resize", update);
+  /** Bring the field being typed in to the middle of what's visible, if the keyboard, the sticky header or a
+      bar covers it. Chat boxes pinned above the keyboard (Namo, Messages) are already in place. */
+  function reveal() {
+    var a = document.activeElement;
+    if (!phone() || !field(a) || a.closest("#chat, .mx-chat")) return;
+    var r = a.getBoundingClientRect(),
+      top = vv.offsetTop + 72, // below the sticky site header
+      bottom = vv.offsetTop + vv.height - 16;
+    if (r.bottom > bottom || r.top < top)
+      a.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
+  }
+  var later;
+  function soon(ms) {
+    clearTimeout(later);
+    later = setTimeout(function () {
+      update();
+      reveal();
+    }, ms);
+  }
+  vv.addEventListener("resize", function () {
+    update();
+    soon(120); // keyboard finished sliding (or rotated): check the field again
+  });
   vv.addEventListener("scroll", update);
+  document.addEventListener("focusin", function () {
+    update();
+    soon(350); // the keyboard takes ~300 ms to slide up
+  });
+  document.addEventListener("focusout", function () {
+    setTimeout(update, 60); // after focus has moved on (or left every field)
+  });
   update();
 })();
