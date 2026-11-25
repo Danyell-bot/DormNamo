@@ -177,8 +177,10 @@ var Nav = (function () {
       });
     };
     document.getElementById("mOut").onclick = function () {
-      Accounts.logOut();
-      location.reload();
+      menu.hidden = true;
+      Accounts.logOut().then(function () {
+        location.reload();
+      });
     };
   }
   /* ---------- footer, shared by every page that has <footer id="siteFooter"> ----------

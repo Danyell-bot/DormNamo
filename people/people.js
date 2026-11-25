@@ -149,7 +149,12 @@ var People = (function () {
       (p.showPhone ? " checked" : "") +
       "><span><b>Show my phone on my profile</b><small>Off: only you can see it</small></span></label>" +
       '<p class="err" id="ppErr" role="alert"></p>' +
-      '<div class="pp-acts"><button class="btn sm" type="submit">Save profile</button><button class="btn alt sm" type="button" id="ppCancel">Cancel</button></div></form>'
+      '<div class="pp-acts"><button class="btn sm" type="submit">Save profile</button><button class="btn alt sm" type="button" id="ppCancel">Cancel</button></div>' +
+      (Accounts.cloud()
+        ? '<div class="pp-danger"><p class="meta">Deleting your account removes your profile, places and photos. Messages you sent stay in the other person\'s chat.</p>' +
+          '<button class="btn alt sm" type="button" id="ppDelete">Delete my account</button></div>'
+        : "") +
+      "</form>"
     );
   }
 
@@ -376,8 +381,30 @@ var People = (function () {
         editing = false;
         render();
       } else if (b.id === "ppSignup") {
-        Accounts.logOut();
-        location.reload();
+        Accounts.logOut().then(function () {
+          location.reload();
+        });
+      } else if (b.id === "ppDelete") {
+        // two taps: the first one asks, the second one deletes
+        if (!b.dataset.sure) {
+          b.dataset.sure = "1";
+          b.textContent = "Tap again to delete your account for good";
+          return;
+        }
+        b.disabled = true;
+        b.textContent = "Deleting…";
+        Accounts.deleteAccount().then(
+          function () {
+            location.reload();
+          },
+          function (x) {
+            b.disabled = false;
+            delete b.dataset.sure;
+            b.textContent = "Delete my account";
+            var err = document.getElementById("ppErr");
+            if (err) err.textContent = x.message;
+          },
+        );
       }
     });
     // the profile dialog (#dlg) has its own buttons

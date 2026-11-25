@@ -75,6 +75,10 @@ body.lock {
   min-height: 1.3em;
   margin: 0;
 }
+/* good news in the same place (e.g. "we sent you a link") */
+.err.note {
+  color: #14652f;
+}
 .linkbtn {
   background: none;
   border: 0;

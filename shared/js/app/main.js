@@ -28,11 +28,15 @@ function startSite() {
 
 function boot() {
   if (window.Consent && !Consent.asked()) return Consent.show(boot); // consent first, before anything is saved
-  var user = Accounts.current();
-  if (!user) return Auth.show(boot);
-  loadState(user);
-  if (!S.done)
-    Onboarding.open({ onDone: startSite }); // first visit: ask preferences before anything else
-  else startSite();
+  // Supabase accounts load first (Accounts.init resolves at once when the site has no Supabase config)
+  Accounts.init().then(function () {
+    if (Accounts.recovering()) return Auth.reset(boot); // opened a password-reset link
+    var user = Accounts.current();
+    if (!user) return Auth.show(boot);
+    loadState(user);
+    if (!S.done)
+      Onboarding.open({ onDone: startSite }); // first visit: ask preferences before anything else
+    else startSite();
+  });
 }
 boot();

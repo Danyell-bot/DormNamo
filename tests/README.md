@@ -8,6 +8,7 @@ Nothing here calls a real Google service: those are replaced by fakes.
 |---|---|
 | `consent.test.mjs` | Consent first: nothing saved before the answer, "essential only" keeps data in the tab, accepting saves and sets the preferences cookie. |
 | `site-urls.test.mjs` | Page addresses: links, images and cookies point to the same place from the root page and from page folders (`discover/`…). |
+| `accounts-cloud.test.mjs` | Accounts on Supabase (with a stand-in for supabase-js): sign up, log in, clear error messages, profile edits, hidden phone, old preferences carried over, log out, password reset. |
 | `db.test.mjs` | The Supabase connection: off without config, one client, backend errors become short codes and plain sentences. |
 | `namo.test.mjs` | Namo, the chatbot: understanding messages, explanations, follow-ups, learning consent, Gemini fallback. |
 | `namo-guard.test.mjs` | The fact check that stops AI replies from inventing prices, numbers, places or promises. |

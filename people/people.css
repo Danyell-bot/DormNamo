@@ -177,6 +177,23 @@
   gap: 6px;
   text-decoration: none;
 }
+/* delete account: set apart at the bottom of the edit form */
+.pp-danger {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.pp-danger p {
+  margin: 0;
+  font-size: 13px;
+}
+.pp-danger .btn {
+  justify-self: start;
+  color: #b3261e;
+  border-color: #e9b7b3;
+}
 .pp-acts .ic,
 .pp-prow .ic {
   width: 16px;
