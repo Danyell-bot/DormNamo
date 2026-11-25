@@ -83,11 +83,14 @@ function list() {
 }
 function render() {
   var r = list();
-  $("res").innerHTML = "<b>" + r.length + "</b> " + (r.length === 1 ? "place" : "places") + " found";
+  var count = "<b>" + r.length + "</b> " + (r.length === 1 ? "place" : "places") + " found";
+  if (render.count !== count) $("res").innerHTML = render.count = count;
   filterUI();
   var CC = window.Comments ? Comments.counts() : {};
   if (window.Insights) Insights.filters(F); // only records anything if the student said yes (insights.js)
-  $("grid").innerHTML = r.length
+  // Start-up calls render() several times (saved preferences, log-in, hearts). Rebuilding identical cards
+  // reloads their photos and replays their entrance, so the grid is only replaced when it would look different.
+  var grid = r.length
     ? r
         .map(function (h, pos) {
           return (
@@ -143,6 +146,13 @@ function render() {
     : '<div class="empty f-empty"><span class="f-empty-i">' +
       ico("search") +
       '</span><b>No rooms match these filters.</b><span>Try a higher budget or fewer must-haves.</span><button class="btn alt sm" type="button" data-clear>Clear filters</button></div>';
+  var g = $("grid");
+  // compare with what was last drawn, and that the cards are still there (nothing replaced them)
+  if (render.grid !== grid || g.childElementCount !== render.cards) {
+    g.innerHTML = grid;
+    render.grid = grid;
+    render.cards = g.childElementCount;
+  }
   $("sCount").textContent = HOUSES.length;
   $("sVer").textContent = HOUSES.filter(function (h) {
     return /\d/.test(h.c);

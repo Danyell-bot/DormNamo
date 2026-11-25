@@ -121,10 +121,17 @@ var FX = (function () {
     void root.offsetWidth; // restart the animation
     root.querySelectorAll(".grid > .card").forEach(function (c, i) {
       c.style.setProperty("--i", Math.min(i, 9));
+      c.style.animation = ""; // let the rise-in play (an earlier run may have frozen this card)
     });
     root.classList.add("searched");
     clearTimeout(showResults.t);
     showResults.t = setTimeout(function () {
+      // Cards also have a default entrance (cardIn, home.css). Dropping "searched" would switch back to it and
+      // the browser would play it again, so the cards that just rose in are frozen first. Cards drawn later
+      // (a filter change) are new elements and still get their normal entrance.
+      root.querySelectorAll(".grid > .card").forEach(function (c) {
+        c.style.animation = "none";
+      });
       root.classList.remove("searched");
     }, 1800);
   }
