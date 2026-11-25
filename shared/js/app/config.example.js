@@ -1,6 +1,6 @@
 /* Example of shared/js/app/config.js. Don't put a real key here.
    Create the real file with `npm run config` (it reads .env), or copy this file
-   to shared/js/app/config.js and fill it in. shared/js/app/config.js is gitignored. */
+   to shared/js/app/config.js and fill it in. config.js is committed, so only public values. */
 var DN_CONFIG = {
   mapsBrowserKey: "", // GOOGLE_MAPS_BROWSER_KEY: Maps JavaScript API only, HTTP-referrer restricted
   mapId: "DEMO_MAP_ID", // GOOGLE_MAPS_MAP_ID: needed for the colored category markers

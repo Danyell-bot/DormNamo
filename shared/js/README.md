@@ -19,7 +19,7 @@ Code that only one page needs lives in that page's folder (`home/` for Rooms, `d
 ## app/ — start-up, settings, shared helpers
 | File | Purpose |
 |---|---|
-| `config.js` | Site settings made by `npm run config` from `.env` (worker address, Maps key, AI on/off, Supabase URL + anon key). Gitignored. |
+| `config.js` | Site settings made by `npm run config` from `.env` (worker address, Maps key, AI on/off, Supabase URL + anon key). Committed: public values only. |
 | `config.example.js` | Template showing what `config.js` contains. |
 | `db.js` | The connection to the Supabase backend (`supabase/`): loads supabase-js only when configured; `DB.ready()`, `DB.rpc()`, `DB.message()` for backend errors. |
 | `utils.js` | Small helpers used everywhere: `$`, money, escaping, icons, the logo, star ratings, phone formatting. |
