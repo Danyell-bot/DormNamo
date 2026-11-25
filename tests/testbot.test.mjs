@@ -1,4 +1,4 @@
-// js/account/testbot.js (the test landowner) and photos / emojis in inbox.js messages.
+// shared/js/account/testbot.js (the test landowner) and photos / emojis in inbox.js messages.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";

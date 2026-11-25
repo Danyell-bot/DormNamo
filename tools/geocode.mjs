@@ -1,5 +1,5 @@
 /* ==========================================================
-   geocode.mjs - save exact coordinates for every listing in js/data/data.js
+   geocode.mjs - save exact coordinates for every listing in shared/js/data/data.js
    Usage:  npm run geocode              (only listings that need it)
            npm run geocode -- --dry-run (show what would change)
            npm run geocode -- --force   (redo all, except geo: "manual")

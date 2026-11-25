@@ -11,12 +11,12 @@
      ALLOWED_ORIGINS         comma list of site origins, e.g. "https://you.github.io,http://localhost:5500"
      ALLOWED_AREA            "lat,lng,km" circle where lookups are allowed (cost guard)
      CACHE_TTL_SECONDS       default 86400 (24 h), clamped to 60 s .. 30 days
-     NEARBY_CATEGORIES       comma list of category keys (default: all in js/maps/nearby-core.js)
+     NEARBY_CATEGORIES       comma list of category keys (default: all in shared/js/maps/nearby-core.js)
      ROUTES_MODE             off (default) | WALK | DRIVE: travel times for the top 5 per category
    POST /namo (Namo replies worded by Google Gemini, free tier) lives in namo.mjs; see its header for GEMINI_API_KEY etc.
    Binding: NEARBY_CACHE (KV namespace). Without it an in-memory cache is used (per isolate).
    ========================================================== */
-import Core from "../js/maps/nearby-core.js";
+import Core from "../shared/js/maps/nearby-core.js";
 import { makeCache, memoryStore, cacheKey, clampTtl, ERROR_TTL_S } from "./cache.mjs";
 import { handleNamo } from "./namo.mjs";
 

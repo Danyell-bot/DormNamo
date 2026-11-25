@@ -9,7 +9,7 @@ compatibility_date = "2026-10-01"
 
 [vars]
 # Your site's origins (GitHub Pages + local dev server). "*" allows any site (not recommended).
-ALLOWED_ORIGINS = "https://ramitannn.github.io,http://localhost:5500,http://127.0.0.1:5500"
+ALLOWED_ORIGINS = "https://ktens.me,https://ramitannn.github.io,http://localhost:5500,http://127.0.0.1:5500"
 # Only answer for locations inside this circle: "lat,lng,km" (MSU-IIT, 100 km covers Iligan + CDO).
 ALLOWED_AREA = "8.2408,124.2437,100"
 CACHE_TTL_SECONDS = "86400"

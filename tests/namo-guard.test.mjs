@@ -1,7 +1,7 @@
-// js/namo/namo-guard.js: an AI-worded reply may only reword DormNamo's facts, never add to them.
+// shared/js/namo/namo-guard.js: an AI-worded reply may only reword DormNamo's facts, never add to them.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import Guard from "../js/namo/namo-guard.js";
+import Guard from "../shared/js/namo/namo-guard.js";
 
 const FACTS =
   "Gonzales-Deanon Boarding House D is your best match right now (82%). It's a short 4-minute walk to class, " +
@@ -73,4 +73,9 @@ test("markup, links and empty or huge replies are rejected", () => {
   assert.equal(ok("[click](x)").ok, false);
   assert.equal(ok("").ok, false);
   assert.equal(ok("a".repeat(Guard.MAX_REPLY + 1)).ok, false);
+});
+
+test("plain() removes emoji Gemini adds, keeps the words and ₱", () => {
+  assert.equal(Guard.plain("Hi there! 😊 It's ₱4,000 👍🏽 and close ❤️."), "Hi there! It's ₱4,000 and close.");
+  assert.equal(Guard.plain("No emoji here."), "No emoji here.");
 });

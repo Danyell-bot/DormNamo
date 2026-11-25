@@ -1,17 +1,17 @@
 /* ==========================================================
    osm-snapshot.mjs - save nearby places for every pinned dorm into
-   js/data/nearby-snapshot.js, so the listing dialog shows them instantly
+   shared/js/data/nearby-snapshot.js, so the listing dialog shows them instantly
    instead of waiting on the free (slow, often busy) Overpass servers.
    Usage: npm run nearby            (dorms without a fresh snapshot)
           npm run nearby -- --all   (refresh every pinned dorm)
-   Run it after adding pins with pin.html. No key needed.
+   Run it after adding pins with the pin tool (pin/). No key needed.
    OpenStreetMap data is ODbL: the site shows the required attribution.
    ========================================================== */
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
-import Core from "../js/maps/nearby-core.js";
+import Core from "../shared/js/maps/nearby-core.js";
 import { jsPath } from "./js-files.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -104,5 +104,5 @@ fs.writeFileSync(
     JSON.stringify(snap) +
     ";\n",
 );
-console.log(done + " updated, " + failed + " failed. Wrote js/data/nearby-snapshot.js");
+console.log(done + " updated, " + failed + " failed. Wrote shared/js/data/nearby-snapshot.js");
 if (failed) process.exitCode = 1;

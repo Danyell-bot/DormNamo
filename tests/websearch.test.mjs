@@ -1,4 +1,4 @@
-// js/namo/websearch.js: Namo's web search (OpenStreetMap Nominatim) for places DormNamo doesn't list.
+// shared/js/namo/websearch.js: Namo's web search (OpenStreetMap Nominatim) for places DormNamo doesn't list.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";

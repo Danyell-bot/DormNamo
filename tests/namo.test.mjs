@@ -1,4 +1,4 @@
-// Namo (js/namo/chat.js + js/namo/talk.js + js/matching/insights.js) loaded into a vm with the DOM and storage stubbed out.
+// Namo (shared/js/namo/chat.js + shared/js/namo/talk.js + shared/js/matching/insights.js) loaded into a vm with the DOM and storage stubbed out.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";

@@ -1,7 +1,7 @@
-// js/maps/nearby-core.js: nearby-place categories, distance and time text, opening hours, walking routes.
+// shared/js/maps/nearby-core.js: nearby-place categories, distance and time text, opening hours, walking routes.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import Core from "../js/maps/nearby-core.js";
+import Core from "../shared/js/maps/nearby-core.js";
 
 test("formatDistance: meters, rounding, kilometers", () => {
   assert.equal(Core.formatDistance(0), "10 m");

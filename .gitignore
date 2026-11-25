@@ -5,8 +5,11 @@
 .dev.vars
 worker/.dev.vars
 # generated from .env by `npm run config`
-js/app/config.js
+shared/js/app/config.js
 
 node_modules/
 .wrangler/
 worker/.wrangler/
+# Supabase CLI working files
+supabase/.temp/
+supabase/.branches/

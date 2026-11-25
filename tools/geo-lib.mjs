@@ -2,7 +2,7 @@
 
 const GEO_KEYS = ["lat", "lng", "pid", "geo", "geoAt"];
 
-/** Find the HOUSES records in js/data/data.js. Each listing is one JSON object on one line. */
+/** Find the HOUSES records in shared/js/data/data.js. Each listing is one JSON object on one line. */
 export function parseHouses(src) {
   const lines = src.split(/\r?\n/),
     out = [];

@@ -1,4 +1,4 @@
-// tools/geo-lib.mjs: reading and editing js/data/data.js one listing line at a time (used by npm run geocode).
+// tools/geo-lib.mjs: reading and editing shared/js/data/data.js one listing line at a time (used by npm run geocode).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { parseHouses, setGeoFields, needsGeocode, nameMatches } from "../tools/geo-lib.mjs";

@@ -1,4 +1,4 @@
-<!doctype html>
+  <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -9,7 +9,7 @@
       href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2028%2032%22%3E%3Cpath%20d%3D%22M3%2028.4V14a11%2011%200%200%201%2022%200v14.4a1.6%201.6%200%200%201-1.6%201.6H4.6A1.6%201.6%200%200%201%203%2028.4z%22%20fill%3D%22%230a47a9%22%2F%3E%3Cpath%20d%3D%22M14%206.2V30%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.6%22%2F%3E%3Ccircle%20cx%3D%2210.9%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3Ccircle%20cx%3D%2217.1%22%20cy%3D%2218.6%22%20r%3D%221.45%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E"
     />
     <script>
-      /* hide the hero until the intro plays (js/pages/hero-fx.js); safety net if it never does */ document.documentElement.classList.add(
+      /* hide the hero until the intro plays (home/hero-fx.js); safety net if it never does */ document.documentElement.classList.add(
         "intro",
       );
       setTimeout(function () {
@@ -22,20 +22,20 @@
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600..800&family=Figtree:wght@400..800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/base/base.css" />
-    <link rel="stylesheet" href="css/pages/home.css" />
-    <link rel="stylesheet" href="css/components/chat.css" />
-    <link rel="stylesheet" href="css/components/ui.css" />
-    <link rel="stylesheet" href="css/pages/discover.css" />
-    <link rel="stylesheet" href="css/components/maps.css" />
-    <link rel="stylesheet" href="css/components/details.css" />
-    <link rel="stylesheet" href="css/base/polish.css" />
-    <link rel="stylesheet" href="css/pages/hero.css" />
-    <link rel="stylesheet" href="css/base/brand.css" />
-    <link rel="stylesheet" href="css/components/onboarding.css" />
-    <link rel="stylesheet" href="css/pages/owners.css" />
-    <link rel="stylesheet" href="css/pages/finder.css" />
-    <link rel="stylesheet" href="css/base/mobile.css" />
+    <link rel="stylesheet" href="shared/css/base/base.css" />
+    <link rel="stylesheet" href="shared/css/components/home.css" />
+    <link rel="stylesheet" href="shared/css/components/chat.css" />
+    <link rel="stylesheet" href="shared/css/components/ui.css" />
+    <link rel="stylesheet" href="shared/css/components/discover.css" />
+    <link rel="stylesheet" href="shared/css/components/maps.css" />
+    <link rel="stylesheet" href="shared/css/components/details.css" />
+    <link rel="stylesheet" href="shared/css/base/polish.css" />
+    <link rel="stylesheet" href="shared/css/components/hero.css" />
+    <link rel="stylesheet" href="shared/css/base/brand.css" />
+    <link rel="stylesheet" href="shared/css/components/onboarding.css" />
+    <link rel="stylesheet" href="shared/css/components/owners.css" />
+    <link rel="stylesheet" href="home/finder.css" />
+    <link rel="stylesheet" href="shared/css/base/mobile.css" />
   </head>
   <body data-page="home">
     <header id="siteHeader"></header>
@@ -591,7 +591,7 @@
               <h3>Add your property</h3>
               <p class="meta">
                 Demo: listings are saved in this browser and no payment is taken. Add photos and house rules
-                later in <a href="mylistings.html">My listings</a>.
+                later in <a href="my-listings/">My listings</a>.
               </p>
             </div>
             <label
@@ -666,42 +666,43 @@
     <div class="overlay" id="auth" hidden></div>
     <div class="overlay" id="ob" hidden></div>
     <div id="toast" role="status" aria-live="polite"></div>
-    <script src="js/data/data.js"></script>
-    <script src="js/app/utils.js"></script>
-    <script src="js/app/consent.js"></script>
-    <script src="js/listings/photos.js"></script>
-    <script src="js/listings/listings.js"></script>
-    <script src="js/listings/comments.js"></script>
-    <script src="js/listings/hearts.js"></script>
-    <script src="js/account/inbox.js"></script>
-    <script src="js/account/testbot.js"></script>
-    <script src="js/app/config.js"></script>
-    <script src="js/data/pins.js"></script>
-    <script src="js/data/nearby-snapshot.js"></script>
-    <script src="js/maps/nearby-core.js"></script>
-    <script src="js/maps/maps.js"></script>
-    <script src="js/listings/details.js"></script>
-    <script src="js/pages/browse.js"></script>
-    <script src="js/pages/owners.js"></script>
-    <script src="js/app/select.js"></script>
-    <script src="js/matching/matching.js"></script>
-    <script src="js/matching/twotower.js"></script>
-    <script src="js/app/state.js"></script>
-    <script src="js/account/argon2id.js"></script>
-    <script src="js/account/accounts.js"></script>
-    <script src="js/account/auth.js"></script>
-    <script src="js/account/onboarding.js"></script>
-    <script src="js/app/nav.js"></script>
-    <script src="js/app/fx.js"></script>
-    <script src="js/pages/hero-fx.js"></script>
-    <script src="js/namo/explain.js"></script>
-    <script src="js/namo/namo-guard.js"></script>
-    <script src="js/namo/namo-ai.js"></script>
-    <script src="js/namo/knowledge.js"></script>
-    <script src="js/namo/websearch.js"></script>
-    <script src="js/namo/talk.js"></script>
-    <script src="js/namo/chat.js"></script>
-    <script src="js/matching/insights.js"></script>
-    <script src="js/app/main.js"></script>
+    <script src="shared/js/data/data.js"></script>
+    <script src="shared/js/app/utils.js"></script>
+    <script src="shared/js/app/consent.js"></script>
+    <script src="shared/js/listings/photos.js"></script>
+    <script src="shared/js/listings/listings.js"></script>
+    <script src="shared/js/listings/comments.js"></script>
+    <script src="shared/js/listings/hearts.js"></script>
+    <script src="shared/js/account/inbox.js"></script>
+    <script src="shared/js/account/testbot.js"></script>
+    <script src="shared/js/app/config.js"></script>
+    <script src="shared/js/app/db.js"></script>
+    <script src="shared/js/data/pins.js"></script>
+    <script src="shared/js/data/nearby-snapshot.js"></script>
+    <script src="shared/js/maps/nearby-core.js"></script>
+    <script src="shared/js/maps/maps.js"></script>
+    <script src="shared/js/listings/details.js"></script>
+    <script src="home/browse.js"></script>
+    <script src="home/owners.js"></script>
+    <script src="shared/js/app/select.js"></script>
+    <script src="shared/js/matching/matching.js"></script>
+    <script src="shared/js/matching/twotower.js"></script>
+    <script src="shared/js/app/state.js"></script>
+    <script src="shared/js/account/argon2id.js"></script>
+    <script src="shared/js/account/accounts.js"></script>
+    <script src="shared/js/account/auth.js"></script>
+    <script src="shared/js/account/onboarding.js"></script>
+    <script src="shared/js/app/nav.js"></script>
+    <script src="shared/js/app/fx.js"></script>
+    <script src="home/hero-fx.js"></script>
+    <script src="shared/js/namo/explain.js"></script>
+    <script src="shared/js/namo/namo-guard.js"></script>
+    <script src="shared/js/namo/namo-ai.js"></script>
+    <script src="shared/js/namo/knowledge.js"></script>
+    <script src="shared/js/namo/websearch.js"></script>
+    <script src="shared/js/namo/talk.js"></script>
+    <script src="shared/js/namo/chat.js"></script>
+    <script src="shared/js/matching/insights.js"></script>
+    <script src="shared/js/app/main.js"></script>
   </body>
 </html>

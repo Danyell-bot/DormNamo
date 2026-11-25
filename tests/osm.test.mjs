@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
-import Core from "../js/maps/nearby-core.js";
+import Core from "../shared/js/maps/nearby-core.js";
 import { jsPath } from "../tools/js-files.mjs";
 
 const O = { lat: 8.241213, lng: 124.245297 };
@@ -89,7 +89,7 @@ test("pins.js entries are valid and land on the right listings", () => {
   }
 });
 
-test("draft pins from pin.html override the file, and null removes a pin", () => {
+test("draft pins from the pin tool (pin/) override the file, and null removes a pin", () => {
   const drafts = { 7: null, 1: { lat: 8.242, lng: 124.2445 } };
   const ctx = { localStorage: { getItem: (k) => (k === "dn:pinDrafts" ? JSON.stringify(drafts) : null) } };
   ctx.window = ctx;

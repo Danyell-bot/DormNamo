@@ -1,4 +1,4 @@
-// js/app/consent.js: ask first, then save preferences (browser + dn_prefs cookie) only with consent.
+// shared/js/app/consent.js: ask first, then save preferences (browser + dn_prefs cookie) only with consent.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";

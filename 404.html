@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>DormNamo | Page not found</title>
+    <script>
+      /* GitHub Pages shows this page for any address that doesn't exist. Old addresses
+         (discover.html, people.html…) moved into folders (discover/, people/…): send them there,
+         keeping the #part (people.html#me -> people/#me). */
+      (function () {
+        var MOVED = {
+          "index.html": "",
+          "discover.html": "discover/",
+          "mylistings.html": "my-listings/",
+          "people.html": "people/",
+          "messages.html": "messages/",
+          "about.html": "about/",
+          "pin.html": "pin/",
+        };
+        var m = location.pathname.match(/^(.*\/)([a-z]+\.html)$/);
+        if (m && m[2] in MOVED) location.replace(m[1] + MOVED[m[2]] + location.search + location.hash);
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f7faff;
+        color: #0a2f73;
+        font: 16px/1.5 system-ui, sans-serif;
+        text-align: center;
+        padding: 24px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+      a {
+        color: #0a47a9;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>This page isn't here</h1>
+      <p>The address may have changed. <a href="/DormNamo/" id="home">Go to DormNamo</a></p>
+    </main>
+    <script>
+      // the site's folder, wherever it is hosted (e.g. /DormNamo/)
+      var m = location.pathname.match(/^\/[^/]+\//);
+      document.getElementById("home").href = m ? m[0] : "/";
+    </script>
+  </body>
+</html>

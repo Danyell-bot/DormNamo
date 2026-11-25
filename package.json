@@ -8,7 +8,14 @@
     "geocode": "node tools/geocode.mjs",
     "nearby": "node tools/osm-snapshot.mjs",
     "worker:dev": "npx wrangler dev --config worker/wrangler.toml",
-    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml"
+    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml",
+    "db:test": "node supabase/tests/rules.mjs",
+    "db:bundle": "node tools/supabase-bundle.mjs"
   },
-  "engines": { "node": ">=21.7" }
+  "engines": {
+    "node": ">=21.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.16"
+  }
 }
