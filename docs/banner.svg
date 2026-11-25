@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-label="DormNamo - Your home away from home.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6eefb"/>
+      <stop offset="0.55" stop-color="#f7f9fe"/>
+      <stop offset="1" stop-color="#fff3d6"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="0.95" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#ffd978" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffd978" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-30%" width="120%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0a47a9" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="520" rx="28" fill="url(#bg)"/>
+  <rect width="1280" height="520" rx="28" fill="url(#warm)"/>
+
+  <g font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif">
+    <!-- logo + wordmark -->
+    <g transform="translate(540 46)">
+      <path d="M0 40 V14 C0 4 7 0 14 0 C21 0 28 4 28 14 V40 Z" fill="#0a47a9"/>
+      <rect x="12.5" y="10" width="3" height="30" fill="#ffffff" fill-opacity="0.9"/>
+      <rect x="5" y="20" width="18" height="3" fill="#ffffff" fill-opacity="0.9"/>
+      <text x="44" y="34" font-size="32" font-weight="800" fill="#0a47a9" letter-spacing="-0.5">DormNamo</text>
+    </g>
+
+    <!-- pill -->
+    <g transform="translate(640 138)">
+      <rect x="-142" y="-19" width="284" height="38" rx="19" fill="#ffffff" stroke="#dbe5f5"/>
+      <circle cx="-116" cy="0" r="6" fill="#f6b91a"/>
+      <text x="-98" y="6" font-size="16" font-weight="700" fill="#0a47a9">Rooms near MSU-IIT &amp; more</text>
+    </g>
+
+    <!-- headline -->
+    <text x="640" y="238" text-anchor="middle" font-size="76" font-weight="800" letter-spacing="-2" fill="#0b2a6f">Your home away from home.</text>
+    <rect x="906" y="250" width="150" height="7" rx="4" fill="#f6b91a"/>
+
+    <!-- sub -->
+    <text x="640" y="304" text-anchor="middle" font-size="22" fill="#44547a">Compare boarding houses and dorms by price, distance and what reviewers say,</text>
+    <text x="640" y="334" text-anchor="middle" font-size="22" fill="#44547a">without visiting every one.</text>
+
+    <!-- search bar -->
+    <g filter="url(#shadow)">
+      <rect x="220" y="372" width="840" height="92" rx="46" fill="#ffffff"/>
+    </g>
+    <g font-size="12.5" font-weight="800" fill="#0a47a9" letter-spacing="1.5">
+      <text x="270" y="408">WHERE</text>
+      <text x="512" y="408">BUDGET</text>
+      <text x="740" y="408">ROOM TYPE</text>
+    </g>
+    <g font-size="20" font-weight="600" fill="#0b2a6f">
+      <text x="270" y="438">Any school</text>
+      <text x="512" y="438">Any budget</text>
+      <text x="740" y="438">Any type</text>
+    </g>
+    <g stroke="#e3e9f4" stroke-width="2">
+      <line x1="468" y1="394" x2="468" y2="442"/>
+      <line x1="696" y1="394" x2="696" y2="442"/>
+    </g>
+    <rect x="900" y="382" width="150" height="72" rx="36" fill="#f6b91a"/>
+    <circle cx="942" cy="416" r="8" fill="none" stroke="#3a2a00" stroke-width="2.6"/>
+    <line x1="948" y1="422" x2="954" y2="428" stroke="#3a2a00" stroke-width="2.6" stroke-linecap="round"/>
+    <text x="966" y="425" font-size="20" font-weight="800" fill="#3a2a00">Search</text>
+  </g>
+</svg>
