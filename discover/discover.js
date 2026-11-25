@@ -569,9 +569,6 @@ function decide(type) {
     },
     { passive: false },
   );
-  window.addEventListener("resize", function () {
-    if (!busy) lay(0, 0, 0);
-  });
 })();
 function current() {
   return Q[pos];
@@ -639,7 +636,31 @@ act = function (type, id) {
   _act(type, id);
   toast(SAY[type]);
 };
+/* Phones: size the strip so the room, the position line and the Like / Pass buttons all fit on one screen
+   (the Ask Namo button keeps its corner below them). A fixed height pushed the buttons below the fold, and the
+   strip itself can't scroll the page, so reaching them felt hard. Bigger screens keep the CSS height. */
+function fitDeck() {
+  if (!matchMedia("(max-width: 560px)").matches) {
+    deck.style.height = "";
+    return;
+  }
+  var vh = window.visualViewport ? visualViewport.height : window.innerHeight,
+    top = deck.getBoundingClientRect().top + window.scrollY,
+    p = $("dPos"),
+    rail = dpage.querySelector(".rail"),
+    below = (p && !p.hidden ? p.offsetHeight + 12 : 0) + (rail ? rail.offsetHeight + 12 : 0),
+    fab = 76; // the Ask Namo button's corner
+  deck.style.height = Math.max(320, Math.min(600, Math.round(vh - top - below - fab))) + "px";
+}
+window.addEventListener("resize", function () {
+  if (!busy) {
+    fitDeck();
+    lay(0, 0, 0);
+  }
+});
+
 function pageInit() {
+  fitDeck();
   draw();
   if (location.hash === "#saved") tab(true); // footer "Saved rooms"
 }

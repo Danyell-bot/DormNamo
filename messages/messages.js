@@ -731,6 +731,13 @@ var Messages = (function () {
       }
     });
     window.addEventListener("hashchange", route);
+    // phones: when the keyboard opens the conversation gets shorter (mobile.css); keep the newest message in view
+    if (window.visualViewport)
+      visualViewport.addEventListener("resize", function () {
+        var log = $("mxLog");
+        if (log && document.activeElement && document.activeElement.id === "mxIn")
+          log.scrollTop = log.scrollHeight;
+      });
     Inbox.on(function () {
       render(true); // a message arrived from another tab, or this tab changed something
     });

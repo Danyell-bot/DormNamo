@@ -181,3 +181,26 @@ var FX = (function () {
 function toast(m) {
   FX.toast(m);
 }
+
+/* ---------- phone keyboards ----------
+   Android (with interactive-widget=resizes-content in the viewport meta) shrinks the page itself when the
+   keyboard opens. iPhones don't: the keyboard slides over fixed and full-height parts (Namo's chat, the
+   Messages composer). From the visible area (visualViewport) this sets, on <html>:
+     --kb   how many px the keyboard covers at the bottom of the screen (0 when closed)
+     --vvh  the visible height
+     .kb-open  while a keyboard covers more than 120 px
+   and mobile.css lifts those parts above it. */
+(function () {
+  var vv = window.visualViewport,
+    root = document.documentElement;
+  if (!vv) return;
+  function update() {
+    var kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+    root.style.setProperty("--kb", kb + "px");
+    root.style.setProperty("--vvh", Math.round(vv.height) + "px");
+    root.classList.toggle("kb-open", kb > 120);
+  }
+  vv.addEventListener("resize", update);
+  vv.addEventListener("scroll", update);
+  update();
+})();

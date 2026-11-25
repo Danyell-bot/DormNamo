@@ -525,9 +525,13 @@ body:not(.dark) .sv-tag.bm {
   height: clamp(420px, calc(100dvh - 290px), 640px);
   margin: 0;
   flex: none;
-  touch-action: none;
+  /* the page scrolls from anywhere but the room in front (up / down there = like / pass, discover.js) */
+  touch-action: pan-y;
   clip-path: inset(-100vh 0);
   perspective: 1600px;
+}
+.dpage .deckwrap .deck .sw.is-focus {
+  touch-action: none;
 }
 /* a soft spotlight on the floor under the focused room */
 .dpage .deckwrap .deck::before {

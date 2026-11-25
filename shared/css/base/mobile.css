@@ -223,3 +223,21 @@
     padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ---------- phones: the on-screen keyboard never covers a chat box ----------
+   fx.js sets --kb / --vvh and html.kb-open from the visible area (iPhones); Android shrinks the page itself
+   (interactive-widget=resizes-content in every page's viewport meta), so there --kb stays 0. */
+@media (max-width: 760px) {
+  /* Namo: the window sits on top of the keyboard and fits the space that's left */
+  html.kb-open #chat {
+    bottom: calc(var(--kb, 0px) + 8px);
+  }
+  html.kb-open .cpanel {
+    height: min(560px, calc(var(--vvh, 100dvh) - 20px));
+  }
+  /* Messages: the conversation shrinks to the visible area, so the composer stays just above the keyboard */
+  html.kb-open body[data-page="messages"] .mx-grid {
+    height: calc(var(--vvh, 100dvh) - 73px - 18px);
+    min-height: 0;
+  }
+}
