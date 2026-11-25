@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="DormNamo - Your home away from home" width="100%">
+# DormNamo
 
-<br>
+### Your home away from home.
 
-**Find a dorm near MSU-IIT. Swipe, match, message the landowner.**
+Find a dorm near MSU-IIT. Swipe, match, message the landowner.
 
 <br>
 
